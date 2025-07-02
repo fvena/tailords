@@ -1,0 +1,19 @@
+@use "variables" as vars;
+
+@mixin button-base {
+  padding: vars.$spacing-medium vars.$spacing-large;
+  font-size: vars.$font-size-base;
+  cursor: pointer;
+  border: none;
+  border-radius: vars.$border-radius;
+}
+
+@mixin button-primary {
+  @include button-base;
+  color: white;
+  background-color: vars.$primary-color;
+
+  &:hover {
+    background-color: color.adjust(vars.$primary-color, $lightness: -10%);
+  }
+}

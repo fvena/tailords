@@ -1,4 +1,0 @@
-{
-  "extends": "personal-style-guide/typescript/node",
-  "include": ["src", "test", "docs/.vitepress/**/*", "*.config.*"]
-}

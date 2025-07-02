@@ -1,10 +1,10 @@
 @use "sass:meta";
-@use "../src/core/functions" as f;
+@use "../src/core/math.core" as f;
 @use "sass-true" as *;
 
 @include test-module("Functions") {
   @include test("rem function") {
-    @include assert-equal(f.rem(16), 1rem);
-    @include assert-equal(f.rem(32), 2rem);
+    @include assert-equal(f.pxToRem(16), 1rem);
+    @include assert-equal(f.pxToRem(32), 2rem);
   }
 }

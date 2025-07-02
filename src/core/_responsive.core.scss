@@ -1,0 +1,138 @@
+@use "sass:map";
+@use "vars.core" as *;
+@use "math.core" as *;
+
+$palm: map.get($screens, palm);
+$lap: map.get($screens, lap);
+$small: map.get($screens, small);
+$desk: map.get($screens, desk);
+
+/*
+ * Desk First Alias
+ *
+ * Listado de los alias con los puntos de corte para un desarrollo responsive
+ */
+
+$breakpoints: (
+  "palm": "screen and (max-width: #{pxToEm($palm - 1)})",
+  "lap": "screen and (min-width: #{pxToEm($palm)}) and (max-width: #{pxToEm($lap - 1)})",
+  "small": "screen and (min-width: #{pxToEm($lap)}) and (max-width: #{pxToEm($small - 1)})",
+  "desk": "screen and (min-width: #{pxToEm($small)}) and (max-width: #{pxToEm($desk - 1)})",
+  "large": "screen and (min-width: #{pxToEm($desk)})",
+  "portrait": "screen and (max-width: #{pxToEm($lap - 1)})",
+  "landscape": "screen and (min-width: #{pxToEm($lap)})",
+  "touch": "screen and (max-width: #{pxToEm($small - 1)})",
+  "screen": "screen and (min-width: #{pxToEm($small)})",
+  "tablet": "screen and (min-width: #{pxToEm($palm)}) and (max-width: #{pxToEm($small - 1)})",
+);
+
+/*
+ * ================ Mixins ================
+ */
+
+/*
+ * Genera una clase con todas sus variantes responsive
+ *
+ * @example SCSS
+ *     .myClass {
+ *       @include responsive {
+ *         color: color(brand);
+ *       }
+ *     }
+ *
+ * @result CSS
+ *      .myClass {
+ *        color: rgba(var(--brand), 1);
+ *      }
+ *
+ *      @media screen and (max-width: 37.4375em) {
+ *        .myClass--palm {
+ *          color: rgba(var(--brand), 1);
+ *        }
+ *      }
+ *
+ *      @media screen and (min-width: 37.5em) and (max-width: 56.1875em) {
+ *        .myClass--lap {
+ *          color: rgba(var(--brand), 1);
+ *        }
+ *      }
+ *
+ *      @media screen and (min-width: 56.25em) and (max-width: 74.9375em) {
+ *        .myClass--small {
+ *          color: rgba(var(--brand), 1);
+ *        }
+ *      }
+ *
+ *      @media screen and (min-width: 75em) and (max-width: 99.9375em) {
+ *        .myClass--desk {
+ *          color: rgba(var(--brand), 1);
+ *        }
+ *      }
+ *
+ *      @media screen and (min-width: 100em) {
+ *        .myClass--large {
+ *          color: rgba(var(--brand), 1);
+ *        }
+ *      }
+ */
+
+@mixin responsive {
+  @content;
+
+  @if $enable-responsive == true {
+    @each $screen in $medias {
+      @media #{map.get($breakpoints, $screen)} {
+        &--#{$screen} {
+          @content;
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Genera un media query con los parámetros del tipo de pantalla seleccionada
+ *
+ * @param {String} $screen - Tamaño de pantalla
+ *
+ * @example SCSS
+ *     .myClass {
+ *       @include media(palm) {
+ *         color: color(brand);
+ *       }
+ *     }
+ *
+ * @result CSS
+ *     @media screen and (max-width: 37.4375em) {
+ *       .myClass {
+ *         color: rgba(var(--brand), 1);
+ *       }
+ *     }
+ */
+
+@mixin media($screen) {
+  // Si el alias existe en la lista que indicamos en el setting
+  @if map.has-key($breakpoints, $screen) {
+    // Crea la regla media-query
+    @media #{map.get($breakpoints, $screen)} {
+      @content;
+    }
+  }
+
+  // Si aplica a los modelos con notch
+  @else if $screen == "notch" {
+    @supports (padding: max(0)) and (padding: env(safe-area-inset-bottom)) {
+      @content;
+    }
+  }
+
+  // Si aplica a todos los tamaños no añado nada
+  @else if $screen == "all" {
+    @content;
+  }
+
+  // Si no existe ningun alias muestra una alerta
+  @else {
+    @warn 'Oops! Breakpoint "#{$screen}" does not exist.';
+  }
+}

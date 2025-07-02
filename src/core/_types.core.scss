@@ -1,0 +1,174 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+@use "vars.core" as *;
+@use "math.core" as *;
+
+/*
+ * ================ Funciones ================
+ */
+
+/*
+ * Calcula el tamaño de la fuente en base al tamaño indicado
+ *
+ * @param {string|integer} $size - Valor númerico de la escala o alias del listado de tamaños de texto
+ * @return {Number} - valor del texto en rem
+ *
+ * @example SCSS
+ *   calcFontSize(2) =>  1.381rem;
+ */
+@function calcFontSize($size) {
+  $module: math.pow($modular-scale, $size);
+  $round: decimal-round($module, 3, ceil);
+
+  @return #{$round}rem;
+}
+
+/*
+ * Devuelve el tamaño del texto en base al tamaño indicado
+ *
+ * @param {string|integer} $size - Valor númerico de la escala o alias del listado de tamaños de texto
+ * @return {Number} - valor del texto en rem
+ *
+ * @example SCSS
+ *   font-size(2) =>  1.381rem;
+ *   font-size(h4) =>  1.381rem;
+ */
+@function font-size($size) {
+  // Obtengo el tipo del valor
+  $font-type: meta.type-of($size);
+
+  // Compruebo si el valor es un número
+  @if $font-type == number {
+    @return calcFontSize($size);
+  }
+
+  // Compruebo si el valor pertenece al listado de tamaños de texto
+  @if map.get($font-sizes, $size) {
+    @if $css-variables == true {
+      @return var(--font-#{$size});
+    }
+
+    @return calcFontSize(map.get($font-sizes, $size));
+  }
+
+  // No es un valor válido
+  @error "[#{$size}] does not exist";
+}
+
+/*
+ * Devuelve la altura de línea en base al tamaño indicado
+ *
+ * @param {string|integer} $size - Valor númerico de la escala o alias del listado de tamaños de texto
+ * @return {Number} - valor del texto en rem
+ *
+ * @example SCSS
+ *   leading(2) =>  3.2;
+ *   leading(large) => 1.84;
+ */
+
+@function calcLeading($size) {
+  @return #{$space * $size};
+}
+
+@function leading($size) {
+  // Obtengo el tipo del valor
+  $leading-type: meta.type-of($size);
+
+  // Compruebo si el valor es un número
+  @if $leading-type == number {
+    @return calcLeading($size);
+  }
+
+  // Compruebo si el valor pertenece al listado de alturas de línea
+  @if map.get($leading, $size) {
+    @if $css-variables == true {
+      @return var(--leading-#{$size});
+    }
+
+    @return calcLeading(map.get($leading, $size));
+  }
+
+  // No es un valor válido
+  @error "[#{$size}] does not exist";
+}
+
+/*
+ * Devuelve el peso tipográfico
+ *
+ * @param {string} $weight - Alias del listado de tamaños de texto
+ * @return {Number} - valor del peso tipográfico
+ *
+ * @example SCSS
+ *   font-weight(semibold) =>  600;
+ */
+
+@function font-weight($weight) {
+  // Compruebo si el valor pertenece al listado de pesos tipográficos
+  @if map.get($font-weights, $weight) {
+    @if $css-variables == true {
+      @return var(--font-#{$weight});
+    }
+
+    @return map.get($font-weights, $weight);
+  }
+
+  // No es un valor válido
+  @error "[#{$weight}] does not exist";
+}
+
+/*
+ * Devuele el valor de la familia seleccionada
+ *
+ * @param {string} $family - Alias del listado de tamaños de texto
+ * @return {Number} - valor del peso tipográfico
+ *
+ * @example SCSS
+ *   font-family(header) => "Source Sans Pro", Helvetica Neue, Arial, sans-serif;
+ */
+
+@function font-family($family) {
+  // Compruebo si el valor pertenece al listados de familias
+  @if map.get($font-families, $family) {
+    @if $css-variables == true {
+      @return var(--font-#{$family});
+    }
+
+    @return map.get($font-families, $family);
+  }
+
+  // No es un valor válido
+  @error "[#{$family}] does not exist";
+}
+
+/*
+ * Devuelve un tamaño de fuente, familia o peso dependiendo del valor indicado
+ *
+ * @param {string} $font - Alias del tamaño del texto, peso tipográfico o familia
+ * @return {string} - valor del tamaño del texto, peso tipográfico o familia
+ *
+ * @example SCSS
+ *   font(h4) => 1.381rem;
+ *   font(header) => "Source Sans Pro", Helvetica Neue, Arial, sans-serif;
+ *   font(semibold) => 500;
+ */
+
+@function font($value) {
+  // Compruebo si el valor pertenece al listado de tamaños de texto
+  @if map.get($font-sizes, $value) {
+    @return font-size($value);
+  }
+
+  // Compruebo si el valor pertenece al listado de pesos tipográficos
+  @if map.get($font-weights, $value) {
+    @return font-weight($value);
+  }
+
+  // Compruebo si el valor pertenece al listados de familias
+  @if map.get($font-families, $value) {
+    @return font-family($value);
+  }
+
+  // No es un valor válido
+  @error "[#{$value}] does not exist";
+}

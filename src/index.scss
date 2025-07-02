@@ -1,6 +1,6 @@
 // TailorDS - A Modern SCSS Framework
 // Main entry point for the framework
 
-@forward "variables";
-@forward "mixins";
-@forward "components";
+@forward "core";
+@forward "base";
+@forward "utilities";

@@ -1,0 +1,112 @@
+@use "../core/vars.core" as *;
+@use "../core/helpers.core" as *;
+@use "../core/responsive.core" as *;
+@use "../core/sizes.core" as *;
+
+/*
+ * ================ Generadores ================
+ */
+
+/*
+ * Modifica el tamaño de un elemento.
+ */
+
+@if generate(sizes) == true {
+  /*
+   * Tamaños relativos
+   *
+   * @example CSS
+   *   .width-half            // Anchura de medio espacio
+   *   .width-simple          // Anchura de un espacio
+   *   .height-triple         // Altura de tres espacios
+   *   .height-triple--lap    // Altura de tres espacios solo para dispostivos de escritorio
+   */
+
+  @each $size, $value in $sizes-relatives {
+    .#{$prefix}width-#{$size} {
+      @include responsive {
+        width: size($value) #{$important};
+      }
+    }
+
+    .#{$prefix}height-#{$size} {
+      @include responsive {
+        height: size($value) #{$important};
+      }
+    }
+  }
+
+  /*
+   * Tamaños proporcionales
+   *
+   * @example CSS
+   *   .width-50           // Anchura del 50% del contenedor
+   *   .vw-50              // Anchura del 50% de la pantalla
+   *   .max-width-50       // Anchura máxima del 50% del contenedor
+   *   .max-vw-50          // Anchura máxima del 50% de la pantalla
+   *   .height-auto        // Altura automática
+   *   .height-50--lap     // Altura del 50% del contenedor solo para dispostivos de escritorio
+   */
+
+  @each $size, $value in $sizes-percentages {
+    .#{$prefix}width-#{$size} {
+      @include responsive {
+        width: #{$value * 1%} #{$important};
+      }
+    }
+
+    .#{$prefix}height-#{$size} {
+      @include responsive {
+        height: #{$value * 1%} #{$important};
+      }
+    }
+
+    .#{$prefix}vw-#{$size} {
+      @include responsive {
+        width: #{$value}vw #{$important};
+      }
+    }
+
+    .#{$prefix}vh-#{$size} {
+      @include responsive {
+        height: #{$value}vh #{$important};
+      }
+    }
+
+    .#{$prefix}max-width-#{$size} {
+      @include responsive {
+        max-width: #{$value * 1%} #{$important};
+      }
+    }
+
+    .#{$prefix}max-height-#{$size} {
+      @include responsive {
+        max-height: #{$value * 1%} #{$important};
+      }
+    }
+
+    .#{$prefix}max-vw-#{$size} {
+      @include responsive {
+        max-width: #{$value}vw #{$important};
+      }
+    }
+
+    .#{$prefix}max-vh-#{$size} {
+      @include responsive {
+        max-height: #{$value}vh #{$important};
+      }
+    }
+  }
+
+  .#{$prefix}width-auto {
+    @include responsive {
+      width: auto #{$important};
+    }
+  }
+
+  .#{$prefix}height-auto {
+    @include responsive {
+      width: auto #{$important};
+    }
+  }
+}

@@ -1,0 +1,69 @@
+@use "../core/vars.core" as *;
+@use "../core/colors.core" as *;
+@use "../core/types.core" as *;
+@use "../core/borders.core" as *;
+@use "../core/sizes.core" as *;
+
+@if $useBase {
+  /*
+   * ================ Tabla ================
+   */
+
+  table {
+    width: 100%;
+    min-width: 100%;
+    margin-bottom: simple();
+    border-spacing: 0;
+    border-collapse: separate;
+  }
+
+  td,
+  th {
+    padding: quarter();
+    vertical-align: top;
+    border-bottom: 1px solid transparent;
+  }
+
+  th,
+  td,
+  tbody + tbody {
+    border-bottom-color: color(gray3);
+  }
+
+  th {
+    font-size: font-size(small2);
+    font-weight: font-weight(bold);
+    vertical-align: bottom;
+    color: color(gray1);
+    text-transform: uppercase;
+    background-color: color(gray5);
+    border-top: 1px solid color(gray3);
+    border-bottom-color: color(gray3);
+
+    &:first-of-type {
+      border-left: 1px solid color(gray3);
+      border-radius: radius(medium) 0 0 radius(medium);
+    }
+
+    &:last-of-type {
+      border-right: 1px solid color(gray3);
+      border-radius: 0 radius(medium) radius(medium) 0;
+    }
+  }
+
+  td {
+    font-size: font-size(small1);
+    line-height: 1.4rem;
+    color: color(gray1);
+    border-bottom: 1px solid color(gray3);
+
+    &:first-of-type {
+      font-weight: font-weight(bold);
+      white-space: nowrap;
+    }
+  }
+
+  tbody + tbody {
+    border-bottom: 1px solid transparent;
+  }
+}

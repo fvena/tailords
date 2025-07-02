@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "sass:meta";
+@use "vars.core" as *;
+
+/*
+ * ================ Funciones ================
+ */
+
+/*
+ * Devuelve el tamaño relativo de un elemento en base al tamaño por defecto
+ *
+ * @param {string|integer} $value - Valor númerico o alias del listado de tamaños
+ * @return {Number} - valor del texto en rem
+ *
+ * @example SCSS
+ *   size(2) =>  3.2rem;
+ *   size(double) =>  3.2rem;
+ */
+
+@function size($value) {
+  // Compruebo si el valor pertenece al listado de tamaños relativos
+  @if meta.type-of($value) == "string" {
+    @if map.get($sizes-relatives, $value) {
+      $value: #{map.get($sizes-relatives, $value)};
+    }
+
+    // No es un valor válido
+    @error "[#{$size}] does not exist";
+  }
+
+  @if $css-variables == true {
+    @return calc(var(--space) * #{$value * 1rem});
+  }
+
+  @return $space * $value * 1rem;
+}

@@ -1,0 +1,62 @@
+@use "sass:map";
+@use "sass:meta";
+@use "vars.core" as *;
+
+/*
+ * ================ Funciones ================
+ */
+
+/*
+ * Devuelve la anchura del borde en base al tamaño indicado
+ *
+ * @param {string|null|number} $size - Alias de la anchura del borde
+ * @return {string} - valor del borde en texto
+ *
+ * @example SCSS
+ *   border(thin) => 1px;
+ *   border() => 2px; // Medium (Por defecto)
+ */
+@function border($size: medium) {
+  // Obtengo el tipo del valor
+  $border-type: meta.type-of($size);
+
+  // Compruebo si el valor es un número
+  @if $border-type == number {
+    @return #{$size}px;
+  }
+
+  // Compruebo si el valor pertenece al listado de anchuras de borde
+  @if map.get($border-widths, $size) {
+    @if $css-variables == true {
+      @return var(--border-#{$size});
+    }
+
+    @return #{map.get($border-widths, $size)}px;
+  }
+
+  // No es un valor válido
+  @error "[#{$size}] does not exist";
+}
+
+/*
+ * Devuelve el valor del radio indicado
+ *
+ * @param {string} $radius - tamaño de radio
+ * @return {Number} - valor de radio en rem
+ *
+ * @example SCSS
+ *   radius(lg) =>  1.125rem;
+ */
+
+@function radius($radius: medium) {
+  @if map.get($radiuses, $radius) {
+    @if $css-variables == true {
+      @return var(--radius-#{$radius});
+    }
+
+    @return map.get($radiuses, $radius);
+  }
+
+  // No es un valor válido
+  @error "[#{$radius}] does not exist";
+}

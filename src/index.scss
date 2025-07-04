@@ -1,6 +1,46 @@
 // TailorDS - A Modern SCSS Framework
 // Main entry point for the framework
 
-@forward "core";
-@forward "base";
-@forward "utilities";
+// Core
+@forward "core/utils.core";
+@forward "core/math.core";
+@forward "variables";
+@forward "core/helpers.core";
+@forward "core/colors.core";
+@forward "core/borders.core";
+@forward "core/gradients.core";
+@forward "core/hover.core";
+@forward "core/responsive.core";
+@forward "core/shadows.core";
+@forward "core/sizes.core";
+@forward "core/types.core";
+
+// Base
+@forward "base/button.base";
+@forward "base/code.base";
+@forward "base/document.base";
+@forward "base/forms.base";
+@forward "base/images.base";
+@forward "base/links.base";
+@forward "base/list.base";
+@forward "base/print.base";
+@forward "base/reset.base";
+@forward "base/table.base";
+@forward "base/types.base";
+
+// Utilities
+@forward "utilities/borders.utilities";
+@forward "utilities/colors.utilities";
+@forward "utilities/cursor.utilities";
+@forward "utilities/display.utilities";
+@forward "utilities/gradients.utilities";
+@forward "utilities/hover.utilities";
+@forward "utilities/opacities.utilities";
+@forward "utilities/overflow.utilities";
+@forward "utilities/position.utilities";
+@forward "utilities/roots.utilities";
+@forward "utilities/shadows.utilities";
+@forward "utilities/sizes.utilities";
+@forward "utilities/spaces.utilities";
+@forward "utilities/transitions.utilities";
+@forward "utilities/types.utilities";

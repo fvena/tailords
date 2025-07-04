@@ -3,7 +3,7 @@
 @use "sass:string";
 @use "sass:math";
 @use "sass:meta";
-@use "vars.core" as *;
+@use "../variables" as *;
 @use "colors.core" as *;
 
 /*

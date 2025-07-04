@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "../core/vars.core" as *;
+@use "../variables" as *;
 
 @if $useReset {
   * {

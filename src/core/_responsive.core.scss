@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "vars.core" as *;
+@use "../variables" as *;
 @use "math.core" as *;
 
 $palm: map.get($screens, palm);

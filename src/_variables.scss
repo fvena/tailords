@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "sass:list";
-@use "utils.core" as *;
-@use "math.core" as *;
+@use "core/utils.core" as *;
+@use "core/math.core" as *;
 
 /*
  * ================ Configuración ================

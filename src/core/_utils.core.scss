@@ -7,56 +7,6 @@
  */
 
 /*
- * Comprueba si debe añadirse !important a las clases generadas
- *
- * @param {Boolean} - true si debe añadirse !important
- * @return {string} - cadena vacía o !important
- */
-
-@function check-important($important) {
-  @if $important == true {
-    @return "!important";
-  }
-  @return "";
-}
-
-/*
- * Comprueba si debe añadirse un prefijo a las clases generadas
- *
- * @param {string} - cadena vacía o el prefijo
- * @return {string} - cadena vacía o el prefijo con un guión
- */
-
-@function check-prefix($prefix) {
-  @if $prefix != "" and $prefix {
-    @return "#{$prefix}-";
-  }
-
-  @return "";
-}
-
-/*
- * Devuelve la abreviatura de un token si está disponible, sino el nombre original
- *
- * @param {Map} $token-map - Mapa de tokens
- * @param {String} $key - Clave del token
- * @return {String} - Abreviatura o nombre original
- *
- * @example SCSS
- *     abbr($spacing-scale, half)  => "2" (si half tiene abbr: "2")
- *     abbr($spacing-scale, half)  => "half" (si half no tiene abbr)
- */
-@function abbr($token-map, $key) {
-  $token: map.get($token-map, $key);
-
-  @if meta.type-of($token) == "map" and map.has-key($token, abbr) {
-    @return map.get($token, abbr);
-  }
-
-  @return $key;
-}
-
-/*
  * Parsea un template de utility class reemplazando placeholders
  *
  * @param {String} $template - Template con placeholders

@@ -100,146 +100,147 @@ $utilities: (
    */
   classes: (
       /*
-     * ================ Color Utilities ================
+     * ================ Color Utilities Classes ================
      */
-        // Background colors: .bg-brand, .bg-primary (if abbr defined)
-      background-colors: "",
+        // Template for generating CSS utility classes for background colors.
+      // @param {string} $color - The name of the color to generate a CSS utility class for.
+      // @example SCSS
+      //   background-colors: "bg-{color}" => .bg-brand, .bg-gray-500
+      background-colors: null,
 
-      // Background opacity: .bg-opacity-50, .bg-opacity-75
-      background-opacity: "",
+      // Template for generating CSS utility classes for background opacity levels.
+      // @param {string} $color - The name of the color to generate a CSS utility class for.
+      // @param {number} $opacity - The opacity of the color to generate a CSS utility class for.
+      // @example SCSS
+      //   background-opacity: "bg-{color}-{opacity}" => .bg-brand-100, .bg-gray-500-50
+      background-opacity: null,
 
-      // Text colors: .text-brand, .text-primary (if abbr defined)
+      // Template for generating CSS utility classes for text colors.
       text-colors: "",
 
-      // Text opacity: .text-opacity-50, .text-opacity-75
+      // Template for generating CSS utility classes for text opacity levels.
       text-opacity: "",
 
-      // Background gradients: .bg-gradient-brand, .bg-gradient-success
+      // Template for generating CSS utility classes for background gradients.
       background-gradients: "",
 
-      // Text gradients: .text-gradient-brand, .text-gradient-success
+      // Template for generating CSS utility classes for text gradients.
       text-gradients: "",
 
-      // Border gradients: .border-gradient-brand, .border-gradient-success
+      // Template for generating CSS utility classes for border gradients.
       border-gradients: "",
 
       /*
-     * ================ Typography Utilities ================
+     * ================ Typography Utilities Classes ================
      */
-        // Font sizes: .text-lg, .h1, .base
+        // Template for generating CSS utility classes for font sizes.
       font-sizes: "",
 
-      // Font weights: .font-bold, .font-semibold
+      // Template for generating CSS utility classes for font weights.
       font-weights: "",
 
-      // Font families: .font-sans, .font-serif, .font-mono
+      // Template for generating CSS utility classes for font families.
       font-families: "",
 
-      // Line heights: .leading-tight, .leading-relaxed
+      // Template for generating CSS utility classes for line heights.
       line-heights: "",
 
-      // Letter spacing: .tracking-tight, .tracking-wide
+      // Template for generating CSS utility classes for letter spacing.
       letter-spacing: "",
 
-      // Text alignment: .text-left, .text-center, .text-right
+      // Template for generating CSS utility classes for text alignment.
       text-alignment: "",
 
-      // Text transforms: .uppercase, .lowercase, .capitalize
+      // Template for generating CSS utility classes for text transforms.
       text-transforms: "",
 
-      // Text decorations: .underline, .no-underline
+      // Template for generating CSS utility classes for text decorations.
       text-decorations: "",
 
-      // Text truncation: .truncate, .truncate-2, .truncate-3
+      // Template for generating CSS utility classes for text truncation.
       text-truncation: "",
 
-      // Style guide combinations: .h1-semibold-gray1, .base-regular-brand
+      // Template for generating CSS utility classes for predefined style guide combinations.
       style-guide: "",
 
       /*
-     * ================ Spacing Utilities ================
+     * ================ Spacing Utilities Classes ================
      */
-        // Margins: .m-4, .mt-2, .mx-auto
+        // Template for generating CSS utility classes for margins
       // DIRECTIONS: all, top, right, bottom, left, x, y
       // SPECIAL: auto value for horizontal centering
       margins: "",
 
-      // Paddings: .p-4, .pt-2, .px-8
+      // Template for generating CSS utility classes for paddings
       // DIRECTIONS: all, top, right, bottom, left, x, y
       paddings: "",
 
       /*
-     * ================ Sizing Utilities ================
+     * ================ Sizing Utilities Classes ================
      */
-        // Widths: .w-full, .w-1/2, .w-64
+        // Template for generating CSS utility classes for widths.
       widths: "",
 
-      // Heights: .h-full, .h-screen, .h-64
+      // Template for generating CSS utility classes for heights.
       heights: "",
 
-      // Viewport widths: .vw-50, .vw-100
+      // Template for generating CSS utility classes for viewport-relative widths.
       viewport-widths: "",
 
-      // Viewport heights: .vh-50, .vh-100
+      // Template for generating CSS utility classes for viewport-relative heights.
       viewport-heights: "",
 
-      // Max widths: .max-w-full, .max-w-screen
+      // Template for generating CSS utility classes for maximum widths.
       max-widths: "",
 
-      // Max heights: .max-h-full, .max-h-screen
+      // Template for generating CSS utility classes for maximum heights.
       max-heights: "",
 
       /*
      * ================ Border Utilities ================
      */
-        // Border positions: .border, .border-t, .border-x
+        // Template for generating CSS utility classes for border positions
       // DIRECTIONS: all, top, right, bottom, left, x, y
       border-positions: "",
 
-      // Border colors: .border-brand, .border-gray-300
+      // Template for generating CSS utility classes for border colors.
       border-colors: "",
 
-      // Border widths: .border, .border-2, .border-4
+      // Template for generating CSS utility classes for border widths.
       border-widths: "",
 
-      // Border styles: .border-solid, .border-dashed, .border-dotted
+      // Template for generating CSS utility classes for border styles.
       border-styles: "",
 
-      // Border radius: .rounded, .rounded-lg, .rounded-full
+      // Template for generating CSS utility classes for border radius.
       border-radius: "",
 
       /*
      * ================ Effect Utilities ================
      */
-        // Box shadows: .shadow, .shadow-lg, .shadow-xl
+        // Template for generating CSS utility classes for box shadows.
       shadows: "",
 
-      // Element opacities: .opacity-50, .opacity-75, .opacity-100
+      // Template for generating CSS utility classes for element opacity.
       opacities: "",
 
       /*
      * ================ Layout Utilities ================
      */
-        // Display: .block, .inline, .flex, .hidden
+        // Template for generating CSS utility classes for display properties.
       display: "",
 
-      // Position: .relative, .absolute, .fixed, .sticky
+      // Template for generating CSS utility classes for position properties.
       position: "",
 
-      // Overflow: .overflow-hidden, .overflow-auto, .overflow-scroll
+      // Template for generating CSS utility classes for overflow properties.
       overflow: "",
 
       /*
      * ================ Interaction Utilities ================
      */
-        // Cursors: .cursor-pointer, .cursor-not-allowed
-      cursors: "",
-
-      /*
-     * ================ System Utilities ================
-     */
-        // CSS custom properties: generates :root with --variables
-      css-variables: ""
+        // Template for generating CSS utility classes for cursor styles.
+      cursors: ""
     )
 ) !default;
 

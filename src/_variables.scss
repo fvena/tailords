@@ -30,10 +30,7 @@ $_utilities-valid: validate-utilities-config($utilities);
 $_tokens-valid: validate-tokens-structure($tokens);
 $_base-valid: validate-base-config($base);
 
-// Extract and validate theme configuration
-$primary-theme: map.get($framework, primary-theme);
-$themes: map.get($tokens, themes);
-$_themes-valid: validate-themes($themes, $primary-theme);
+@include validate-themes($themes, $primary-theme);
 
 // Extract and validate responsive configuration
 $framework-responsive-breakpoints: map.get($framework, responsive-breakpoints);
@@ -59,64 +56,63 @@ $responsive-breakpoints: map.get($framework, responsive-breakpoints);
  */
 
 // Global utility settings
-$utility-config: map.get($utilities, config);
-$utility-classes: map.get($utilities, classes);
 
-$utilities-prefix: map.get($utility-config, prefix);
-$utilities-important: map.get($utility-config, important);
-$utilities-responsive: map.get($utility-config, responsive);
-$utilities-hover: map.get($utility-config, hover);
-$utilities-abbreviations: map.get($utility-config, abbreviations);
+$utilities-responsive: map.get(utilities, config, responsive);
 
 // Processed values for framework use
-$prefix: check-prefix($utilities-prefix);
-$important: check-important($utilities-important);
+$prefix: map.get(utilities, config, prefix);
+$hover-suffix: map.get(utilities, config, hover-suffix);
+$important: map.get(utilities, config, important);
 
 // Individual utility class controls (flat variables for easy access)
-$generate-background-colors: map.get($utility-classes, background-colors) != "";
-$generate-background-opacity: map.get($utility-classes, background-opacity) != "";
-$generate-text-colors: map.get($utility-classes, text-colors) != "";
-$generate-text-opacity: map.get($utility-classes, text-opacity) != "";
-$generate-background-gradients: map.get($utility-classes, background-gradients) != "";
-$generate-text-gradients: map.get($utility-classes, text-gradients) != "";
-$generate-border-gradients: map.get($utility-classes, border-gradients) != "";
+$themes: map.get($tokens, themes);
+$primary-theme: map.get($framework, primary-theme);
 
-$generate-font-sizes: map.get($utility-classes, font-sizes) != "";
-$generate-font-weights: map.get($utility-classes, font-weights) != "";
-$generate-font-families: map.get($utility-classes, font-families) != "";
-$generate-line-heights: map.get($utility-classes, line-heights) != "";
-$generate-letter-spacing: map.get($utility-classes, letter-spacing) != "";
-$generate-text-alignment: map.get($utility-classes, text-alignment) != "";
-$generate-text-transforms: map.get($utility-classes, text-transforms) != "";
-$generate-text-decorations: map.get($utility-classes, text-decorations) != "";
-$generate-text-truncation: map.get($utility-classes, text-truncation) != "";
-$generate-style-guide: map.get($utility-classes, style-guide) != "";
+$template-background-colors: map.get($utilities, classes, background-colors) != "";
+$generate-background-opacity: map.get($utilities, classes, background-opacity) != "";
+$generate-text-colors: map.get($utilities, classes, text-colors) != "";
+$generate-text-opacity: map.get($utilities, classes, text-opacity) != "";
+$generate-background-gradients: map.get($utilities, classes, background-gradients) != "";
+$generate-text-gradients: map.get($utilities, classes, text-gradients) != "";
+$generate-border-gradients: map.get($utilities, classes, border-gradients) != "";
+$generate-scrim-gradients: map.get($utilities, classes, scrim-gradients) != "";
+$generate-opacities: map.get($utilities, classes, opacities) != "";
 
-$generate-margins: map.get($utility-classes, margins) != "";
-$generate-paddings: map.get($utility-classes, paddings) != "";
+$generate-font-sizes: map.get($utilities, classes, font-sizes) != "";
+$generate-font-weights: map.get($utilities, classes, font-weights) != "";
+$generate-font-families: map.get($utilities, classes, font-families) != "";
+$generate-line-heights: map.get($utilities, classes, line-heights) != "";
+$generate-letter-spacing: map.get($utilities, classes, letter-spacing) != "";
+$generate-text-alignment: map.get($utilities, classes, text-alignment) != "";
+$generate-text-transforms: map.get($utilities, classes, text-transforms) != "";
+$generate-text-decorations: map.get($utilities, classes, text-decorations) != "";
+$generate-text-truncation: map.get($utilities, classes, text-truncation) != "";
+$generate-style-guide: map.get($utilities, classes, style-guide) != "";
 
-$generate-widths: map.get($utility-classes, widths) != "";
-$generate-heights: map.get($utility-classes, heights) != "";
-$generate-viewport-widths: map.get($utility-classes, viewport-widths) != "";
-$generate-viewport-heights: map.get($utility-classes, viewport-heights) != "";
-$generate-max-widths: map.get($utility-classes, max-widths) != "";
-$generate-max-heights: map.get($utility-classes, max-heights) != "";
+$generate-margins: map.get($utilities, classes, margins) != "";
+$generate-paddings: map.get($utilities, classes, paddings) != "";
 
-$generate-border-positions: map.get($utility-classes, border-positions) != "";
-$generate-border-colors: map.get($utility-classes, border-colors) != "";
-$generate-border-widths: map.get($utility-classes, border-widths) != "";
-$generate-border-styles: map.get($utility-classes, border-styles) != "";
-$generate-border-radius: map.get($utility-classes, border-radius) != "";
+$generate-widths: map.get($utilities, classes, widths) != "";
+$generate-heights: map.get($utilities, classes, heights) != "";
+$generate-viewport-widths: map.get($utilities, classes, viewport-widths) != "";
+$generate-viewport-heights: map.get($utilities, classes, viewport-heights) != "";
+$generate-max-widths: map.get($utilities, classes, max-widths) != "";
+$generate-max-heights: map.get($utilities, classes, max-heights) != "";
 
-$generate-shadows: map.get($utility-classes, shadows) != "";
-$generate-opacities: map.get($utility-classes, opacities) != "";
+$generate-border-positions: map.get($utilities, classes, border-positions) != "";
+$generate-border-colors: map.get($utilities, classes, border-colors) != "";
+$generate-border-widths: map.get($utilities, classes, border-widths) != "";
+$generate-border-styles: map.get($utilities, classes, border-styles) != "";
+$generate-border-radius: map.get($utilities, classes, border-radius) != "";
 
-$generate-display: map.get($utility-classes, display) != "";
-$generate-position: map.get($utility-classes, position) != "";
-$generate-overflow: map.get($utility-classes, overflow) != "";
+$generate-shadows: map.get($utilities, classes, shadows) != "";
 
-$generate-cursors: map.get($utility-classes, cursors) != "";
-$generate-css-variables: map.get($utility-classes, css-variables) != "";
+$generate-display: map.get($utilities, classes, display) != "";
+$generate-position: map.get($utilities, classes, position) != "";
+$generate-overflow: map.get($utilities, classes, overflow) != "";
+
+$generate-cursors: map.get($utilities, classes, cursors) != "";
+$generate-css-variables: map.get($utilities, classes, css-variables) != "";
 
 /*
  * ================ Design Token Variables ================
@@ -229,26 +225,47 @@ $transition-default-duration: map.get($animation-config, transition-duration);
 $transition-default-easing: map.get($animation-config, transition-easing);
 
 /*
- * ================ Legacy Compatibility ================
- * Aliases for variables that might be referenced by existing framework code
+ * ================ Color System Validation Status ================
+ * Verification that color system is properly configured
  */
 
-// Maintain old naming for internal compatibility
-$useReset: $enable-reset;
-$useBase: $enable-base;
+// Validate gradient configuration if gradient utilities are enabled
+@if $generate-background-gradients or $generate-text-gradients or $generate-border-gradients {
+  @if not map.has-key($gradients, brand) {
+    @warn "Brand gradient not defined in gradients configuration. Generic gradient utilities may not work properly.";
+  }
+}
 
-// DEPRECATED: Use $responsive-breakpoints instead
-// This maintains backward compatibility but should be phased out
-$medias: $responsive-breakpoints !default;
+/*
+ * ================ Template Validation ================
+ * Verify template placeholders are valid
+ */
 
-// Shadow configuration (maintain old variable names)
-$shadow-soft: $shadow-default-softness;
-$shadow-horizontal: $shadow-default-horizontal;
-$shadow-vertical: $shadow-default-vertical;
-$shadow-hard: $shadow-default-hardness;
-$shadow-invert-alpha: $shadow-invert-alpha;
+@if $generate-background-colors {
+  $bg-template: map.get($utilities, classes, background-colors);
+  @if not(string.index($bg-template, "{color}") or string.index($bg-template, "{abbr(color)}")) {
+    @error "Background colors template must contain {color} or {abbr(color)} placeholder. Current: '#{$bg-template}'";
+  }
+}
 
-// Border configuration
-$border-color: $border-default-color;
-$border-width: $border-default-width;
-$border-style: $border-default-style;
+@if $generate-text-colors {
+  $text-template: map.get($utilities, classes, text-colors);
+  @if not(string.index($text-template, "{color}") or string.index($text-template, "{abbr(color)}"))
+  {
+    @error "Text colors template must contain {color} or {abbr(color)} placeholder. Current: '#{$text-template}'";
+  }
+}
+
+@if $generate-background-gradients or $generate-text-gradients or $generate-border-gradients {
+  $gradient-templates: (
+    background-gradients: map.get($utilities, classes, background-gradients),
+    text-gradients: map.get($utilities, classes, text-gradients),
+    border-gradients: map.get($utilities, classes, border-gradients),
+  );
+
+  @each $type, $template in $gradient-templates {
+    @if $template != "" and not string.index($template, "{gradient}") {
+      @error "#{$type} template must contain {gradient} placeholder. Current: '#{$template}'";
+    }
+  }
+}

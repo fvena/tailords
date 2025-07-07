@@ -85,13 +85,18 @@
   /*
    * Theme-specific CSS custom properties
    */
+  @if not map.has-key($themes, $primary-theme) {
+    @error 'Primary theme "#{$primary-theme}" not found in themes configuration. Available themes: #{map.keys($themes)}';
+  }
+
+  // Primary theme
   :root,
-  .#{$prefix}light-mode,
-  [data-theme="light"] {
+  .#{$prefix}#{$primary-theme}-mode,
+  [data-theme="#{$primary-theme}"] {
     --COLORS------------------------: 10;
 
-    $light-theme: map.get($themes, light);
-    @each $color, $color-value in $light-theme {
+    $primary-map: map.get($themes, $primary-theme);
+    @each $color, $color-value in $primary-map {
       @if meta.type-of($color-value) == "map" {
         --#{'' + $color}: #{hex2rgb(map.get($color-value, value))};
       } @else {
@@ -100,14 +105,18 @@
     }
   }
 
-  .#{$prefix}dark-mode,
-  [data-theme="dark"] {
-    $dark-theme: map.get($themes, dark);
-    @each $color, $color-value in $dark-theme {
-      @if meta.type-of($color-value) == "map" {
-        --#{'' + $color}: #{hex2rgb(map.get($color-value, value))};
-      } @else {
-        --#{'' + $color}: #{hex2rgb($color-value)};
+  // Other themes
+  @each $theme, $theme-map in $themes {
+    @if $theme != $primary-theme {
+      .#{$prefix}#{$theme}-mode,
+      [data-theme="#{$theme}"] {
+        @each $color, $color-value in $theme-map {
+          @if meta.type-of($color-value) == "map" {
+            --#{$color}: #{hex2rgb(map.get($color-value, value))};
+          } @else {
+            --#{$color}: #{hex2rgb($color-value)};
+          }
+        }
       }
     }
   }

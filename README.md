@@ -188,7 +188,6 @@ module.exports = {
     ),
 
   $font-sizes: (xs: -2, sm: -1, base: 0, lg: 1, xl: 2, xxl: 3),
-
   $spacing: (xs: 0.25, sm: 0.5, md: 1, lg: 2, xl: 4)
 );
 ```

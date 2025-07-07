@@ -1,110 +1,213 @@
-@use "sass:math";
-@use "sass:list";
+@use "sass:map";
 @use "sass:meta";
-@use "../config" as *;
-@use "../variables" as *;
+@use "sass:string";
 
 /*
- * ================ Funciones ================
+ * ================ Template Parsing Functions ================
+ * Sistema completo de parseo de templates con todos los placeholders
  */
 
 /*
- * Checks if a utility group or sub-group should be generated based on configuration
- *
- * @param {string} $module - Module name (e.g., 'colors', 'borders')
- * @param {string} $sub-module - Optional sub-module name (e.g., 'backgrounds', 'gradients')
- * @return {Boolean} - true if should be generated
- *
- * @example SCSS
- *   generate(colors)                    => true/false (entire colors module)
- *   generate(colors, backgrounds)       => true/false (specific backgrounds sub-module)
- *   generate(borders)                   => true/false (entire borders module)
+ * Parsea templates para gradientes con placeholders completos
+ * Soporte para {gradient}, {abbr(gradient)}, {responsive}, {hover}
  */
+@function parse-gradient-template($template, $gradient-name, $gradient-map: null) {
+  $result: $template;
 
-@function generate($module, $sub-module: null) {
-  // Get the classes configuration
-  $classes-config: map.get($utilities, classes);
-
-  // Check if module exists in classes configuration
-  @if not map.has-key($classes-config, $module) {
-    @return false; // Module not defined = false by default
+  // Si no hay template, retorna nombre por defecto
+  @if $template == "" or $template == null {
+    @return "";
   }
 
-  $module-config: map.get($classes-config, $module);
-
-  // If module config is a boolean, return it directly
-  @if meta.type-of($module-config) == bool {
-    @return $module-config;
+  // Reemplazar {abbr(gradient)} - busca abreviación en gradient map
+  @if string.index($result, "{abbr(gradient)}") {
+    $abbr: $gradient-name;
+    @if $gradient-map and map.has-key($gradient-map, $gradient-name) {
+      $gradient-data: map.get($gradient-map, $gradient-name);
+      @if meta.type-of($gradient-data) == "map" and map.has-key($gradient-data, abbr) {
+        $abbr: map.get($gradient-data, abbr);
+      }
+    }
+    $result: string.replace($result, "{abbr(gradient)}", $abbr);
   }
 
-  // If module config is a map but no sub-module specified, return true
-  // (means the module is enabled but caller wants to check sub-modules individually)
-  @if $sub-module == null {
-    @return true;
+  // Reemplazar {gradient}
+  @if string.index($result, "{gradient}") {
+    $result: string.replace($result, "{gradient}", $gradient-name);
   }
 
-  // Check if sub-module exists and return its value
-  @if map.has-key($module-config, $sub-module) {
-    @return map.get($module-config, $sub-module);
-  }
-
-  @return false; // Sub-module not defined = false by default
+  @return $result;
 }
 
 /*
- * Devuelve el nombre de la variable o su valor dependiendo de si las variables CSS están activadas
- *
- * @param {string} $name - Nombre de la variable
- * @param {string} $value - Valor de la variable
- * @return {string} - Nombre de la variable o su valor
- *
- * @example SCSS
- *   isVar('--border-style', $border-style) => var(--border-style) // css-variable = true
- *   isVar('--border-style', $border-style) => $border-style // css-variable = false
+ * Parsea templates para variantes de scrim
+ * Soporte para {variant}, {abbr(variant)}, etc.
  */
+@function parse-scrim-template($template, $variant-name: "default") {
+  $result: $template;
 
-@function isVar($name, $value) {
-  @if $css-variables == true {
-    @return var(#{$name});
+  @if $template == "" or $template == null {
+    @return "";
   }
 
-  @return $value;
+  // Reemplazar {variant}
+  @if string.index($result, "{variant}") {
+    $variant-suffix: if($variant-name == "default", "", "-#{$variant-name}");
+    $result: string.replace($result, "{variant}", $variant-suffix);
+  }
+
+  @return $result;
 }
 
 /*
- * Comprueba si un valor es una dirección de degradado válida
+ * Parse templates for colors with support for opacity
  *
- * @param {*} $value - Valor para comprobar
- * @return {Bool}
+ * @param {string} $template - The template to parse
+ * @param {string} $color-name - The name of the color to parse
+ * @param {number} $opacity - The opacity of the color to parse
+ * @param {string} $hover-suffix - The suffix to use for hover styles
+ * @return {string} - The parsed template
  *
  * @example SCSS
- *   is-direction('to top right')    => true
- *   is-direction('top right')       => false
- *   is-direction(135deg)            => true
- *   is-direction(135)               => false
+ *   parse-color-template("bg-{color}", "brand") => "bg-brand"
+ *   parse-color-template("bg-{color}-{opacity}", "brand", 100) => "bg-brand-100"
+ *   parse-color-template("bg-{color}-{hover}", "brand", null, "-hover") => "bg-brand-hover"
  */
+@function generate-color-class-name(
+  $template,
+  $color-name,
+  $opacity: null,
+  $prefix: null,
+  $hover-suffix: null
+) {
+  // Replace {color} placeholder
+  @if string.index($template, "{color}") == null {
+    @error "Template must contain {color} placeholder";
+  }
 
-@function is-direction($value) {
-  $is-keyword: list.index(
-    (
-      "to top",
-      "to top right",
-      "to right top",
-      "to right",
-      "to bottom right",
-      "to right bottom",
-      "to bottom",
-      "to bottom left",
-      "to left bottom",
-      "to left",
-      "to left top",
-      "to top left"
-    ),
-    $value
-  );
+  $result: string.replace($template, "{color}", $color-name);
 
-  $is-angle: meta.type-of($value) == "number" and
-    list.index("deg" "grad" "turn" "rad", math.unit($value));
+  // Replace {opacity} placeholder
+  @if $opacity != null {
+    @if string.index($result, "{opacity}") == null {
+      @error "Template must contain {opacity} placeholder";
+    }
+    $result: string.replace($result, "{opacity}", $opacity);
+  }
 
-  @return $is-keyword or $is-angle;
+  // Replace {prefix} placeholder if it exists or remove it if it doesn't
+  @if string.index($result, "{prefix}") != null {
+    $result: string.replace($result, "{prefix}", $prefix);
+  } @else {
+    $result: string.replace($result, "{prefix}", "");
+  }
+
+  // Replace {hover} placeholder if it exists or remove it if it doesn't
+  @if string.index($result, "{hover}") != null {
+    $result: string.replace($result, "{hover}", $hover-suffix);
+  } @else {
+    $result: string.replace($result, "{hover}", "");
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates con soporte responsive completo
+ * Añade {responsive} y {abbr(responsive)} placeholders
+ */
+@function parse-responsive-placeholders($template, $breakpoint: null, $abbreviations: null) {
+  $result: $template;
+
+  @if $breakpoint == null {
+    // Sin responsive, limpiar placeholders
+    $result: string.replace($result, "{responsive}", "");
+    $result: string.replace($result, "{abbr(responsive)}", "");
+    @return $result;
+  }
+
+  // Reemplazar {abbr(responsive)}
+  @if string.index($result, "{abbr(responsive)}") and $abbreviations {
+    $responsive-abbrs: map.get($abbreviations, responsive);
+    $abbr: if(
+      $responsive-abbrs and map.has-key($responsive-abbrs, $breakpoint),
+      map.get($responsive-abbrs, $breakpoint),
+      $breakpoint
+    );
+    $result: string.replace($result, "{abbr(responsive)}", $abbr);
+  }
+
+  // Reemplazar {responsive}
+  @if string.index($result, "{responsive}") {
+    $result: string.replace($result, "{responsive}", "--#{$breakpoint}");
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates con soporte hover completo
+ */
+@function parse-hover-placeholders($template, $is-hover: false, $abbreviations: null) {
+  $result: $template;
+
+  @if not $is-hover {
+    // Sin hover, limpiar placeholders
+    $result: string.replace($result, "{hover}", "");
+    $result: string.replace($result, "{abbr(hover)}", "");
+    @return $result;
+  }
+
+  // Reemplazar {abbr(hover)}
+  @if string.index($result, "{abbr(hover)}") and $abbreviations {
+    $hover-abbr: map.get($abbreviations, hover);
+    $abbr: if($hover-abbr, $hover-abbr, "hover");
+    $result: string.replace($result, "{abbr(hover)}", $abbr);
+  }
+
+  // Reemplazar {hover}
+  @if string.index($result, "{hover}") {
+    $result: string.replace($result, "{hover}", "--hover");
+  }
+
+  @return $result;
+}
+
+/*
+ * Parser universal para cualquier template con todos los placeholders
+ * Combina todos los sistemas de placeholders
+ */
+@function parse-universal-template(
+  $template,
+  $token-name,
+  $token-map: null,
+  $breakpoint: null,
+  $is-hover: false,
+  $abbreviations: null
+) {
+  $result: $template;
+
+  @if $template == "" or $template == null {
+    @return "";
+  }
+
+  // 1. Parsear token-specific placeholders
+  @if $token-map {
+    @if string.index($result, "{abbr(") or string.index($result, "{color}") {
+      $result: parse-color-template($result, $token-name, $token-map);
+    }
+  }
+
+  // 2. Parsear responsive placeholders
+  $result: parse-responsive-placeholders($result, $breakpoint, $abbreviations);
+
+  // 3. Parsear hover placeholders
+  $result: parse-hover-placeholders($result, $is-hover, $abbreviations);
+
+  // 4. Reemplazar placeholders genéricos restantes
+  @if string.index($result, "{token}") {
+    $result: string.replace($result, "{token}", $token-name);
+  }
+
+  @return $result;
 }

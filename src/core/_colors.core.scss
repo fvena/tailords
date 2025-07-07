@@ -8,36 +8,6 @@
 @use "../tokens" as *;
 
 /*
- * ================ Validaciones ================
- */
-
-/*
- * Validates theme structure and inheritance
- */
-@function validate-themes($themes, $primary-theme) {
-  @if meta.type-of($themes) != "map" {
-    @error "$themes must be a map";
-  }
-
-  // Check primary theme exists
-  @if not map.has-key($themes, $primary-theme) {
-    @error "Primary theme '#{$primary-theme}' not found in $themes";
-  }
-
-  $primary: map.get($themes, $primary-theme);
-
-  // Validate primary theme has essential colors
-  $essential-colors: (brand, gray1, gray2, white, black);
-  @each $color in $essential-colors {
-    @if not map.has-key($primary, $color) {
-      @warn "Essential color '#{$color}' missing from primary theme '#{$primary-theme}'";
-    }
-  }
-
-  @return true;
-}
-
-/*
  * ================ Funciones ================
  */
 

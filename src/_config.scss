@@ -46,7 +46,14 @@ $framework: (
    * MUST MATCH: A key in $themes map from _tokens.scss
    * AFFECTS: Color resolution when secondary themes don't define a color
    */
-  primary-theme: "light",
+  primary-theme: null,
+
+  /*
+   * Hover suffix to use for hover styles
+   * GENERATES: Hover styles in final CSS bundle
+   * AVAILABLE: Any suffix you want to use for hover styles
+   */
+  hover-suffix: null,
 
   /*
    * Responsive breakpoints to generate utility variants for

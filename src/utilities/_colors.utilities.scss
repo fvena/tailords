@@ -1,26 +1,40 @@
+@use "sass:map";
 @use "../variables" as *;
 @use "../core/helpers.core" as *;
 @use "../core/hover.core" as *;
 @use "../core/colors.core" as *;
 
 /*
- * ================ Color Utilities Generator ================
+ * ================ Color System Validation ================
  */
 
 /*
- * Background Colors
+ * Verify that the color system is properly configured
+ *
+ * @param {map} $themes - The themes configuration
+ * @param {string} $primary-theme - The primary theme
+ * @return {boolean} - true if the color system is properly configured
  */
-@if $generate-background-colors {
-  $template: map.get($utility-classes, background-colors);
+@mixin validate-themes($themes, $primary-theme) {
+  @if not map.has-key($themes, $primary-theme) {
+    @error 'Primary theme "#{$primary-theme}" not found in themes configuration. Available themes: #{map.keys($themes)}';
+  }
 
-  @each $theme-name, $theme-colors in $themes {
-    @each $color-name, $color-value in $theme-colors {
-      $class-name: parse-color-template($template, $color-name, $theme-colors);
+  $primary-map: map.get($themes, $primary-theme);
 
-      .#{$prefix}#{$class-name} {
-        @include hover {
-          --bg-opacity: 1;
-          background-color: color($color-name, var(--bg-opacity)) #{$important};
+  @if meta.type-of($primary-map) != "map" {
+    @error 'Primary theme colors must be a valid Sass map';
+  }
+
+  @each $theme, $map in $themes {
+    @if $theme != $primary-theme {
+      @if meta.type-of($map) != "map" {
+        @error 'Theme "#{$theme}" must be a valid Sass map';
+      }
+
+      @each $key, $value in $map {
+        @if not map.has-key($primary-map, $key) {
+          @error 'Color "#{$key}" in theme "#{$theme}" not found in primary theme "#{$primary-theme}".';
         }
       }
     }
@@ -28,7 +42,35 @@
 }
 
 /*
- * Background Opacity
+ * ================ Color Utilities Generator ================
+ */
+
+/*
+ * Background Colors - generate a CSS utility classes for each color in the primary theme
+ */
+@if $template-background-colors {
+  $theme-map: map.get($themes, $primary-theme);
+
+  @each $color-name, $color-value in $theme-map {
+    $class-name: generate-color-class-name(
+      $template-background-colors,
+      $color-name,
+      null,
+      $prefix,
+      $hover-token
+    );
+
+    .#{$class-name} {
+      @include hover($template) using ($hover-token) {
+        --bg-opacity: 1;
+        background-color: color($color-name, var(--bg-opacity)) #{$important};
+      }
+    }
+  }
+}
+
+/*
+ * Background Opacity - Template System
  */
 @if $generate-background-opacity {
   $template: map.get($utility-classes, background-opacity);
@@ -45,7 +87,7 @@
 }
 
 /*
- * Text Colors
+ * Text Colors - Template System
  */
 @if $generate-text-colors {
   $template: map.get($utility-classes, text-colors);
@@ -65,7 +107,7 @@
 }
 
 /*
- * Text Opacity
+ * Text Opacity - Template System
  */
 @if $generate-text-opacity {
   $template: map.get($utility-classes, text-opacity);
@@ -81,15 +123,9 @@
   }
 }
 
-@use "sass:map";
-@use "../variables" as *;
-@use "../core/helpers.core" as *;
-@use "../core/hover.core" as *;
-
 /*
- * ================ Opacity Utilities Generator ================
+ * Element Opacities - Template System
  */
-
 @if $generate-opacities {
   $template: map.get($utility-classes, opacities);
 
@@ -105,67 +141,127 @@
 }
 
 /*
- * ================ Gradient Utilities Generator ================
+ * ================ Gradient Utilities - Template System ================
  */
 
 /*
- * Background Gradients
+ * Background Gradients - Completamente Template-Based
  */
 @if $generate-background-gradients {
   $template: map.get($utility-classes, background-gradients);
 
-  @each $name, $gradient-colors in $gradients {
-    $class-name: parse-gradient-template($template, $name);
+  @each $gradient-name, $gradient-colors in $gradients {
+    $class-name: parse-gradient-template($template, $gradient-name, $gradients);
 
     .#{$prefix}#{$class-name} {
-      background: gradient($name) #{$important};
+      background: gradient($gradient-name) #{$important};
     }
   }
 }
 
 /*
- * Text Gradients
+ * Text Gradients - Template System con Mixin Integration
  */
 @if $generate-text-gradients {
   $template: map.get($utility-classes, text-gradients);
 
-  @each $name, $gradient-colors in $gradients {
-    $class-name: parse-gradient-template($template, $name);
+  @each $gradient-name, $gradient-colors in $gradients {
+    $class-name: parse-gradient-template($template, $gradient-name, $gradients);
 
     .#{$prefix}#{$class-name} {
-      @include text-gradient($name, "", linear, to right);
+      @include text-gradient($gradient-name, "", linear, to right);
     }
   }
 
-  // Generic text gradient using brand
-  .#{$prefix}text-gradient {
-    @include text-gradient(brand);
+  // Generic text gradient usando brand - Solo si template habilitado
+  @if map.get($utility-classes, text-gradients) != "" {
+    .#{$prefix}text-gradient {
+      @include text-gradient(brand);
+    }
   }
 }
 
 /*
- * Border Gradients
+ * Border Gradients - Template System con Mixin Integration
  */
 @if $generate-border-gradients {
   $template: map.get($utility-classes, border-gradients);
 
-  @each $name, $gradient-colors in $gradients {
-    $class-name: parse-gradient-template($template, $name);
+  @each $gradient-name, $gradient-colors in $gradients {
+    $class-name: parse-gradient-template($template, $gradient-name, $gradients);
 
     .#{$prefix}#{$class-name} {
-      @include border-gradient($name);
+      @include border-gradient($gradient-name);
     }
   }
 
-  // Generic border gradient using brand
-  .#{$prefix}border-gradient {
-    @include border-gradient(brand);
+  // Generic border gradient usando brand - Solo si template habilitado
+  @if map.get($utility-classes, border-gradients) != "" {
+    .#{$prefix}border-gradient {
+      @include border-gradient(brand);
+    }
   }
 }
 
 /*
- * Scrim gradient (special utility)
+ * ================ Scrim Gradients - Template System ================
+ * Sistema de gradientes suavizados con variantes configurables
  */
-.scrim {
-  background-image: scrim-gradient($shadow-color);
+@if map.get($utility-classes, scrim-gradients) and map.get($utility-classes, scrim-gradients) != ""
+{
+  $template: map.get($utility-classes, scrim-gradients);
+
+  // Scrim variants configuration
+  $scrim-variants: (
+    default: (
+        color: $shadow-color,
+        opacity: 0.9,
+        direction: "to top",
+      ),
+    dark: (
+        color: $shadow-color,
+        opacity: 0.95,
+        direction: "to top",
+      ),
+    light: (
+        color: white,
+        opacity: 0.8,
+        direction: "to top",
+      ),
+    bottom: (
+        color: $shadow-color,
+        opacity: 0.9,
+        direction: "to bottom",
+      ),
+    left: (
+        color: $shadow-color,
+        opacity: 0.9,
+        direction: "to left",
+      ),
+    right: (
+        color: $shadow-color,
+        opacity: 0.9,
+        direction: "to right",
+      ),
+  );
+
+  @each $variant-name, $variant-config in $scrim-variants {
+    $class-name: parse-scrim-template($template, $variant-name);
+
+    @if $class-name != "" {
+      .#{$prefix}#{$class-name} {
+        background-image: scrim-gradient(
+            map.get($variant-config, color),
+            map.get($variant-config, opacity),
+            map.get($variant-config, direction)
+          )
+          #{$important};
+      }
+    }
+  }
+} @else if not map.has-key($utility-classes, scrim-gradients) {
+  // Fallback para compatibilidad - Solo si no está configurado en templates
+  .scrim {
+    background-image: scrim-gradient($shadow-color);
+  }
 }

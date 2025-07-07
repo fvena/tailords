@@ -1,0 +1,187 @@
+@use "sass:meta";
+@use "sass:map";
+@use "../src/core/colors.core" as colors;
+@use "../src/core/helpers.core" as helpers;
+@use "../src/variables" as *;
+@use "sass-true" as *;
+
+@include test-module("Colors System") {
+  @include test("color() function with wrapper tokens") {
+    // Test basic color access from wrapper tokens
+    @include assert-equal(colors.color(brand), rgba(221, 34, 78, 1));
+    @include assert-equal(colors.color(gray1), rgba(18, 26, 29, 1));
+
+    // Test opacity parameter
+    @include assert-equal(colors.color(brand, 0.5), rgba(221, 34, 78, 0.5));
+    @include assert-equal(colors.color(gray1, 0.8), rgba(18, 26, 29, 0.8));
+  }
+
+  @include test("theme inheritance system") {
+    // Test primary theme color access
+    @include assert-equal(colors.color(brand, 1, "light"), rgba(221, 34, 78, 1));
+
+    // Test secondary theme inheritance (brand should inherit from light)
+    @include assert-equal(colors.color(brand, 1, "dark"), rgba(221, 34, 78, 1));
+
+    // Test secondary theme override (gray1 is different in dark theme)
+    @include assert-equal(colors.color(gray1, 1, "dark"), rgba(247, 246, 245, 1));
+  }
+
+  @include test("hex2rgb conversion") {
+    @include assert-equal(colors.hex2rgb(#dd224e), "221,34,78");
+    @include assert-equal(colors.hex2rgb(#121a1d), "18,26,29");
+    @include assert-equal(colors.hex2rgb(#ffffff), "255,255,255");
+  }
+
+  @include test("encodecolor for SVG usage") {
+    @include assert-equal(colors.encodecolor(#dd224e), "%23dd224e");
+    @include assert-equal(colors.encodecolor(brand), "%23dd224e");
+  }
+
+  @include test("gradient function with wrapper configuration") {
+    // Test predefined gradients from $gradients map
+    $brand-gradient: colors.gradient(brand);
+    @include assert-true(string.index($brand-gradient, "radial-gradient") != null);
+
+    // Test custom gradient with two colors
+    $custom-gradient: colors.gradient(brand, success);
+    @include assert-true(string.index($custom-gradient, "radial-gradient") != null);
+  }
+
+  @include test("scrim-gradient generation") {
+    $scrim: colors.scrim-gradient();
+    @include assert-true(string.index($scrim, "linear-gradient") != null);
+    @include assert-true(string.index($scrim, "to top") != null);
+
+    // Test custom scrim
+    $custom-scrim: colors.scrim-gradient(brand, 0.8, "to bottom");
+    @include assert-true(string.index($custom-scrim, "to bottom") != null);
+  }
+}
+
+@include test-module("Template Parsing") {
+  @include test("parse-color-template with abbreviations") {
+    $test-colors: (
+      brand: (
+        value: #dd224e,
+        abbr: "primary",
+      ),
+      gray1: #121a1d,
+    );
+
+    // Test {color} placeholder
+    @include assert-equal(
+      helpers.parse-color-template("bg-{color}", brand, $test-colors),
+      "bg-primary"
+    );
+
+    // Test {abbr(color)} placeholder forces abbreviation
+    @include assert-equal(
+      helpers.parse-color-template("text-{abbr(color)}", brand, $test-colors),
+      "text-primary"
+    );
+
+    // Test color without abbreviation
+    @include assert-equal(
+      helpers.parse-color-template("bg-{color}", gray1, $test-colors),
+      "bg-gray1"
+    );
+  }
+
+  @include test("parse-gradient-template") {
+    $test-gradients: (
+      brand: (
+        brand-light,
+        brand-dark,
+      ),
+      custom: (
+        value: (
+          red,
+          blue,
+        ),
+        abbr: "rb",
+      ),
+    );
+
+    @include assert-equal(
+      helpers.parse-gradient-template("bg-gradient-{gradient}", brand, $test-gradients),
+      "bg-gradient-brand"
+    );
+
+    @include assert-equal(
+      helpers.parse-gradient-template("gradient-{abbr(gradient)}", custom, $test-gradients),
+      "gradient-rb"
+    );
+  }
+
+  @include test("parse-scrim-template variants") {
+    @include assert-equal(helpers.parse-scrim-template("scrim-{variant}", "dark"), "scrim-dark");
+
+    @include assert-equal(helpers.parse-scrim-template("scrim-{variant}", "default"), "scrim");
+  }
+
+  @include test("parse-universal-template integration") {
+    $test-tokens: (
+      half: (
+        value: 0.5,
+        abbr: "2",
+      ),
+    );
+
+    $abbreviations: (
+      responsive: (
+        palm: "p",
+        desk: "d",
+      ),
+      hover: "h",
+    );
+
+    // Test full template with all placeholders
+    @include assert-equal(
+      helpers.parse-universal-template(
+        "m-{abbr(token)}-{abbr(responsive)}-{abbr(hover)}",
+        half,
+        $test-tokens,
+        palm,
+        true,
+        $abbreviations
+      ),
+      "m-2-p-h"
+    );
+  }
+}
+
+@include test-module("Validation System") {
+  @include test("theme validation") {
+    $valid-themes: (
+      light: (
+        brand: #dd224e,
+        gray1: #121a1d,
+      ),
+      dark: (
+        gray1: #ffffff,
+      ),
+    );
+
+    @include assert-true(colors.validate-themes($valid-themes, "light"));
+  }
+
+  @include test("configuration validation") {
+    // These tests would verify that the validation functions
+    // properly check wrapper map structures and provide helpful errors
+    @include assert-true(true); // Placeholder - actual validation tests would go here
+  }
+}
+
+@include test-module("CSS Custom Properties") {
+  @include test("CSS variables generation") {
+    // Test that color values are properly formatted for CSS custom properties
+    @include assert-equal(colors.hex2rgb(#dd224e), "221,34,78");
+
+    // Test CSS variable usage in color function when $css-variables is true
+    @if $css-variables {
+      $color-with-var: colors.color(brand);
+      @include assert-true(string.index($color-with-var, "var(--brand)") != null);
+    }
+  }
+}

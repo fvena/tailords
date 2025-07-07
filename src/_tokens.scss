@@ -40,10 +40,7 @@ $tokens: (
         brand-darkest: #4e011e,
         brand-darker: #80002f,
         brand-dark: #bb1642,
-        brand: (
-          value: #dd224e,
-          abbr: "primary",
-        ),
+        brand: #dd224e,
         brand-light: #fb5067,
         brand-lighter: #ff817a,
         brand-lightest: #fae0df,
@@ -52,10 +49,7 @@ $tokens: (
         success-darkest: #448a0f,
         success-darker: #448a0f,
         success-dark: #5faf23,
-        success: (
-          value: #77c23d,
-          abbr: "green",
-        ),
+        success: #77c23d,
         success-light: #ace580,
         success-lighter: #e3f7d4,
         success-lightest: #ebfae0,
@@ -64,10 +58,7 @@ $tokens: (
         warning-darkest: #b37400,
         warning-darker: #b37400,
         warning-dark: #e69d00,
-        warning: (
-          value: #ffbe33,
-          abbr: "yellow",
-        ),
+        warning: #ffbe33,
         warning-light: #ffd780,
         warning-lighter: #ffefcc,
         warning-lightest: #faf1dd,
@@ -76,56 +67,23 @@ $tokens: (
         danger-darkest: #990f00,
         danger-darker: #990f00,
         danger-dark: #e61700,
-        danger: (
-          value: #ff4733,
-          abbr: "red",
-        ),
+        danger: #ff4733,
         danger-light: #ff8c80,
         danger-lighter: #ffd1cc,
         danger-lightest: #fce4e1,
 
         // Grayscale
         black: #000000,
-        gray1: (
-          value: #121a1d,
-          abbr: "gray-900",
-        ),
-        gray2: (
-          value: #3b4c54,
-          abbr: "gray-800",
-        ),
-        gray3: (
-          value: #6a7981,
-          abbr: "gray-700",
-        ),
-        gray4: (
-          value: #9da6aa,
-          abbr: "gray-600",
-        ),
-        gray5: (
-          value: #ced5d9,
-          abbr: "gray-500",
-        ),
-        gray6: (
-          value: #e7ebee,
-          abbr: "gray-400",
-        ),
-        gray7: (
-          value: #f6f7f9,
-          abbr: "gray-300",
-        ),
-        gray8: (
-          value: #fcfcfd,
-          abbr: "gray-200",
-        ),
-        gray9: (
-          value: #f7f6f5,
-          abbr: "gray-100",
-        ),
-        gray10: (
-          value: #f7f6f5,
-          abbr: "gray-50",
-        ),
+        gray1: #121a1d,
+        gray2: #3b4c54,
+        gray3: #6a7981,
+        gray4: #9da6aa,
+        gray5: #ced5d9,
+        gray6: #e7ebee,
+        gray7: #f6f7f9,
+        gray8: #fcfcfd,
+        gray9: #f7f6f5,
+        gray10: #f7f6f5,
         white: #ffffff,
       ),
 

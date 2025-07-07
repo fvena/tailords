@@ -1,0 +1,216 @@
+/*
+ * ================ Base Component Configuration ================
+ *
+ * Default styling configuration for HTML elements when $enable-base is true.
+ *
+ * PHILOSOPHY:
+ * These are REAL, FINAL values that work regardless of user's token configuration.
+ * No assumptions about token names - the framework must work out of the box.
+ *
+ * WHAT'S IN THIS FILE:
+ * - Default colors, typography, and styling for HTML elements
+ * - Component-specific styling defaults (forms, buttons, tables, etc.)
+ * - Global styling defaults (page background, transitions, etc.)
+ *
+ * VALUE FORMAT:
+ * - Colors: Real hex values or CSS keywords
+ * - Sizes: Real rem/px/em values
+ * - Properties: Actual CSS values, not token references
+ *
+ * USER OVERRIDE:
+ * Users can override these by defining their own tokens with the same purpose.
+ * Functions will prefer user tokens when available, fall back to these defaults.
+ */
+
+/*
+ * Base configuration with real, working values
+ */
+$base: (
+  /*
+   * Page-level defaults
+   * AFFECTS: <body> and document-level styling
+   */
+  page: (
+      /*
+     * Default page background color
+     * VALUE: Light gray for readable default
+     * GENERATES: body { background-color: #fcfcfd; }
+     */
+      background-color: #fcfcfd
+    ),
+
+  /*
+   * Typography defaults for text elements
+   * AFFECTS: <body>, <h1>-<h6>, <p>, <strong>, <em>, etc.
+   */
+  typography: (
+      /*
+     * Body text configuration
+     * AFFECTS: <body> element base styling
+     */
+      body-font-family: (sans-serif),
+      // CSS generic family
+      body-font-size: 1rem,
+      // Standard base size
+      body-font-weight: 400,
+      // Normal weight
+      body-line-height: 1.6,
+      // Comfortable reading
+      body-text-color: #3b4c54,
+
+      // Dark gray for readability
+      /*
+     * Heading configuration
+     * AFFECTS: <h1>-<h6> elements
+     */
+      heading-font-family: (serif),
+      // Distinguish from body
+      heading-font-weight: 600,
+      // Semibold for emphasis
+      heading-text-color: #121a1d,
+
+      // Darker for hierarchy
+      /*
+     * List styling
+     * AFFECTS: <ul>, <ol> marker colors
+     */
+      list-marker-color: #dd224e,
+
+      // Accent color for markers
+      /*
+     * Code and keyboard styling
+     * AFFECTS: <code>, <pre>, <kbd> elements
+     */
+      code-text-color: #3b4c54,
+      // Same as body for consistency
+      code-background-color: #f6f7f9,
+      // Light background for contrast
+      kbd-text-color: #ffffff,
+      // White text
+      kbd-background-color: #121a1d,
+      // Dark background for kbd
+    ),
+
+  /*
+   * Form element defaults
+   * AFFECTS: <input>, <textarea>, <select>, etc.
+   */
+  forms: (
+      /*
+     * Input field styling
+     * AFFECTS: Text inputs, textareas, selects
+     */
+      input-border-color: #6a7981,
+      // Medium gray border
+      input-focus-color: #dd224e,
+      // Accent color for focus
+      input-placeholder-color: #9da6aa,
+      // Light gray for placeholder
+      input-disabled-color: #9da6aa,
+      // Same as placeholder
+    ),
+
+  /*
+   * Button element defaults
+   * AFFECTS: <button>, input[type="submit"], etc.
+   */
+  buttons: (
+      /*
+     * Default button appearance
+     * AFFECTS: All button elements unless overridden
+     */
+      background-color: #dd224e,
+      // Accent color background
+      border-color: #dd224e,
+      // Matching border
+      text-color: #ffffff,
+      // White text for contrast
+    ),
+
+  /*
+   * Link element defaults
+   * AFFECTS: <a> elements
+   */
+  links: (
+      /*
+     * Link styling and states
+     * AFFECTS: Default link appearance and hover states
+     */
+      text-color: #4e011e,
+      // Darker accent for links
+      decoration-color: #dd224e,
+      // Accent color underline
+      hover-color: #dd224e,
+      // Accent color on hover
+    ),
+
+  /*
+   * Table element defaults
+   * AFFECTS: <table>, <th>, <td>, etc.
+   */
+  tables: (
+      /*
+     * Table styling
+     * AFFECTS: Table borders, headers, cells
+     */
+      border-color: #6a7981,
+      // Medium gray borders
+      header-text-color: #121a1d,
+      // Dark text in headers
+      header-background: #ced5d9,
+      // Light gray header background
+      cell-text-color: #121a1d,
+      // Dark text in cells
+    ),
+
+  /*
+   * Border and visual effect defaults
+   * AFFECTS: Default border and effect styling across components
+   */
+  effects: (
+      /*
+     * Default border configuration
+     * AFFECTS: Border utilities and component borders
+     */
+      border-color: #6a7981,
+      // Medium gray
+      border-width: 2,
+      // 2px width (will be converted to px)
+      border-style: solid,
+      // Solid line style
+      border-radius: 0.5rem,
+
+      // 8px radius
+      /*
+     * Default shadow configuration
+     * AFFECTS: Shadow utilities and component shadows
+     */
+      shadow-color: #0b0f11,
+      // Dark shadow color
+      shadow-softness: 2,
+      // Medium softness
+      shadow-horizontal: 0,
+      // No horizontal offset
+      shadow-vertical: 2,
+      // Small vertical offset
+      shadow-hardness: 2,
+      // Medium hardness
+      shadow-invert-alpha: false,
+      // Normal alpha progression
+    ),
+
+  /*
+   * Animation and transition defaults
+   * AFFECTS: Hover states, focus transitions, animations
+   */
+  animation: (
+      /*
+     * Default transition configuration
+     * AFFECTS: All CSS transitions in base components
+     */
+      transition-duration: 0.3s,
+      // 300ms duration
+      transition-easing: ease-in-out,
+      // Smooth easing
+    )
+) !default;

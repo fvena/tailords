@@ -3,7 +3,7 @@
 @use "../core/types.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
    * ================ Imágenes ================
    *
@@ -36,7 +36,7 @@
    */
 
   figure {
-    margin: double() 0 triple();
+    margin: size(double) 0 size(triple);
 
     img {
       display: block;
@@ -45,10 +45,10 @@
     }
 
     figcaption {
-      margin-top: quarter();
+      margin-top: size(quarter);
       font-size: font-size(small1);
       font-style: italic;
-      color: color(gray3);
+      color: color($body-text-color);
       text-align: center;
     }
   }

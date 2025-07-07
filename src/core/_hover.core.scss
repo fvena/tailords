@@ -1,3 +1,4 @@
+@use "../config" as *;
 @use "../variables" as *;
 
 /*
@@ -25,7 +26,7 @@
 @mixin hover {
   @content;
 
-  @if $enable-hover == true {
+  @if map.get($utilities, config, hover) == true {
     @media (hover: hover) and (pointer: fine) {
       &--hover:not([disabled]):hover {
         @content;

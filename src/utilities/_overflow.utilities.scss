@@ -2,19 +2,18 @@
 @use "../core/helpers.core" as *;
 
 /*
- * ================ Generadores ================
+ * ================ Overflow Utilities Generator ================
  */
 
-@if generate(overflow) == true {
-  /*
-   * Modifica como se comporta un elemento cuando su contenido se desborda.
-   */
+@if $generate-overflow {
+  $template: map.get($utility-classes, overflow);
+  $overflow-values: (auto, hidden, visible, scroll);
 
-  .#{$prefix}overflow-auto {
-    overflow: auto #{$important};
-  }
+  @each $value in $overflow-values {
+    $class-name: parse-overflow-template($template, $value);
 
-  .#{$prefix}overflow-hidden {
-    overflow: hidden #{$important};
+    .#{$prefix}#{$class-name} {
+      overflow: #{$value} #{$important};
+    }
   }
 }

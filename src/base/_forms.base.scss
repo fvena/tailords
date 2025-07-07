@@ -2,7 +2,7 @@
 @use "../core/colors.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
    * ================ Formularios ================
    */
@@ -31,21 +31,21 @@
     height: double();
     padding: 0 simple();
     line-height: double();
-    border: 1px solid color($border-color);
+    border: 1px solid color($input-border-color);
 
     &:focus {
       outline: none;
-      border-color: color(brand);
+      border-color: color($input-focus-color);
     }
 
     &::placeholder {
-      color: color(gray3);
+      color: color($input-placeholder-color);
       opacity: 1;
     }
 
     &[disabled],
     &[readonly] {
-      color: color(gray4);
+      color: color($input-disabled-color);
       cursor: not-allowed;
       opacity: 1;
     }

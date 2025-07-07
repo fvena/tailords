@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "../variables" as *;
 
-@if $useReset {
+@if $enable-reset {
   * {
     padding: 0;
     margin: 0;

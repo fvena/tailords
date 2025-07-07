@@ -14,7 +14,7 @@
  * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
  */
 
-@if $useReset {
+@if $enable-reset {
   /**
    * 1. Prevent overflow of the container in all browsers (opinionated).
    */
@@ -35,13 +35,13 @@
   }
 }
 
-@if $useBase {
+@if $enable-base {
   code,
   pre,
   kbd {
     font-weight: font(medium);
     line-height: initial;
-    color: color($font-code-color);
+    color: color($code-text-color);
     background-color: color($code-background-color);
     border-radius: radius(small);
   }
@@ -63,8 +63,8 @@
 
   pre {
     display: block;
-    padding: half() simple();
-    margin-bottom: simple();
+    padding: size(half) size(simple);
+    margin-bottom: size(simple);
     overflow-x: auto;
     text-align: left;
     word-spacing: normal;
@@ -88,7 +88,7 @@
 
   kbd {
     vertical-align: baseline;
-    color: color(white);
-    background-color: color(gray1);
+    color: color($kbd-text-color);
+    background-color: color($kbd-background-color);
   }
 }

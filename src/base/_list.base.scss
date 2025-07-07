@@ -2,9 +2,10 @@
 @use "../core/responsive.core" as *;
 @use "../core/types.core" as *;
 @use "../core/sizes.core" as *;
+@use "../core/colors.core" as *;
 
 /* stylelint-disable no-descending-specificity */
-@if $useBase {
+@if $enable-base {
   /*
    * ================ Listados ================
    */
@@ -29,7 +30,7 @@
   }
 
   dd {
-    margin-bottom: spacers("1/2");
+    margin-bottom: half();
     margin-left: 0; // Deshace el valor predeterminado del navegador
   }
 
@@ -63,7 +64,7 @@
         position: absolute;
         left: quarter("-");
         width: simple();
-        color: $list-markers-color;
+        color: color($list-marker-color);
         text-align: right;
         content: counters(b, ".") " ";
         counter-increment: b;
@@ -99,7 +100,7 @@
         height: 6px;
         text-align: right;
         content: "";
-        background-color: $list-markers-color;
+        background-color: color($list-marker-color);
         border-radius: 3px;
       }
     }

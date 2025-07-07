@@ -4,7 +4,7 @@
 @use "../core/borders.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
    * ================ Tabla ================
    */
@@ -12,14 +12,14 @@
   table {
     width: 100%;
     min-width: 100%;
-    margin-bottom: simple();
+    margin-bottom: size(simple);
     border-spacing: 0;
     border-collapse: separate;
   }
 
   td,
   th {
-    padding: quarter();
+    padding: size(quarter);
     vertical-align: top;
     border-bottom: 1px solid transparent;
   }
@@ -27,26 +27,26 @@
   th,
   td,
   tbody + tbody {
-    border-bottom-color: color(gray3);
+    border-bottom-color: color($table-border-color);
   }
 
   th {
     font-size: font-size(small2);
     font-weight: font-weight(bold);
     vertical-align: bottom;
-    color: color(gray1);
+    color: color($table-header-text-color);
     text-transform: uppercase;
-    background-color: color(gray5);
-    border-top: 1px solid color(gray3);
-    border-bottom-color: color(gray3);
+    background-color: color($table-header-background);
+    border-top: 1px solid color($table-border-color);
+    border-bottom-color: color($table-border-color);
 
     &:first-of-type {
-      border-left: 1px solid color(gray3);
+      border-left: 1px solid color($table-border-color);
       border-radius: radius(medium) 0 0 radius(medium);
     }
 
     &:last-of-type {
-      border-right: 1px solid color(gray3);
+      border-right: 1px solid color($table-border-color);
       border-radius: 0 radius(medium) radius(medium) 0;
     }
   }
@@ -54,8 +54,8 @@
   td {
     font-size: font-size(small1);
     line-height: 1.4rem;
-    color: color(gray1);
-    border-bottom: 1px solid color(gray3);
+    color: color($table-cell-text-color);
+    border-bottom: 1px solid color($table-border-color);
 
     &:first-of-type {
       font-weight: font-weight(bold);

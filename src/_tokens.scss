@@ -1,0 +1,457 @@
+/*
+ * ================ Design Tokens ================
+ *
+ * The atomic values that define your visual design language.
+ *
+ * WHAT'S IN THIS FILE:
+ * - Color palettes and theme definitions
+ * - Typography scales (sizes, weights, families)
+ * - Spacing and sizing scales
+ * - Visual effects (shadows, borders, gradients)
+ * - Responsive breakpoints
+ *
+ * TOKEN FORMAT:
+ * Simple: token-name: value
+ * With abbreviation: token-name: (value: #color, abbr: "short")
+ *
+ * ABBREVIATIONS:
+ * Optional 'abbr' property creates shorter utility class names
+ * Example: brand: (value: #dd224e, abbr: "primary")
+ * → .bg-brand OR .bg-primary (depending on utility template)
+ *
+ * THEME INHERITANCE:
+ * Secondary themes inherit missing colors from primary theme
+ * Only define overrides in secondary themes, not complete palettes
+ */
+
+/*
+ * Design tokens wrapper - organized by category
+ */
+$tokens: (
+  /*
+   * Color theme definitions
+   * FORMAT: theme-name: (color-name: value-or-map, ...)
+   * INHERITANCE: Secondary themes inherit from primary theme
+   * GENERATES: CSS custom properties and utility classes
+   */
+  themes: (
+      light: (
+        // Brand colors
+        brand-darkest: #4e011e,
+        brand-darker: #80002f,
+        brand-dark: #bb1642,
+        brand: (
+          value: #dd224e,
+          abbr: "primary",
+        ),
+        brand-light: #fb5067,
+        brand-lighter: #ff817a,
+        brand-lightest: #fae0df,
+
+        // Success colors
+        success-darkest: #448a0f,
+        success-darker: #448a0f,
+        success-dark: #5faf23,
+        success: (
+          value: #77c23d,
+          abbr: "green",
+        ),
+        success-light: #ace580,
+        success-lighter: #e3f7d4,
+        success-lightest: #ebfae0,
+
+        // Warning colors
+        warning-darkest: #b37400,
+        warning-darker: #b37400,
+        warning-dark: #e69d00,
+        warning: (
+          value: #ffbe33,
+          abbr: "yellow",
+        ),
+        warning-light: #ffd780,
+        warning-lighter: #ffefcc,
+        warning-lightest: #faf1dd,
+
+        // Danger colors
+        danger-darkest: #990f00,
+        danger-darker: #990f00,
+        danger-dark: #e61700,
+        danger: (
+          value: #ff4733,
+          abbr: "red",
+        ),
+        danger-light: #ff8c80,
+        danger-lighter: #ffd1cc,
+        danger-lightest: #fce4e1,
+
+        // Grayscale
+        black: #000000,
+        gray1: (
+          value: #121a1d,
+          abbr: "gray-900",
+        ),
+        gray2: (
+          value: #3b4c54,
+          abbr: "gray-800",
+        ),
+        gray3: (
+          value: #6a7981,
+          abbr: "gray-700",
+        ),
+        gray4: (
+          value: #9da6aa,
+          abbr: "gray-600",
+        ),
+        gray5: (
+          value: #ced5d9,
+          abbr: "gray-500",
+        ),
+        gray6: (
+          value: #e7ebee,
+          abbr: "gray-400",
+        ),
+        gray7: (
+          value: #f6f7f9,
+          abbr: "gray-300",
+        ),
+        gray8: (
+          value: #fcfcfd,
+          abbr: "gray-200",
+        ),
+        gray9: (
+          value: #f7f6f5,
+          abbr: "gray-100",
+        ),
+        gray10: (
+          value: #f7f6f5,
+          abbr: "gray-50",
+        ),
+        white: #ffffff,
+      ),
+
+      dark: (
+        // Override grayscale for dark theme
+        // Brand colors inherit from light theme
+        black: #ffffff,
+        gray1: (
+          value: #f7f6f5,
+          abbr: "gray-900",
+        ),
+        gray2: (
+          value: #f7f6f5,
+          abbr: "gray-800",
+        ),
+        gray3: (
+          value: #fcfcfd,
+          abbr: "gray-700",
+        ),
+        gray4: (
+          value: #f6f7f9,
+          abbr: "gray-600",
+        ),
+        gray5: (
+          value: #e7ebee,
+          abbr: "gray-500",
+        ),
+        gray6: (
+          value: #ced5d9,
+          abbr: "gray-400",
+        ),
+        gray7: (
+          value: #9da6aa,
+          abbr: "gray-300",
+        ),
+        gray8: (
+          value: #6a7981,
+          abbr: "gray-200",
+        ),
+        gray9: (
+          value: #3b4c54,
+          abbr: "gray-100",
+        ),
+        gray10: (
+          value: #172226,
+          abbr: "gray-50",
+        ),
+        white: #000000,
+      ),
+    ),
+
+  /*
+   * Typography scales and families
+   * FONT-SIZES: Positions on modular scale, calculated from $modular-scale ratio
+   * GENERATES: Font size utilities and base element styling
+   */
+  typography: (
+      families: (
+        body: (
+          sans-serif,
+        ),
+        header: (
+          serif,
+        ),
+        mono: (
+          monospace,
+        ),
+      ),
+
+      weights: (
+        ultralight: 100,
+        extralight: 200,
+        light: 300,
+        regular: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+        extrabold: 800,
+        ultrabold: 900,
+      ),
+
+      sizes: (
+        h1: 5,
+        h2: 4,
+        h3: 3,
+        h4: 2,
+        h5: 1,
+        base: 0,
+        small1: -1,
+        small2: -2,
+      ),
+
+      // Modular scale ratio for calculating font sizes
+      modular-scale: 1.175,
+
+      line-heights: (
+        xxsmall: 0.55,
+        xsmall: 0.7,
+        small: 0.85,
+        medium: 1,
+        large: 1.15,
+        xlarge: 1.3,
+        xxlarge: 1.45,
+      ),
+
+      tracking: (
+        xxsmall: -0.1em,
+        xsmall: -0.05em,
+        small: -0.02em,
+        medium: 0,
+        large: 0.02em,
+        xlarge: 0.05em,
+        xxlarge: 0.1em,
+      ),
+
+      // Style guide combinations for utility generation
+      style-guide: (
+          sizes: (
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            base,
+            small1,
+            small2,
+          ),
+          weights: (
+            regular,
+            semibold,
+          ),
+          colors: (
+            gray1,
+            gray4,
+            brand,
+            danger,
+            success,
+            warning,
+          ),
+        ),
+    ),
+
+  /*
+   * Spacing and sizing scales
+   * SPACE-BASE: Foundation unit (rem) for all spacing calculations
+   * SPACING-SCALE: Relative multipliers with optional abbreviations
+   * GENERATES: Margin, padding, width, height utilities
+   */
+  spacing: (
+      // Base space unit in rem
+      base: 1.6,
+
+      // Spacing scale with abbreviations for utilities
+      scale: (
+          none: (
+            value: 0,
+            abbr: "0",
+          ),
+          quarter: (
+            value: 0.25,
+            abbr: "1",
+          ),
+          half: (
+            value: 0.5,
+            abbr: "2",
+          ),
+          simple: (
+            value: 1,
+            abbr: "4",
+          ),
+          double: (
+            value: 2,
+            abbr: "8",
+          ),
+          triple: (
+            value: 3,
+            abbr: "12",
+          ),
+          quadruple: (
+            value: 4,
+            abbr: "16",
+          ),
+          quintuple: (
+            value: 5,
+            abbr: "20",
+          ),
+          sextuple: (
+            value: 6,
+            abbr: "24",
+          ),
+        ),
+
+      // Percentage-based sizes for width/height utilities
+      percentages: (
+          0: 0,
+          10: 10,
+          20: 20,
+          30: 30,
+          40: 40,
+          50: 50,
+          60: 60,
+          70: 70,
+          80: 80,
+          90: 90,
+          100: 100,
+        )
+    ),
+
+  /*
+   * Responsive breakpoint definitions
+   * GENERATES: Media queries and responsive utility variants
+   * NAMING: palm (mobile), lap (tablet portrait), small (tablet landscape), desk (desktop)
+   */
+  breakpoints: (
+      palm: 600px,
+      lap: 900px,
+      small: 1200px,
+      desk: 1600px,
+    ),
+
+  /*
+   * Visual effects and styling
+   * GENERATES: Border, shadow, opacity, and effect utilities
+   */
+  effects: (
+      border-radius: (
+        xxsmall: 3px,
+        xsmall: 4px,
+        small: 6px,
+        medium: 8px,
+        large: 12px,
+        xlarge: 16px,
+        xxlarge: 24px,
+      ),
+
+      border-widths: (
+        thin: 1,
+        medium: 2,
+        thick: 4,
+      ),
+
+      border-styles: (
+        solid,
+        dashed,
+        dotted,
+        hidden,
+        none,
+      ),
+      opacity-scale: (
+        0: 0,
+        5: 0.05,
+        10: 0.1,
+        15: 0.15,
+        20: 0.2,
+        25: 0.25,
+        30: 0.3,
+        35: 0.35,
+        40: 0.4,
+        45: 0.45,
+        50: 0.5,
+        55: 0.55,
+        60: 0.6,
+        65: 0.65,
+        70: 0.7,
+        75: 0.75,
+        80: 0.8,
+        85: 0.85,
+        90: 0.9,
+        95: 0.95,
+        100: 1,
+      ),
+
+      shadow-scale: (
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+      ),
+      shadow-color: #0b0f11,
+
+      gradients: (
+        brand: (
+          brand-light,
+          brand-dark,
+        ),
+        success: (
+          success-light,
+          success-dark,
+        ),
+        warning: (
+          warning-light,
+          warning-dark,
+        ),
+        danger: (
+          danger-light,
+          danger-dark,
+        ),
+        light: (
+          gray7,
+          gray5,
+        ),
+        dark: (
+          gray2,
+          gray1,
+        ),
+      ),
+      gradient-default-type: radial,
+    ),
+
+  /*
+   * Interaction and animation
+   * GENERATES: Cursor and transition utilities
+   */
+  interaction: (
+      cursor-types: (
+        auto,
+        default,
+        pointer,
+        wait,
+        text,
+        move,
+        not-allowed,
+      ),
+      transition-duration: 0.3s,
+      transition-easing: ease-in-out,
+    )
+) !default;

@@ -2,18 +2,18 @@
 @use "../core/helpers.core" as *;
 
 /*
- * ================ Generadores ================
- *
+ * ================ Hover Utilities Generator ================
+ */
 
- *
+/*
  * Añade una clase que aplica automáticamente una transición
  * y modifica el cursor para todos los elementos cuyo nombre de clase
  * contenga --hover, siempre y cuando la propiedad hover esté configurada
  */
 
-@if $enable-hover == true and generate(hover) == true {
+@if $utilities-hover == true {
   [class*="--hover"] {
     cursor: pointer;
-    transition: all $transition-duration;
+    transition: all $transition-duration $transition-easing;
   }
 }

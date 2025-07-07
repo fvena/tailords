@@ -1,0 +1,301 @@
+/*
+ * ================ Utility Classes Configuration ================
+ *
+ * Controls which utility classes are generated and how they're named.
+ *
+ * WHAT'S IN THIS FILE:
+ * - Granular enable/disable for each utility type
+ * - Custom naming templates using placeholders
+ * - Responsive and hover variant configuration
+ *
+ * HOW IT WORKS:
+ * - Empty string or undefined = utility disabled
+ * - Template string = utility enabled with custom naming
+ * - Templates use {token} placeholders replaced with actual values
+ *
+ * TEMPLATE PLACEHOLDERS:
+ * - {token}: Uses token name or 'abbr' if defined
+ * - {abbr(token)}: Forces abbreviation if available, fallback to name
+ * - {responsive}: Responsive suffix (--palm, --desk, etc.)
+ * - {hover}: Hover suffix (--hover or abbreviation)
+ *
+ * RESPONSIVE ABBR: palm→p, lap→l, small→s, desk→d, large→lg
+ * HOVER ABBR: hover→h
+ * DIRECTION ABBR: top→t, right→r, bottom→b, left→l, x→x, y→y
+ *
+ * EXAMPLES:
+ * "m-{abbr(size)}" + size=half(abbr:"2") = .m-2
+ * "margin-{size}{responsive}" + palm breakpoint = .margin-half--palm
+ * "m{abbr(size)}{abbr(responsive)}" + palm = .m2p (ultra-compact)
+ */
+
+/*
+ * Utility configuration wrapper
+ */
+$utilities: (
+  /*
+   * Global utility behavior
+   * AFFECTS: All generated utility classes
+   */
+  config: (
+      /*
+     * Prefix for all utility classes
+     * EXAMPLE: "tw-" generates .tw-m-4, .tw-bg-blue
+     */
+      prefix: "",
+
+      /*
+     * Add !important to all utility declarations
+     * USE CASE: Override specificity in complex CSS
+     */
+      important: false,
+
+      /*
+     * Generate responsive variants (--palm, --desk, etc.)
+     * GENERATES: .class--palm, .class--desk responsive variants
+     * BREAKPOINTS: Uses responsive-breakpoints from framework config
+     */
+      responsive: true,
+
+      /*
+     * Generate hover state variants (--hover)
+     * GENERATES: .class--hover:hover pseudo-class variants
+     * MEDIA: Only applies on non-touch devices
+     */
+      hover: true,
+
+      /*
+     * Abbreviations for hardcoded values in templates
+     * USE: {abbr(responsive)}, {abbr(hover)}, {abbr(direction)}
+     */
+      abbreviations: (
+          // Responsive breakpoints
+          responsive: (
+              palm: "p",
+              lap: "l",
+              small: "s",
+              desk: "d",
+              large: "lg",
+            ),
+
+          // Hover state
+          hover: "h",
+
+          // Directional modifiers
+          direction: (
+              top: "t",
+              right: "r",
+              bottom: "b",
+              left: "l",
+              x: "x",
+              y: "y",
+            )
+        )
+    ),
+
+  /*
+   * Individual utility class templates
+   * FORMAT: "template-string-with-{placeholders}"
+   * DISABLED: "" or undefined
+   */
+  classes: (
+      /*
+     * ================ Color Utilities ================
+     */
+        // Background colors: .bg-brand, .bg-primary (if abbr defined)
+      background-colors: "",
+
+      // Background opacity: .bg-opacity-50, .bg-opacity-75
+      background-opacity: "",
+
+      // Text colors: .text-brand, .text-primary (if abbr defined)
+      text-colors: "",
+
+      // Text opacity: .text-opacity-50, .text-opacity-75
+      text-opacity: "",
+
+      // Background gradients: .bg-gradient-brand, .bg-gradient-success
+      background-gradients: "",
+
+      // Text gradients: .text-gradient-brand, .text-gradient-success
+      text-gradients: "",
+
+      // Border gradients: .border-gradient-brand, .border-gradient-success
+      border-gradients: "",
+
+      /*
+     * ================ Typography Utilities ================
+     */
+        // Font sizes: .text-lg, .h1, .base
+      font-sizes: "",
+
+      // Font weights: .font-bold, .font-semibold
+      font-weights: "",
+
+      // Font families: .font-sans, .font-serif, .font-mono
+      font-families: "",
+
+      // Line heights: .leading-tight, .leading-relaxed
+      line-heights: "",
+
+      // Letter spacing: .tracking-tight, .tracking-wide
+      letter-spacing: "",
+
+      // Text alignment: .text-left, .text-center, .text-right
+      text-alignment: "",
+
+      // Text transforms: .uppercase, .lowercase, .capitalize
+      text-transforms: "",
+
+      // Text decorations: .underline, .no-underline
+      text-decorations: "",
+
+      // Text truncation: .truncate, .truncate-2, .truncate-3
+      text-truncation: "",
+
+      // Style guide combinations: .h1-semibold-gray1, .base-regular-brand
+      style-guide: "",
+
+      /*
+     * ================ Spacing Utilities ================
+     */
+        // Margins: .m-4, .mt-2, .mx-auto
+      // DIRECTIONS: all, top, right, bottom, left, x, y
+      // SPECIAL: auto value for horizontal centering
+      margins: "",
+
+      // Paddings: .p-4, .pt-2, .px-8
+      // DIRECTIONS: all, top, right, bottom, left, x, y
+      paddings: "",
+
+      /*
+     * ================ Sizing Utilities ================
+     */
+        // Widths: .w-full, .w-1/2, .w-64
+      widths: "",
+
+      // Heights: .h-full, .h-screen, .h-64
+      heights: "",
+
+      // Viewport widths: .vw-50, .vw-100
+      viewport-widths: "",
+
+      // Viewport heights: .vh-50, .vh-100
+      viewport-heights: "",
+
+      // Max widths: .max-w-full, .max-w-screen
+      max-widths: "",
+
+      // Max heights: .max-h-full, .max-h-screen
+      max-heights: "",
+
+      /*
+     * ================ Border Utilities ================
+     */
+        // Border positions: .border, .border-t, .border-x
+      // DIRECTIONS: all, top, right, bottom, left, x, y
+      border-positions: "",
+
+      // Border colors: .border-brand, .border-gray-300
+      border-colors: "",
+
+      // Border widths: .border, .border-2, .border-4
+      border-widths: "",
+
+      // Border styles: .border-solid, .border-dashed, .border-dotted
+      border-styles: "",
+
+      // Border radius: .rounded, .rounded-lg, .rounded-full
+      border-radius: "",
+
+      /*
+     * ================ Effect Utilities ================
+     */
+        // Box shadows: .shadow, .shadow-lg, .shadow-xl
+      shadows: "",
+
+      // Element opacities: .opacity-50, .opacity-75, .opacity-100
+      opacities: "",
+
+      /*
+     * ================ Layout Utilities ================
+     */
+        // Display: .block, .inline, .flex, .hidden
+      display: "",
+
+      // Position: .relative, .absolute, .fixed, .sticky
+      position: "",
+
+      // Overflow: .overflow-hidden, .overflow-auto, .overflow-scroll
+      overflow: "",
+
+      /*
+     * ================ Interaction Utilities ================
+     */
+        // Cursors: .cursor-pointer, .cursor-not-allowed
+      cursors: "",
+
+      /*
+     * ================ System Utilities ================
+     */
+        // CSS custom properties: generates :root with --variables
+      css-variables: ""
+    )
+) !default;
+
+/*
+ * ================ Template Examples ================
+ *
+ * Copy these examples to customize your utility naming:
+ */
+
+/*
+// Tailwind CSS style (compact with abbreviations)
+$utilities: (
+  classes: (
+    margins: "m{abbr(direction)}-{abbr(size)}",           // .mt-2, .mx-4, .mb-0
+    background-colors: "bg-{abbr(color)}",               // .bg-primary, .bg-gray-500
+    font-sizes: "text-{abbr(size)}",                     // .text-lg, .text-xl
+    responsive: true,   // Generates .mt-2--palm, .bg-primary--desk
+  ),
+)
+
+// Bootstrap style (verbose, full names)
+$utilities: (
+  classes: (
+    margins: "m{direction}-{size}",                      // .mt-half, .mx-double
+    background-colors: "bg-{color}",                     // .bg-brand, .bg-gray1
+    font-sizes: "{size}",                                // .h1, .small1, .base
+  ),
+)
+
+// Ultra-compact style (maximum abbreviation)
+$utilities: (
+  classes: (
+    margins: "m{abbr(direction)}{abbr(size)}{abbr(responsive)}", // .mt2p (margin-top-2--palm)
+    background-colors: "bg{abbr(color)}{abbr(hover)}",          // .bgprimaryh (.bg-primary--hover)
+  ),
+)
+
+// Mixed approach (semantic where useful, compact where needed)
+$utilities: (
+  classes: (
+    margins: "space-{abbr(size)}",                       // .space-2, .space-4
+    background-colors: "bg-{color}",                     // .bg-brand-darkest
+    font-sizes: "text-{size}",                           // .text-h1, .text-base
+    border-radius: "rounded{size}",                      // .rounded, .roundedlg
+  ),
+)
+
+// Direction-specific templates (advanced)
+$utilities: (
+  classes: (
+    margins: (
+      all: "m-{abbr(size)}",                             // .m-2, .m-4
+      top: "mt-{abbr(size)}",                            // .mt-2, .mt-4
+      horizontal: "mx-{abbr(size)}",                     // .mx-2, .mx-auto
+      vertical: "my-{abbr(size)}",                       // .my-2, .my-4
+    ),
+  ),
+)
+*/

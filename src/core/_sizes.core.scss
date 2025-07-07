@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "sass:meta";
-@use "../variables" as *;
+@use "../config" as *;
+@use "../base" as *;
 
 /*
  * ================ Funciones ================
@@ -20,8 +21,8 @@
 @function size($value) {
   // Compruebo si el valor pertenece al listado de tamaños relativos
   @if meta.type-of($value) == "string" {
-    @if map.get($sizes-relatives, $value) {
-      $value: #{map.get($sizes-relatives, $value)};
+    @if map.get($size-relatives, $value) {
+      $value: #{map.get($size-relatives, $value)};
     }
 
     // No es un valor válido
@@ -32,5 +33,5 @@
     @return calc(var(--space) * #{$value * 1rem});
   }
 
-  @return $space * $value * 1rem;
+  @return spacing(base) * $value * 1rem;
 }

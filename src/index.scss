@@ -4,11 +4,13 @@
 // Core
 @forward "core/utils.core";
 @forward "core/math.core";
+@forward "config";
+@forward "base";
+@forward "tokens";
 @forward "variables";
 @forward "core/helpers.core";
 @forward "core/colors.core";
 @forward "core/borders.core";
-@forward "core/gradients.core";
 @forward "core/hover.core";
 @forward "core/responsive.core";
 @forward "core/shadows.core";
@@ -33,9 +35,7 @@
 @forward "utilities/colors.utilities";
 @forward "utilities/cursor.utilities";
 @forward "utilities/display.utilities";
-@forward "utilities/gradients.utilities";
 @forward "utilities/hover.utilities";
-@forward "utilities/opacities.utilities";
 @forward "utilities/overflow.utilities";
 @forward "utilities/position.utilities";
 @forward "utilities/roots.utilities";

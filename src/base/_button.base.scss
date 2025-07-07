@@ -12,7 +12,7 @@
  * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
  */
 
-@if $useReset {
+@if $enable-reset {
   /*
    * 1. Remove the margin on controls in Safari
    * 2. Show the overflow in Edge
@@ -35,7 +35,7 @@
   }
 }
 
-@if $useBase {
+@if $enable-base {
   button {
     display: block;
     width: 100%;
@@ -51,9 +51,9 @@
   input[type="button"],
   input[type="reset"],
   [role="button"] {
-    --background-color: color(brand);
-    --border-color: color(brand);
-    --color: color(gray8);
+    --background-color: #{color($button-background-color)};
+    --border-color: #{color($button-border-color)};
+    --color: #{color($button-text-color)};
     padding: half() simple();
     font-size: 1rem;
     font-weight: var(--font-weight);
@@ -63,8 +63,8 @@
     cursor: pointer;
     outline: none;
     background-color: var(--background-color);
-    border: var(--border-width) solid var(--border-color);
-    border-radius: var(--border-radius);
+    border: border($border-default-width) solid var(--border-color);
+    border-radius: radius($border-default-radius);
     box-shadow: var(--box-shadow);
   }
 }

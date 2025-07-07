@@ -3,31 +3,23 @@
 @use "../core/responsive.core" as *;
 
 /*
- * ================ Generadores ================
+ * ================ Display Utilities Generator ================
  */
 
-@if generate(display) == true {
-  $displays: (none, inline, inline-block, block);
-
-  /*
-   * Modificadores del modo de visualización de un elemento
-   *
-   * .display-{value}--{breakpoint}
-   *
-   * @example CSS
-   *   .display-none         // Oculta el elemento
-   *   .display-inline--palm    // Muestra un elemento como inline solo en pantallas pequeñas
-   *   .display-block--print    // Muestra un elemento como bloque al imprimir la página
-   */
+@if $generate-display {
+  $template: map.get($utility-classes, display);
+  $displays: (none, inline, inline-block, block, flex, grid, table);
 
   @each $display in $displays {
-    .#{$prefix}display-#{$display} {
+    $class-name: parse-display-template($template, $display);
+
+    .#{$prefix}#{$class-name} {
       @include responsive {
         display: #{$display} #{$important};
       }
     }
 
-    .#{$prefix}display-#{$display}--print {
+    .#{$prefix}#{$class-name}--print {
       @media print {
         display: #{$display} #{$important};
       }

@@ -1,625 +1,243 @@
 @use "sass:map";
-@use "sass:list";
+@use "config" as *;
+@use "tokens" as *;
+@use "utilities" as *;
+@use "base" as *;
+@use "core/validations.core" as *;
+@use "core/colors.core" as *;
 @use "core/utils.core" as *;
-@use "core/math.core" as *;
 
 /*
- * ================ Configuración ================
- */
-
-/*
- * Usa el reset de los estilos
- */
-$useReset: true !default;
-
-/*
- * Usa los estilos base de Didor
- */
-$useBase: true !default;
-
-/*
- * Prefijo para las clases
- */
-$usePrefix: "" !default;
-$prefix: check-prefix($usePrefix);
-
-/*
- * Crear variables css globales
- */
-$css-variables: true !default;
-
-/*
- * Crear clases con los estilos
- */
-$utility-class: true !default;
-
-/*
- * Excluye las clases indicadas,
- * la propiedad utility-class debe ser true para que tenga efecto
- */
-$excludes: () !default;
-
-/*
- * Excluye las clases indicadas,
- * la propiedad utility-class debe ser true para que tenga efecto
- */
-$includes: () !default;
-
-/*
- * Crear clases responsive
- */
-$enable-responsive: true !default;
-
-/*
- * Añade !important a todas las clases
- */
-$useImportant: false !default;
-$important: check-important($useImportant);
-
-/*
- * Crear clases hover
- */
-$enable-hover: true !default;
-
-/*
- * ================ Responsive ================
+ * ================ Internal and Derived Variables ================
  *
-
- * Existen 5 tamaños de pantalla definidos:
- *   palm  - Móviles                                  (0 - 600px)
- *   lap   - Tablet verticales y Móviles horizontales (601px - 900px)
- *   small - Tablet horizontales                      (901px - 1200px)
- *   desk  - Portátiles y monitores pequeños          (1201px - 1600px)
- *   large - Monitores grandes                        (1601px - ...)
- */
-$screens: (
-  palm: 600px,
-  lap: 900px,
-  small: 1200px,
-  desk: 1600px,
-) !default;
-
-/*
- * Indica cuales de los breakpoints predefinidos se utilizarán para
- * generar las clases responsive:
- *   - palm, lap, small, desk, large, protrait, landscape, touch, screen, tablet
- */
-$medias: (palm, lap, small, desk, large) !default;
-
-/*
- * ================ Paleta de colores ================
- */
-
-/*
- * Listado de los colores utilizados en la aplicación
- */
-$theme: (
-  brand-darkest: #4e011e,
-  brand-darker: #80002f,
-  brand-dark: #bb1642,
-  brand: #dd224e,
-  brand-light: #fb5067,
-  brand-lighter: #ff817a,
-  brand-lightest: #fae0df,
-  warning-darkest: #b37400,
-  warning-darker: #b37400,
-  warning-dark: #e69d00,
-  warning: #ffbe33,
-  warning-light: #ffd780,
-  warning-lighter: #ffefcc,
-  warning-lightest: #faf1dd,
-  success-darkest: #448a0f,
-  success-darker: #448a0f,
-  success-dark: #5faf23,
-  success: #77c23d,
-  success-light: #ace580,
-  success-lighter: #e3f7d4,
-  success-lightest: #ebfae0,
-  danger-darkest: #990f00,
-  danger-darker: #990f00,
-  danger-dark: #e61700,
-  danger: #ff4733,
-  danger-light: #ff8c80,
-  danger-lighter: #ffd1cc,
-  danger-lightest: #fce4e1,
-) !default;
-
-/*
- * Listado de grises utilizados en la aplicación en modo claro
- */
-$light-theme: (
-  black: #000000,
-  gray1: #121a1d,
-  gray2: #3b4c54,
-  gray3: #6a7981,
-  gray4: #9da6aa,
-  gray5: #ced5d9,
-  gray6: #e7ebee,
-  gray7: #f6f7f9,
-  gray8: #fcfcfd,
-  gray9: #f7f6f5,
-  gray10: #f7f6f5,
-  white: #ffffff,
-) !default;
-
-/*
- * Listado de grises utilizados en la aplicación en modo oscuro
- */
-$dark-theme: (
-  black: #ffffff,
-  gray1: #f7f6f5,
-  gray2: #f7f6f5,
-  gray3: #fcfcfd,
-  gray4: #f6f7f9,
-  gray5: #e7ebee,
-  gray6: #ced5d9,
-  gray7: #9da6aa,
-  gray8: #6a7981,
-  gray9: #3b4c54,
-  gray10: #172226,
-  white: #000000,
-) !default;
-
-/*
- * Color de fondo de la página
- */
-$page-background-color: gray8 !default;
-
-/*
- * Color de fondo del código
- */
-$code-background-color: gray8 !default;
-
-/*
- * Color de fondo de una entrada de teclado "kbd"
- */
-$kbd-background-color: gray2 !default;
-
-/*
- * Listado de degradados
- */
-$gradients: (
-  brand: (
-    brand-light,
-    brand-dark,
-  ),
-  warning: (
-    warning-light,
-    warning-dark,
-  ),
-  success: (
-    success-light,
-    success-dark,
-  ),
-  danger: (
-    danger-light,
-    danger-dark,
-  ),
-  light: (
-    gray7,
-    gray5,
-  ),
-  dark: (
-    gray2,
-    gray1,
-  ),
-) !default;
-
-/*
- * Tipo de gradiente por defecto: linear, radial, conic
- */
-$gradient-default: radial !default;
-
-/*
- * ================ Bordes ================
- */
-
-/*
- * Listado con las anchuras en px de los bordes
- */
-$border-widths: (
-  thin: 1,
-  medium: 2,
-  thick: 4,
-) !default;
-
-/*
- * Listado con los estilos de bordes
- */
-$border-styles: (solid, dashed, dotted, hidden, none) !default;
-
-/*
- * Color del borde por defecto
- */
-$border-color: gray3 !default;
-
-/*
- * Anchura del borde por defecto
- */
-$border-width: medium !default;
-
-/*
- * Estilo de borde por defecto
- */
-$border-style: solid !default;
-
-/*
- * ================ Opacidad ================
- */
-
-/*
- * Listado de opacidades
- */
-$opacities: (
-  0: 0,
-  5: 0.05,
-  10: 0.1,
-  15: 0.15,
-  20: 0.2,
-  25: 0.25,
-  30: 0.3,
-  35: 0.35,
-  40: 0.4,
-  45: 0.45,
-  50: 0.5,
-  55: 0.55,
-  60: 0.6,
-  65: 0.65,
-  70: 0.7,
-  75: 0.75,
-  80: 0.8,
-  85: 0.85,
-  90: 0.9,
-  95: 0.95,
-  100: 1,
-) !default;
-
-/*
- * ================ Sombras ================
- */
-
-/*
- * Color base de la sombra
- */
-$shadow-color: #0b0f11 !default;
-
-/*
- * Suavidad por defecto de las sombras
- */
-$shadow-soft: 2 !default;
-
-/*
- * Desplazamiento horizontal por defecto de la sombras
- */
-$shadow-horizontal: 0 !default;
-
-/*
- * Desplazamiento horizontal por defecto de la sombras
- */
-$shadow-vertical: 2 !default;
-
-/*
- * Dureza por defecto de la sombras
- */
-$shadow-hard: 2 !default;
-
-/*
- * Indica si debe invertirse el alpha, genera sombras más difusas
- */
-$shadow-invert-alpha: false !default;
-
-/*
- * Listado de sombras generadas por defecto
- */
-$shadows: (
-  1: 1,
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-) !default;
-
-/*
- * ================ Tamaños ================
- */
-
-/*
- * Tamaño del espacio base tomado como referencia en la aplicación
- */
-$space: 1.6 !default;
-
-/*
- * Listado de tamaños relativos al tamaño base
- */
-$sizes-relatives: (
-  quarter: 0.25,
-  half: 0.5,
-  simple: 1,
-  double: 2,
-  triple: 3,
-  quadruple: 4,
-  quintuple: 5,
-  sextuple: 6,
-  none: 0,
-) !default;
-
-/*
- * Listados de tamaños en porcentajes relativos al propio elemento
- */
-$sizes-percentages: (
-  0: 0,
-  10: 10,
-  20: 20,
-  30: 30,
-  40: 40,
-  50: 50,
-  60: 60,
-  70: 70,
-  80: 80,
-  90: 90,
-  100: 100,
-) !default;
-
-/*
- * Listado de radios de los bordes de los elementos
- */
-$radiuses: (
-  xxsmall: pxToRem(3),
-  xsmall: pxToRem(4),
-  small: pxToRem(6),
-  medium: pxToRem(8),
-  large: pxToRem(12),
-  xlarge: pxToRem(16),
-  xxlarge: pxToRem(24),
-) !default;
-
-/*
- * ================ Tipografía ================
- */
-
-/*
- * Familias tipográficas
- */
-$font-families: (
-  body: (
-    sans-serif,
-  ),
-  header: (
-    serif,
-  ),
-  mono: (
-    monospace,
-  ),
-) !default;
-
-/*
- * Escala Modular
+ * This file extracts values from configuration wrappers and creates
+ * flat variables for internal framework use. Maintains the existing API
+ * while internally using the new map structure.
  *
- *   second: 1.067
- *   major-second: 1.125
- *   minor-third: 1.2
- *   major-third: 1.25
- *   perfect-fourth: 1.333
- *   augmented-fourth: 1.414
- *   perfect-fifth: 1.5
- *   golden: 1.618
- */
-$modular-scale: 1.175 !default;
-
-/*
- * Pesos tipográficos
- */
-$font-weights: (
-  ultralight: 100,
-  extralight: 200,
-  light: 300,
-  regular: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
-  extrabold: 800,
-  ultrabold: 900,
-) !default;
-
-/*
- * Tamaños de fuentes
- */
-$font-sizes: (
-  h1: 5,
-  h2: 4,
-  h3: 3,
-  h4: 2,
-  h5: 1,
-  base: 0,
-  small1: -1,
-  small2: -2,
-) !default;
-
-/*
- * Alturas de linea
- */
-$leading: (
-  xxsmall: 0.55,
-  xsmall: 0.7,
-  small: 0.85,
-  medium: 1,
-  large: 1.15,
-  xlarge: 1.3,
-  xxlarge: 1.45,
-) !default;
-
-/*
- * Separación entre caracteres
- */
-$traking: (
-  xxsmall: -0.1em,
-  xsmall: -0.05em,
-  small: -0.02em,
-  medium: 0,
-  large: 0.02em,
-  xlarge: 0.05em,
-  xxlarge: 0.1em,
-) !default;
-
-/*
- * Color por defecto del cuerpo del texto
- */
-$font-base-color: gray3 !default;
-
-/*
- * Peso tipográfico por defecto del cuerpo del texto
- */
-$font-base-weight: regular !default;
-
-/*
- * Color por defecto de los títulos
- */
-$font-header-color: gray1 !default;
-
-/*
- * Peso tipográfico por defecto de los títulos
- */
-$font-header-weight: semibold !default;
-
-/*
- * Color de los marcadores en los listados
- */
-$list-markers-color: brand !default;
-
-/*
- * Color del código
- */
-$font-code-color: gray3 !default;
-
-/*
- * Color de una entrada de teclado "kbd"
- */
-$kbd-background-color: gray8 !default;
-
-/*
- * ================ Guía de estilos ================
- *
- * se generan tantas clases como combinaciones posibles
- * en base a los siguientes parámetros
- *
- * sizes: Listado con los tamaños de texto utilizados para generar las clases
- * weights: Listado con los pesos utilizados para generar las clases
- * colors: Listado con los colores utilizados para generar las clases
- */
-
-$font-style-guide: (
-  sizes: (
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    base,
-    small1,
-    small2,
-  ),
-  weights: (
-    regular,
-    semibold,
-  ),
-  colors: (
-    gray1,
-    gray4,
-    brand,
-    danger,
-    success,
-    warning,
-  ),
-) !default;
-
-/*
- * ================ Desenfoques ================
- *
- * Listado con los tamaños de desenfoque
- */
-
-$blurs: (
-  2xs: 4px,
-  xs: 8px,
-  sm: 12px,
-  md: 16px,
-  lg: 24px,
-  xl: 32px,
-  2xl: 48px,
-) !default;
-
-/*
- * ================ Cursores ================
- *
- * Listado con los tipos de cursores
- */
-
-$cursors: (auto, default, pointer, wait, text, move, not-allowed) !default;
-
-/*
- * ================ Animaciones ================
+ * VALIDATION ORDER: Critical validations run first (fail fast)
+ * VARIABLE EXTRACTION: Flat variables derived from wrapper maps
+ * API COMPATIBILITY: Same variable names as before, different sources
  */
 
 /*
- * Duración de las transiciones por defecto
+ * ================ Validation Phase ================
+ * Critical validations that must pass before processing
  */
-$transition-duration: 0.3s !default;
+
+// Validate all configuration structures
+$_framework-valid: validate-framework-config($framework);
+$_utilities-valid: validate-utilities-config($utilities);
+$_tokens-valid: validate-tokens-structure($tokens);
+$_base-valid: validate-base-config($base);
+
+// Extract and validate theme configuration
+$primary-theme: map.get($framework, primary-theme);
+$themes: map.get($tokens, themes);
+$_themes-valid: validate-themes($themes, $primary-theme);
 
 /*
- * Tipo de transición por defecto
+ * ================ Framework Configuration Variables ================
+ * Extracted from $framework wrapper for internal use
  */
-$transition-easing: ease-in-out !default;
+
+$enable-reset: map.get($framework, reset);
+$enable-base: map.get($framework, base);
+$css-variables: map.get($framework, css-variables);
+$responsive-breakpoints: map.get($framework, responsive-breakpoints);
 
 /*
- * Listado de animaciones por defecto
+ * ================ Utility Configuration Variables ================
+ * Extracted from $utilities wrapper for internal use
  */
-$keyframes: (
-  spin: (
-    from: (
-      transform: rotate(0deg),
-    ),
-    to: (
-      transform: rotate(360deg),
-    ),
-  ),
-  ping: (
-    0%: (
-      transform: scale(1),
-      opacity: 1,
-    ),
-    80%: (
-      transform: scale(2.25),
-      opacity: 0,
-    ),
-    100%: (
-      transform: scale(2.25),
-      opacity: 0,
-    ),
-  ),
-  bounce: (
-    0%: (
-      transform: translateY(-25%),
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1),
-    ),
-    50%: (
-      transform: none,
-      animation-timing-function: cubic-bezier(0, 0, 0.2, 1),
-    ),
-    100%: (
-      transform: translateY(-25%),
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1),
-    ),
-  ),
-  pulse: (
-    0%: (
-      opacity: 1,
-    ),
-    50%: (
-      opacity: 0.5,
-    ),
-    100%: (
-      opacity: 1,
-    ),
-  ),
-) !default;
+
+// Global utility settings
+$utility-config: map.get($utilities, config);
+$utility-classes: map.get($utilities, classes);
+
+$utilities-prefix: map.get($utility-config, prefix);
+$utilities-important: map.get($utility-config, important);
+$utilities-responsive: map.get($utility-config, responsive);
+$utilities-hover: map.get($utility-config, hover);
+$utilities-abbreviations: map.get($utility-config, abbreviations);
+
+// Processed values for framework use
+$prefix: check-prefix($utilities-prefix);
+$important: check-important($utilities-important);
+
+// Individual utility class controls (flat variables for easy access)
+$generate-background-colors: map.get($utility-classes, background-colors) != "";
+$generate-background-opacity: map.get($utility-classes, background-opacity) != "";
+$generate-text-colors: map.get($utility-classes, text-colors) != "";
+$generate-text-opacity: map.get($utility-classes, text-opacity) != "";
+$generate-background-gradients: map.get($utility-classes, background-gradients) != "";
+$generate-text-gradients: map.get($utility-classes, text-gradients) != "";
+$generate-border-gradients: map.get($utility-classes, border-gradients) != "";
+
+$generate-font-sizes: map.get($utility-classes, font-sizes) != "";
+$generate-font-weights: map.get($utility-classes, font-weights) != "";
+$generate-font-families: map.get($utility-classes, font-families) != "";
+$generate-line-heights: map.get($utility-classes, line-heights) != "";
+$generate-letter-spacing: map.get($utility-classes, letter-spacing) != "";
+$generate-text-alignment: map.get($utility-classes, text-alignment) != "";
+$generate-text-transforms: map.get($utility-classes, text-transforms) != "";
+$generate-text-decorations: map.get($utility-classes, text-decorations) != "";
+$generate-text-truncation: map.get($utility-classes, text-truncation) != "";
+$generate-style-guide: map.get($utility-classes, style-guide) != "";
+
+$generate-margins: map.get($utility-classes, margins) != "";
+$generate-paddings: map.get($utility-classes, paddings) != "";
+
+$generate-widths: map.get($utility-classes, widths) != "";
+$generate-heights: map.get($utility-classes, heights) != "";
+$generate-viewport-widths: map.get($utility-classes, viewport-widths) != "";
+$generate-viewport-heights: map.get($utility-classes, viewport-heights) != "";
+$generate-max-widths: map.get($utility-classes, max-widths) != "";
+$generate-max-heights: map.get($utility-classes, max-heights) != "";
+
+$generate-border-positions: map.get($utility-classes, border-positions) != "";
+$generate-border-colors: map.get($utility-classes, border-colors) != "";
+$generate-border-widths: map.get($utility-classes, border-widths) != "";
+$generate-border-styles: map.get($utility-classes, border-styles) != "";
+$generate-border-radius: map.get($utility-classes, border-radius) != "";
+
+$generate-shadows: map.get($utility-classes, shadows) != "";
+$generate-opacities: map.get($utility-classes, opacities) != "";
+
+$generate-display: map.get($utility-classes, display) != "";
+$generate-position: map.get($utility-classes, position) != "";
+$generate-overflow: map.get($utility-classes, overflow) != "";
+
+$generate-cursors: map.get($utility-classes, cursors) != "";
+$generate-css-variables: map.get($utility-classes, css-variables) != "";
+
+/*
+ * ================ Design Token Variables ================
+ * Extracted from $tokens wrapper - maintains existing API names
+ */
+
+// Typography tokens
+$typography-tokens: map.get($tokens, typography);
+$font-families: map.get($typography-tokens, families);
+$font-weights: map.get($typography-tokens, weights);
+$font-sizes: map.get($typography-tokens, sizes);
+$modular-scale: map.get($typography-tokens, modular-scale);
+$line-heights: map.get($typography-tokens, line-heights);
+$tracking: map.get($typography-tokens, tracking);
+$style-guide-combinations: map.get($typography-tokens, style-guide);
+
+// Spacing tokens
+$spacing-tokens: map.get($tokens, spacing);
+$space-base: map.get($spacing-tokens, base);
+$spacing-scale: map.get($spacing-tokens, scale);
+$size-percentages: map.get($spacing-tokens, percentages);
+
+// Responsive tokens
+$breakpoints: map.get($tokens, breakpoints);
+
+// Effect tokens
+$effects-tokens: map.get($tokens, effects);
+$border-radius: map.get($effects-tokens, border-radius);
+$border-widths: map.get($effects-tokens, border-widths);
+$border-styles: map.get($effects-tokens, border-styles);
+$opacity-scale: map.get($effects-tokens, opacity-scale);
+$shadow-scale: map.get($effects-tokens, shadow-scale);
+$shadow-color: map.get($effects-tokens, shadow-color);
+$gradients: map.get($effects-tokens, gradients);
+$gradient-default-type: map.get($effects-tokens, gradient-default-type);
+
+// Interaction tokens
+$interaction-tokens: map.get($tokens, interaction);
+$cursor-types: map.get($interaction-tokens, cursor-types);
+$transition-duration: map.get($interaction-tokens, transition-duration);
+$transition-easing: map.get($interaction-tokens, transition-easing);
+
+/*
+ * ================ Base Configuration Variables ================
+ * Extracted from $base wrapper for component styling
+ */
+
+// Page configuration
+$page-config: map.get($base, page);
+$page-background-color: map.get($page-config, background-color);
+
+// Typography configuration
+$typography-config: map.get($base, typography);
+$body-font-family: map.get($typography-config, body-font-family);
+$body-font-size: map.get($typography-config, body-font-size);
+$body-font-weight: map.get($typography-config, body-font-weight);
+$body-line-height: map.get($typography-config, body-line-height);
+$body-text-color: map.get($typography-config, body-text-color);
+$heading-font-family: map.get($typography-config, heading-font-family);
+$heading-font-weight: map.get($typography-config, heading-font-weight);
+$heading-text-color: map.get($typography-config, heading-text-color);
+$list-marker-color: map.get($typography-config, list-marker-color);
+$code-text-color: map.get($typography-config, code-text-color);
+$code-background-color: map.get($typography-config, code-background-color);
+$kbd-text-color: map.get($typography-config, kbd-text-color);
+$kbd-background-color: map.get($typography-config, kbd-background-color);
+
+// Form configuration
+$forms-config: map.get($base, forms);
+$input-border-color: map.get($forms-config, input-border-color);
+$input-focus-color: map.get($forms-config, input-focus-color);
+$input-placeholder-color: map.get($forms-config, input-placeholder-color);
+$input-disabled-color: map.get($forms-config, input-disabled-color);
+
+// Button configuration
+$buttons-config: map.get($base, buttons);
+$button-background-color: map.get($buttons-config, background-color);
+$button-border-color: map.get($buttons-config, border-color);
+$button-text-color: map.get($buttons-config, text-color);
+
+// Link configuration
+$links-config: map.get($base, links);
+$link-text-color: map.get($links-config, text-color);
+$link-decoration-color: map.get($links-config, decoration-color);
+$link-hover-color: map.get($links-config, hover-color);
+
+// Table configuration
+$tables-config: map.get($base, tables);
+$table-border-color: map.get($tables-config, border-color);
+$table-header-text-color: map.get($tables-config, header-text-color);
+$table-header-background: map.get($tables-config, header-background);
+$table-cell-text-color: map.get($tables-config, cell-text-color);
+
+// Effects configuration
+$effects-config: map.get($base, effects);
+$border-default-color: map.get($effects-config, border-color);
+$border-default-width: map.get($effects-config, border-width);
+$border-default-style: map.get($effects-config, border-style);
+$border-default-radius: map.get($effects-config, border-radius);
+$shadow-default-color: map.get($effects-config, shadow-color);
+$shadow-default-softness: map.get($effects-config, shadow-softness);
+$shadow-default-horizontal: map.get($effects-config, shadow-horizontal);
+$shadow-default-vertical: map.get($effects-config, shadow-vertical);
+$shadow-default-hardness: map.get($effects-config, shadow-hardness);
+$shadow-invert-alpha: map.get($effects-config, shadow-invert-alpha);
+
+// Animation configuration
+$animation-config: map.get($base, animation);
+$transition-default-duration: map.get($animation-config, transition-duration);
+$transition-default-easing: map.get($animation-config, transition-easing);
+
+/*
+ * ================ Legacy Compatibility ================
+ * Aliases for variables that might be referenced by existing framework code
+ */
+
+// Maintain old naming for internal compatibility
+$useReset: $enable-reset;
+$useBase: $enable-base;
+$medias: $responsive-breakpoints;
+
+// Shadow configuration (maintain old variable names)
+$shadow-soft: $shadow-default-softness;
+$shadow-horizontal: $shadow-default-horizontal;
+$shadow-vertical: $shadow-default-vertical;
+$shadow-hard: $shadow-default-hardness;
+$shadow-invert-alpha: $shadow-invert-alpha;
+
+// Border configuration
+$border-color: $border-default-color;
+$border-width: $border-default-width;
+$border-style: $border-default-style;

@@ -1,6 +1,7 @@
 @use "sass:math";
 @use "sass:list";
 @use "sass:meta";
+@use "../config" as *;
 @use "../variables" as *;
 
 /*
@@ -8,35 +9,46 @@
  */
 
 /*
- * Comprueba si debe generarse un grupo de clases de ayuda en base a la configuración
+ * Checks if a utility group or sub-group should be generated based on configuration
  *
- * @param {string} - nombre del grupo
- * @return {Boolean} - true si debe generarse
+ * @param {string} $module - Module name (e.g., 'colors', 'borders')
+ * @param {string} $sub-module - Optional sub-module name (e.g., 'backgrounds', 'gradients')
+ * @return {Boolean} - true if should be generated
+ *
+ * @example SCSS
+ *   generate(colors)                    => true/false (entire colors module)
+ *   generate(colors, backgrounds)       => true/false (specific backgrounds sub-module)
+ *   generate(borders)                   => true/false (entire borders module)
  */
 
-@function generate($utily) {
-  /*
-   * Si no se habilitan las utilidades de clases no se genera ninguna
-   */
-  @if $utility-class == false {
-    @return false;
+@function generate($module, $sub-module: null) {
+  // Get the classes configuration
+  $classes-config: map.get($utilities, classes);
+
+  // Check if module exists in classes configuration
+  @if not map.has-key($classes-config, $module) {
+    @return false; // Module not defined = false by default
   }
 
-  /*
-   * Si las utilidades de clases se encuentran en la lista de excluidos no se genera
-   */
-  @if list.index($excludes, $utily) {
-    @return false;
+  $module-config: map.get($classes-config, $module);
+
+  // If module config is a boolean, return it directly
+  @if meta.type-of($module-config) == bool {
+    @return $module-config;
   }
 
-  /*
-   * Si hay lista de incluidos, solo se generan las utilidades de clases que se encuentren en ella
-   */
-  @if list.length($includes) > 0 and not list.index($includes, $utily) {
-    @return false;
+  // If module config is a map but no sub-module specified, return true
+  // (means the module is enabled but caller wants to check sub-modules individually)
+  @if $sub-module == null {
+    @return true;
   }
 
-  @return true;
+  // Check if sub-module exists and return its value
+  @if map.has-key($module-config, $sub-module) {
+    @return map.get($module-config, $sub-module);
+  }
+
+  @return false; // Sub-module not defined = false by default
 }
 
 /*

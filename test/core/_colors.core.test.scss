@@ -1,0 +1,189 @@
+@use "sass:map";
+@use "sass:color";
+@use "sass:string";
+@use "sass:meta";
+@use "sass:list";
+@use "../variables" as *;
+
+/*
+ * ================ Funciones ================
+ */
+
+/*
+ * Transforma un valor en hexadecimal en los tres valores que forman un color rgb
+ *
+ * @param {string} $hexColor - Color en formato hexadecimal
+ * @return {string} - Valores del color en rgb
+ *
+ * @example SCSS
+ *   hex2rgb(#8f0537) =>  221,34,78;
+ */
+
+@function hex2rgb($hexColor) {
+  @if meta.type-of($hexColor) != color {
+    @error "hex2rgb() expects a color value, received #{meta.type-of($hexColor)}: #{$hexColor}";
+  }
+
+  @return "#{color.channel($hexColor, "red", $space: rgb)},#{color.channel($hexColor, "green", $space: rgb)},#{color.channel($hexColor, "blue", $space: rgb)}";
+}
+
+/*
+ * Codifica un color para poder para poderlo usar dentro de un string
+ *
+ * @param {string} $color - Color en formato hexadecimal o el nombre de un color definido en la configuración
+ * @return {string} - Color codificado
+ *
+ * @example SCSS
+ *   encodecolor(#8f0537) => %238f0537;
+ *   encodecolor(brand)   => %238f0537;
+ */
+
+@function encodecolor($color) {
+  $resolved-color: null;
+
+  @if meta.type-of($color) == color {
+    $resolved-color: $color;
+  } @else if meta.type-of($color) == string {
+    @if map.has-key($theme, $color) {
+      $resolved-color: map.get($theme, $color);
+    } @else if map.has-key($light-theme, $color) {
+      $resolved-color: map.get($light-theme, $color);
+    } @else if map.has-key($dark-theme, $color) {
+      $resolved-color: map.get($dark-theme, $color);
+    } @else {
+      $available-colors: list.join(map.keys($theme), map.keys($light-theme));
+      @error "encodecolor(): Color token '#{$color}' not found. Available tokens: #{$available-colors}";
+    }
+  } @else {
+    @error "encodecolor() expects a color token (string) or hex value (color), received #{meta.type-of($color)}: #{$color}";
+  }
+
+  $hex: string.slice(color.ie-hex-str($resolved-color), 4);
+  $color: string.unquote("#{$hex}");
+  @return "%23" + $color;
+}
+
+/*
+ * Devuelve el color y opacidad indicados en formato rgba.
+ *
+ * Admite los nombres de los colores definidos en la configuración o un color en hexadecimal
+ * si están habilitadas las variables CSS devuelve el nombre de la variable
+ *
+ * @param {string} $color - Nombre del color definido en la configuración global, o color en hexadecimal
+ * @param {number} $opacity - Valor de la Opacidad de 0 a 1
+ * @return {string} - Color en formato rgba
+ *
+ * @example SCSS
+ *   color(brand)          => rgba(var(--brand),1) // Variables CSS activadas
+ *   color(brand)          => rgba(221,34,78,1)    // Variables CSS desactivadas
+ *   color(#8f0537, 0.5);  => rgba(221,34,78,0.5)
+ */
+
+@function color($color, $opacity: 1) {
+  // Validación mejorada de tipos de input
+  @if meta.type-of($color) != string and meta.type-of($color) != color {
+    @error "color() expects a color token (string) or hex value (color), received #{meta.type-of($color)}: #{$color}";
+  }
+
+  // Validación mejorada de opacidad con sugerencias útiles
+  @if meta.type-of($opacity) != number {
+    @error "color() opacity must be a number between 0 and 1, received #{meta.type-of($opacity)}: #{$opacity}";
+  }
+
+  @if $opacity < 0 or $opacity > 1 {
+    $suggestion: "";
+
+    // Sugerir conversión si parece ser un porcentaje
+    @if $opacity > 1 and $opacity <= 100 {
+      $suggestion: " Did you mean #{$opacity / 100} (#{$opacity}% as decimal)?";
+    }
+
+    @error "color() opacity must be between 0 and 1, received: #{$opacity}.#{$suggestion}";
+  }
+
+  // Si es un color directo (hex), devolverlo con opacidad
+  @if meta.type-of($color) == color {
+    @return rgba($color, $opacity);
+  }
+
+  // Buscar en mapas de colores con mensajes mejorados de error
+  @if map.has-key($theme, $color) {
+    @if $css-variables == true {
+      @return rgba(var(--#{$color}), $opacity);
+    }
+    @return rgba(map.get($theme, $color), $opacity);
+  }
+
+  @if map.has-key($light-theme, $color) {
+    @if $css-variables == true {
+      @return rgba(var(--#{$color}), $opacity);
+    }
+    @return rgba(map.get($light-theme, $color), $opacity);
+  }
+
+  @if map.has-key($dark-theme, $color) {
+    @if $css-variables == true {
+      @return rgba(var(--#{$color}), $opacity);
+    }
+    @return rgba(map.get($dark-theme, $color), $opacity);
+  }
+
+  // Error mejorado con sugerencias cuando no se encuentra el color
+  $all-colors: list.join(
+    list.join(map.keys($theme), map.keys($light-theme)),
+    map.keys($dark-theme)
+  );
+  $suggestions: ();
+
+  // Buscar colores similares para sugerir
+  @each $available-color in $all-colors {
+    @if string.index(string.to-lower-case($available-color), string.to-lower-case($color)) or
+      string.index(string.to-lower-case($color), string.to-lower-case($available-color))
+    {
+      $suggestions: list.append($suggestions, $available-color);
+    }
+  }
+
+  $error-message: "Color token '#{$color}' not found.";
+
+  @if list.length($suggestions) > 0 {
+    $error-message: "#{$error-message} Did you mean: #{$suggestions}?";
+  } @else {
+    $error-message: "#{$error-message} Available colors: #{$all-colors}";
+  }
+
+  @error $error-message;
+}
+
+/*
+ * ================ Mixins ================
+ */
+
+/*
+ * Genera una variación específica para un tema
+ * por defecto se crean los temas 'light', 'dark' aunque se pueden crear nuevos
+ *
+ * @param {String} $theme - Indica el tema al que aplica
+ *
+ * @example SCSS
+ *   .myClass {
+ *     @include theme(dark) {
+ *       color: color(brand);
+ *     }
+ *   }
+ *
+ * @result CSS
+ *   .myClass [data-theme=dark] {
+ *     color: rgba(var(--brand), 1);
+ *   }
+ */
+
+@mixin theme($theme) {
+  @if meta.type-of($theme) != string {
+    @error "theme() mixin expects a theme name (string), received #{meta.type-of($theme)}: #{$theme}";
+  }
+
+  [data-theme="#{$theme}"] {
+    @content;
+  }
+}

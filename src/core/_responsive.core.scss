@@ -1,4 +1,6 @@
 @use "sass:map";
+@use "../config" as *;
+@use "../tokens" as *;
 @use "../variables" as *;
 @use "math.core" as *;
 
@@ -79,7 +81,7 @@ $breakpoints: (
 @mixin responsive {
   @content;
 
-  @if $enable-responsive == true {
+  @if map.get($utilities, config, responsive) == true {
     @each $screen in $medias {
       @media #{map.get($breakpoints, $screen)} {
         &--#{$screen} {

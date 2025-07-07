@@ -1,0 +1,105 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:list";
+
+/*
+ * ================ Core Validation Functions ================
+ */
+
+/*
+ * Validates framework configuration structure
+ */
+@function validate-framework-config($framework) {
+  @if meta.type-of($framework) != "map" {
+    @error "$framework must be a map";
+  }
+
+  // Check required keys
+  $required-keys: (reset, base, css-variables, primary-theme, responsive-breakpoints);
+  @each $key in $required-keys {
+    @if not map.has-key($framework, $key) {
+      @error "$framework missing required key: #{$key}";
+    }
+  }
+
+  // Validate primary-theme is string
+  $primary-theme: map.get($framework, primary-theme);
+  @if meta.type-of($primary-theme) != "string" {
+    @error "framework.primary-theme must be a string, got #{meta.type-of($primary-theme)}";
+  }
+
+  @return true;
+}
+
+/*
+ * Validates utilities configuration structure
+ */
+@function validate-utilities-config($utilities) {
+  @if meta.type-of($utilities) != "map" {
+    @error "$utilities must be a map";
+  }
+
+  // Check required top-level keys
+  @if not map.has-key($utilities, config) {
+    @error "$utilities missing required key: config";
+  }
+
+  @if not map.has-key($utilities, classes) {
+    @error "$utilities missing required key: classes";
+  }
+
+  // Validate config structure
+  $config: map.get($utilities, config);
+  $required-config-keys: (prefix, important, responsive, hover);
+  @each $key in $required-config-keys {
+    @if not map.has-key($config, $key) {
+      @error "$utilities.config missing required key: #{$key}";
+    }
+  }
+
+  // Validate prefix is string
+  $prefix: map.get($config, prefix);
+  @if meta.type-of($prefix) != "string" {
+    @error "utilities.config.prefix must be a string, got #{meta.type-of($prefix)}";
+  }
+
+  @return true;
+}
+
+/*
+ * Validates tokens structure
+ */
+@function validate-tokens-structure($tokens) {
+  @if meta.type-of($tokens) != "map" {
+    @error "$tokens must be a map";
+  }
+
+  // Check required top-level keys
+  $required-keys: (themes, typography, spacing, breakpoints, effects);
+  @each $key in $required-keys {
+    @if not map.has-key($tokens, $key) {
+      @error "$tokens missing required key: #{$key}";
+    }
+  }
+
+  @return true;
+}
+
+/*
+ * Validates base configuration structure
+ */
+@function validate-base-config($base) {
+  @if meta.type-of($base) != "map" {
+    @error "$base must be a map";
+  }
+
+  // Check required keys exist
+  $required-keys: (page, typography, forms, buttons, links, tables, effects, animation);
+  @each $key in $required-keys {
+    @if not map.has-key($base, $key) {
+      @warn "$base missing recommended key: #{$key}";
+    }
+  }
+
+  @return true;
+}

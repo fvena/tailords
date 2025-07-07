@@ -1,66 +1,94 @@
 @use "../variables" as *;
+@use "../core/colors.core" as *;
+@use "../core/types.core" as *;
+@use "../core/borders.core" as *;
+@use "../core/sizes.core" as *;
 
 /*
- * ================ Document ================
+ * ================ Code ================
  */
 
-@if $useReset {
+/*
+ * Reboot based on :
+ * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
+ * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
+ */
+
+@if $enable-reset {
+  /**
+   * 1. Prevent overflow of the container in all browsers (opinionated).
+   */
+
+  :where(pre) {
+    -ms-overflow-style: scrollbar; // 1
+    overflow: auto; // 1
+  }
+
+  /**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+
+  :where(pre, code, kbd, samp) {
+    font-family: font(mono), monospace; // 1
+    font-size: font(small1); // 2
+  }
+}
+
+@if $enable-base {
+  code,
+  pre,
+  kbd {
+    font-weight: font(medium);
+    line-height: initial;
+    color: color($code-text-color);
+    background-color: color($code-background-color);
+    border-radius: radius(small);
+  }
+
   /*
-   * Reboot based on :
-   * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
-   * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
+   * ================ Inline Code ================
    */
 
-  /**
-   * 1. Add border box sizing in all browsers (opinionated).
-   * 2. Backgrounds do not repeat by default (opinionated).
-   */
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box; // 1
-    background-repeat: no-repeat; // 2
+  code,
+  kbd {
+    display: inline-block;
+    padding: 0.1rem 0.3rem;
+    white-space: nowrap;
   }
 
-  /**
-   * 1. Add text decoration inheritance in all browsers (opinionated).
-   * 2. Add vertical alignment inheritance in all browsers (opinionated).
+  /*
+   * ================ Block Code ================
    */
 
-  ::before,
-  ::after {
-    vertical-align: inherit; // 2
-    text-decoration: inherit; // 1
+  pre {
+    display: block;
+    padding: size(half) size(simple);
+    margin-bottom: size(simple);
+    overflow-x: auto;
+    text-align: left;
+    word-spacing: normal;
+    hyphens: none;
+    word-break: normal;
+    word-wrap: normal;
+    tab-size: 4;
+    white-space: pre;
+    border-radius: radius(medium);
+
+    > code {
+      display: block;
+      padding: 0;
+      background: none;
+    }
   }
 
-  /**
-   * 1. Change the line height in all browsers (opinionated).
-   * 2. Breaks words to prevent overflow in all browsers (opinionated).
-   * 3. Use a 4-space tab width in all browsers (opinionated).
-   * 4. Use the default cursor in all browsers (opinionated).
-   * 5. Remove the grey highlight on links in iOS (opinionated).
-   * 6. Prevent adjustments of font size after orientation changes in iOS.
-   * 7. eEnables ligatures (ff, fi, fl, etc.) in text smaller than 20px for some fonts (opinionated).
+  /*
+   * ================ kbd ================
    */
 
-  :where(:root) {
-    line-height: 1.5; // 1
-    overflow-wrap: break-word; // 2
-    -moz-tab-size: 4; // 3
-    tab-size: 4; // 3
-    cursor: default; // 4
-    -webkit-tap-highlight-color: transparent; // 5
-    -webkit-text-size-adjust: 100%; // 6
-    text-size-adjust: 100%; // 6
-    text-rendering: optimizeLegibility; // 7
-  }
-
-  /**
-   * Remove the margin in all browsers (opinionated).
-   */
-
-  :where(body) {
-    margin: 0;
+  kbd {
+    vertical-align: baseline;
+    color: color($kbd-text-color);
+    background-color: color($kbd-background-color);
   }
 }

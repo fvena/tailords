@@ -6,141 +6,145 @@
 @use "../core/colors.core" as *;
 
 /*
- * ================ Generadores ================
+ * ================ Typography Utilities Generator ================
  */
 
-@if generate(types) == true {
-  /*
-   * Genera clases para definir el texto en base al tamaño, peso y color
-   *
-   * @example CSS
-   *   .h2-semibold-gray1       // Tamaño de fuente h2, peso semibold y color gray1
-   *   .small1-regular-danger   // Tamaño de fuente small1, peso regular y color danger
-   */
-  @each $size-name in map.get($font-style-guide, sizes) {
-    @each $weight-name in map.get($font-style-guide, weights) {
-      @each $color-name in map.get($font-style-guide, colors) {
-        %#{$size-name}-#{$weight-name}-#{$color-name},
-        .#{$prefix}#{$size-name}-#{$weight-name}-#{$color-name} {
-          font-size: font-size($size-name) #{$important};
-          font-weight: font-weight($weight-name) #{$important};
-          color: color($color-name) #{$important};
-        }
-      }
-    }
-  }
+/*
+ * Font Sizes
+ */
+@if $generate-font-sizes {
+  $template: map.get($utility-classes, font-sizes);
 
-  /*
-   * Genera clases en base a los tamaños texto definidos
-   *
-   * @example CSS
-   *   .h2            // Tamaño de fuente h2
-   *   .h3-lap        // Tamaño de fuente solo para pantallas Lap de tamaño h3
-   */
+  @each $size-name, $size-value in $font-sizes {
+    $class-name: parse-font-template($template, $size-name, $font-sizes);
 
-  @each $font-size-name, $font-size-value in $font-sizes {
-    .#{$prefix}#{$font-size-name} {
+    .#{$prefix}#{$class-name} {
       @include responsive {
-        font-size: font-size($font-size-name) #{$important};
+        font-size: font-size($size-name) #{$important};
       }
     }
   }
+}
 
-  /*
-   * Genera clases en base a las alturas de texto definidos
-   *
-   * @example CSS
-   *   .leading-large       // Altura de línea para textos de tamaño large
-   */
+/*
+ * Font Weights
+ */
+@if $generate-font-weights {
+  $template: map.get($utility-classes, font-weights);
 
-  @each $leading-size-name, $leading-size-value in $leading {
-    .#{$prefix}leading-#{$leading-size-name} {
-      line-height: leading($leading-size-name) #{$important};
+  @each $weight-name, $weight-value in $font-weights {
+    $class-name: parse-font-template($template, $weight-name, $font-weights);
+
+    .#{$prefix}#{$class-name} {
+      font-weight: font-weight($weight-name) #{$important};
     }
   }
+}
 
-  /*
-   * Genera clases en base a la separación entre letras definidas
-   *
-   * @example CSS
-   *   .traking-large       // Separación entre letras large
-   */
+/*
+ * Font Families
+ */
+@if $generate-font-families {
+  $template: map.get($utility-classes, font-families);
 
-  @each $traking-size-name, $traking-size-value in $traking {
-    .#{$prefix}traking-#{$traking-size-name} {
-      @if $traking-size-name == medium {
+  @each $family-name, $family-value in $font-families {
+    $class-name: parse-font-template($template, $family-name, $font-families);
+
+    .#{$prefix}#{$class-name} {
+      font-family: font-family($family-name) #{$important};
+    }
+  }
+}
+
+/*
+ * Line Heights
+ */
+@if $generate-line-heights {
+  $template: map.get($utility-classes, line-heights);
+
+  @each $leading-name, $leading-value in $line-heights {
+    $class-name: parse-font-template($template, $leading-name, $line-heights);
+
+    .#{$prefix}#{$class-name} {
+      line-height: leading($leading-name) #{$important};
+    }
+  }
+}
+
+/*
+ * Letter Spacing
+ */
+@if $generate-letter-spacing {
+  $template: map.get($utility-classes, letter-spacing);
+
+  @each $tracking-name, $tracking-value in $tracking {
+    $class-name: parse-font-template($template, $tracking-name, $tracking);
+
+    .#{$prefix}#{$class-name} {
+      @if $tracking-name == medium {
         letter-spacing: initial #{$important};
       } @else {
-        letter-spacing: isVar(--traking-#{$traking-size-name}, $traking-size-value) #{$important};
+        letter-spacing: $tracking-value #{$important};
       }
     }
   }
+}
 
-  /*
-   * Genera clases con los pesos tipográficos definidos
-   *
-   * @example CSS
-   *   .semibold
-   *   .regular
-   */
-  @each $font-weight-name, $font-weight-value in $font-weights {
-    .#{$prefix}#{$font-weight-name} {
-      font-weight: $font-weight-value #{$important};
+/*
+ * Text Alignment
+ */
+@if $generate-text-alignment {
+  $template: map.get($utility-classes, text-alignment);
+  $alignments: (left, center, right, justify);
+
+  @each $alignment in $alignments {
+    $class-name: str-replace($template, "{alignment}", $alignment);
+
+    .#{$prefix}#{$class-name} {
+      @include responsive {
+        text-align: #{$alignment} #{$important};
+      }
     }
   }
+}
 
-  /*
-   * Genera clases con las familias tipográficas
-   *
-   * @example CSS
-   *   .body
-   *   .header
-   */
-  @each $font-family-name, $font-family-value in $font-families {
-    .#{$prefix}font-#{$font-family-name} {
-      font-family: $font-family-value #{$important};
+/*
+ * Text Transforms
+ */
+@if $generate-text-transforms {
+  $template: map.get($utility-classes, text-transforms);
+  $transforms: (uppercase, lowercase, capitalize, none);
+
+  @each $transform in $transforms {
+    $class-name: str-replace($template, "{transform}", $transform);
+
+    .#{$prefix}#{$class-name} {
+      text-transform: #{$transform} #{$important};
     }
   }
+}
 
-  /*
-   * Indica como se alinea el texto dentro un elemento.
-   *
-   * @example CSS
-   *   .align-left
-   *   .align-center--lap
-   */
+/*
+ * Text Decorations
+ */
+@if $generate-text-decorations {
+  $template: map.get($utility-classes, text-decorations);
+  $decorations: (underline, overline, line-through, none);
 
-  .#{$prefix}align-left {
-    @include responsive {
-      text-align: left #{$important};
+  @each $decoration in $decorations {
+    $class-name: str-replace($template, "{decoration}", $decoration);
+
+    .#{$prefix}#{$class-name} {
+      text-decoration: #{$decoration} #{$important};
     }
   }
+}
 
-  .#{$prefix}align-right {
-    @include responsive {
-      text-align: right #{$important};
-    }
-  }
-
-  .#{$prefix}align-center {
-    @include responsive {
-      text-align: center #{$important};
-    }
-  }
-
-  .#{$prefix}justify {
-    @include responsive {
-      text-align: justify #{$important};
-    }
-  }
-
-  /*
-   * Texto desbordante
-   */
-
-  .#{$prefix}nowrap {
-    white-space: nowrap #{$important};
-  }
+/*
+ * Text Truncation
+ */
+@if $generate-text-truncation {
+  $template: map.get($utility-classes, text-truncation);
 
   .#{$prefix}truncate {
     overflow: hidden #{$important};
@@ -168,44 +172,24 @@
     -webkit-line-clamp: 4 #{$important};
     -webkit-box-orient: vertical #{$important};
   }
+}
 
-  /*
-   * Transformación
-   */
+/*
+ * Style Guide Combinations
+ */
+@if $generate-style-guide {
+  $template: map.get($utility-classes, style-guide);
 
-  .#{$prefix}lowercase {
-    text-transform: lowercase #{$important};
-  }
-
-  .#{$prefix}uppercase {
-    text-transform: uppercase #{$important};
-  }
-
-  .#{$prefix}capitalize {
-    text-transform: capitalize #{$important};
-  }
-
-  /*
-   * Apariencia
-   */
-
-  .#{$prefix}italic {
-    font-style: italic #{$important};
-  }
-
-  .#{$prefix}normal {
-    font-style: normal #{$important};
-  }
-
-  .#{$prefix}text-hide {
-    text-indent: -10000px #{$important};
-  }
-
-  .#{$prefix}underline {
-    text-decoration: underline #{$important};
-  }
-
-  .#{$prefix}no-decoration {
-    text-decoration: none #{$important};
+  @each $size-name in map.get($style-guide-combinations, sizes) {
+    @each $weight-name in map.get($style-guide-combinations, weights) {
+      @each $color-name in map.get($style-guide-combinations, colors) {
+        %#{$size-name}-#{$weight-name}-#{$color-name},
+        .#{$prefix}#{$size-name}-#{$weight-name}-#{$color-name} {
+          font-size: font-size($size-name) #{$important};
+          font-weight: font-weight($weight-name) #{$important};
+          color: color($color-name) #{$important};
+        }
+      }
+    }
   }
 }

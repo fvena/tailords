@@ -4,22 +4,16 @@
 @use "../core/shadows.core" as *;
 
 /*
- * ================ Generadores ================
+ * ================ Shadow Utilities Generator ================
  */
 
-@if generate(shadows) == true {
-  /*
-   * Genera clases en base a las sombras definidas y a los colores principales
-   * Si están habilitadas las clases hober, genera las mismas clases hover
-   *
-   * Ejemplos:
-   *   .shadow-2                  // Sombra de tamaño 2
-   *   .shadow-2--hover           // Sombra de tamaño 2 al hacer hover sobre un elemento
-   *   .shadow-5.shadow-2--hover  // Sombra de tamaño 5 con transición a un tamaño 2 al hacer hover
-   */
+@if $generate-shadows {
+  $template: map.get($utility-classes, shadows);
 
-  @each $key, $value in $shadows {
-    .#{$prefix}shadow-#{"" + $key} {
+  @each $name, $value in $shadow-scale {
+    $class-name: parse-shadow-template($template, $name);
+
+    .#{$prefix}#{$class-name} {
       @include hover {
         box-shadow: shadow($value) #{$important};
       }

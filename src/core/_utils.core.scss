@@ -1,3 +1,7 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
 /*
  * ================ Funciones ================
  */
@@ -29,4 +33,252 @@
   }
 
   @return "";
+}
+
+/*
+ * Devuelve la abreviatura de un token si está disponible, sino el nombre original
+ *
+ * @param {Map} $token-map - Mapa de tokens
+ * @param {String} $key - Clave del token
+ * @return {String} - Abreviatura o nombre original
+ *
+ * @example SCSS
+ *     abbr($spacing-scale, half)  => "2" (si half tiene abbr: "2")
+ *     abbr($spacing-scale, half)  => "half" (si half no tiene abbr)
+ */
+@function abbr($token-map, $key) {
+  $token: map.get($token-map, $key);
+
+  @if meta.type-of($token) == "map" and map.has-key($token, abbr) {
+    @return map.get($token, abbr);
+  }
+
+  @return $key;
+}
+
+/*
+ * Parsea un template de utility class reemplazando placeholders
+ *
+ * @param {String} $template - Template con placeholders
+ * @param {String} $token-name - Nombre del token
+ * @param {Map} $token-map - Mapa de tokens para obtener abreviatura
+ * @return {String} - Nombre de clase final
+ */
+@function parse-color-template($template, $color-name, $theme-colors) {
+  $result: $template;
+
+  // Reemplazar {abbr(color)}
+  @if string.index($result, "{abbr(color)}") {
+    $abbr: abbr($theme-colors, $color-name);
+    $result: str-replace($result, "{abbr(color)}", $abbr);
+  }
+
+  // Reemplazar {color}
+  @if string.index($result, "{color}") {
+    $token-value: map.get($theme-colors, $color-name);
+    $display-name: if(
+      meta.type-of($token-value) == "map",
+      map.get($token-value, abbr) or $color-name,
+      $color-name
+    );
+    $result: str-replace($result, "{color}", $display-name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para valores de opacidad
+ */
+@function parse-opacity-template($template, $name, $value) {
+  $result: $template;
+
+  // Reemplazar {opacity}
+  @if string.index($result, "{opacity}") {
+    $result: str-replace($result, "{opacity}", $name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para spacing
+ */
+@function parse-spacing-template($template, $size-name, $direction: null) {
+  $result: $template;
+
+  // Reemplazar {abbr(size)}
+  @if string.index($result, "{abbr(size)}") {
+    $abbr: abbr($spacing-scale, $size-name);
+    $result: str-replace($result, "{abbr(size)}", $abbr);
+  }
+
+  // Reemplazar {size}
+  @if string.index($result, "{size}") {
+    $token-value: map.get($spacing-scale, $size-name);
+    $display-name: if(
+      meta.type-of($token-value) == "map",
+      map.get($token-value, abbr) or $size-name,
+      $size-name
+    );
+    $result: str-replace($result, "{size}", $display-name);
+  }
+
+  // Reemplazar {abbr(direction)} si hay dirección
+  @if $direction and string.index($result, "{abbr(direction)}") {
+    $direction-abbrs: map.get($utilities-abbreviations, direction);
+    $abbr: map.get($direction-abbrs, $direction) or $direction;
+    $result: str-replace($result, "{abbr(direction)}", $abbr);
+  }
+
+  // Reemplazar {direction}
+  @if $direction and string.index($result, "{direction}") {
+    $result: str-replace($result, "{direction}", if($direction == "all", "", "-#{$direction}"));
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para bordes
+ */
+@function parse-border-template($template, $position) {
+  $result: $template;
+
+  // Reemplazar {position}
+  @if string.index($result, "{position}") {
+    $pos-suffix: if($position == "all", "", "-#{$position}");
+    $result: str-replace($result, "{position}", $pos-suffix);
+  }
+
+  @return $result;
+}
+
+@function parse-border-width-template($template, $name, $value) {
+  $result: $template;
+
+  @if string.index($result, "{width}") {
+    $result: str-replace($result, "{width}", $name);
+  }
+
+  @return $result;
+}
+
+@function parse-border-style-template($template, $style) {
+  $result: $template;
+
+  @if string.index($result, "{style}") {
+    $result: str-replace($result, "{style}", $style);
+  }
+
+  @return $result;
+}
+
+@function parse-radius-template($template, $name, $value) {
+  $result: $template;
+
+  @if string.index($result, "{radius}") {
+    $result: str-replace($result, "{radius}", $name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para tipografía
+ */
+@function parse-font-template($template, $token-name, $token-map) {
+  $result: $template;
+
+  // Reemplazar {abbr(font)}
+  @if string.index($result, "{abbr(font)}") {
+    $abbr: abbr($token-map, $token-name);
+    $result: str-replace($result, "{abbr(font)}", $abbr);
+  }
+
+  // Reemplazar {font}
+  @if string.index($result, "{font}") {
+    $result: str-replace($result, "{font}", $token-name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para sombras
+ */
+@function parse-shadow-template($template, $shadow-name) {
+  $result: $template;
+
+  @if string.index($result, "{shadow}") {
+    $result: str-replace($result, "{shadow}", $shadow-name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para cursores
+ */
+@function parse-cursor-template($template, $cursor-name) {
+  $result: $template;
+
+  @if string.index($result, "{cursor}") {
+    $result: str-replace($result, "{cursor}", $cursor-name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para overflow
+ */
+@function parse-overflow-template($template, $value) {
+  $result: $template;
+
+  @if string.index($result, "{overflow}") {
+    $result: str-replace($result, "{overflow}", $value);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para position
+ */
+@function parse-position-template($template, $value) {
+  $result: $template;
+
+  @if string.index($result, "{position}") {
+    $result: str-replace($result, "{position}", $value);
+  }
+
+  @return $result;
+}
+
+/*
+ * Parsea templates para gradientes
+ */
+@function parse-gradient-template($template, $gradient-name) {
+  $result: $template;
+
+  @if string.index($result, "{gradient}") {
+    $result: str-replace($result, "{gradient}", $gradient-name);
+  }
+
+  @return $result;
+}
+
+/*
+ * Función helper para reemplazar strings (Sass no tiene str-replace nativo)
+ */
+@function str-replace($string, $search, $replace: "") {
+  $index: string.index($string, $search);
+
+  @if $index {
+    @return string.slice($string, 1, $index - 1) + $replace +
+      str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
+  }
+
+  @return $string;
 }

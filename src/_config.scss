@@ -1,0 +1,58 @@
+/*
+ * ================ Framework Configuration ================
+ *
+ * Controls framework compilation behavior and feature flags.
+ *
+ * WHAT'S IN THIS FILE:
+ * - Boolean flags that enable/disable major framework features
+ * - Theme selection for primary/fallback theme
+ * - Build-time compilation options
+ *
+ * WHAT'S NOT HERE:
+ * - Design values (colors, spacing, typography) → _tokens.scss
+ * - Utility class generation → _utilities.scss
+ * - Component styling defaults → _base.scss
+ *
+ * USAGE:
+ * These settings determine what gets compiled into your final CSS.
+ * Disabling features reduces bundle size but removes functionality.
+ */
+
+/*
+ * Configuration wrapper - organized settings in logical groups
+ */
+$framework: (
+  /*
+   * Include CSS reset/normalize styles
+   * GENERATES: Reset styles in final CSS bundle
+   */
+  reset: true,
+
+  /*
+   * Include base HTML element styles (typography, forms, buttons, etc.)
+   * GENERATES: Styled HTML elements using your design tokens
+   */
+  base: true,
+
+  /*
+   * Generate CSS custom properties (:root with --variables)
+   * GENERATES: :root { --brand: 221,34,78; --space: 1.6; ... }
+   * ENABLES: Runtime theme switching and dynamic values
+   */
+  css-variables: true,
+
+  /*
+   * Primary theme name to use as base and inheritance fallback
+   * MUST MATCH: A key in $themes map from _tokens.scss
+   * AFFECTS: Color resolution when secondary themes don't define a color
+   */
+  primary-theme: "light",
+
+  /*
+   * Responsive breakpoints to generate utility variants for
+   * ACCEPTS: List of breakpoint names from $breakpoints in _tokens.scss
+   * GENERATES: .class--palm, .class--desk style responsive variants
+   * AVAILABLE: palm, lap, small, desk, large, portrait, landscape, touch, screen, tablet
+   */
+  responsive-breakpoints: (palm, lap, small, desk, large)
+) !default;

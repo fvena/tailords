@@ -4,17 +4,17 @@
 @use "../core/borders.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
    * ================ Tipografía ================
    */
 
   body {
-    font-family: font(body);
-    font-size: font(base);
-    font-weight: font($font-base-weight);
-    line-height: leading(medium);
-    color: color($font-base-color);
+    font-family: font($body-font-family);
+    font-size: font($body-font-size);
+    font-weight: font($body-font-weight);
+    line-height: leading($body-line-height);
+    color: color($body-text-color);
     background-color: color($page-background-color);
   }
 
@@ -25,9 +25,9 @@
   h4,
   h5,
   h6 {
-    font-family: font(header);
-    font-weight: font($font-header-weight);
-    color: color($font-header-color);
+    font-family: font($heading-font-family);
+    font-weight: font($heading-font-weight);
+    color: color($heading-text-color);
   }
 
   h1 {
@@ -91,7 +91,7 @@
 
   // Caption
   .caption {
-    font-family: font(body);
+    font-family: font($body-font-family);
     font-size: font(h5);
     font-style: italic;
     color: color(gray4);
@@ -184,7 +184,7 @@
   hr {
     margin-top: double();
     margin-bottom: double();
-    border-top: var(--border-width) var(--border-style) color($border-color);
+    border-top: border($border-default-width) $border-default-style color($border-default-color);
   }
 
   // Ritmo vertical

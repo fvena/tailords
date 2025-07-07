@@ -9,10 +9,10 @@
 @use "../core/types.core" as *;
 
 /*
- * ================ Generadores ================
+ * ================ CSS Custom Properties Generator ================
  */
 
-@if ($css-variables) {
+@if $generate-css-variables and $css-variables {
   :root {
     --FONT-FAMILIES-----------------: 01;
 
@@ -23,7 +23,7 @@
     --FONT-SIZES--------------------: 02;
 
     @each $key, $value in $font-sizes {
-      --font-#{'' + $key}: #{calcFontSize($value)};
+      --font-#{'' + $key}: #{font-size($key)};
     }
 
     --FONT-WEIGHTS------------------: 03;
@@ -34,33 +34,27 @@
 
     --TEXT-LEADING------------------: 04;
 
-    @each $key, $value in $leading {
-      --leading-#{'' + $key}: #{leading($value)};
+    @each $key, $value in $line-heights {
+      --leading-#{'' + $key}: #{leading($key)};
     }
 
-    --TRAKING-----------------------: 05;
+    --TRACKING----------------------: 05;
 
-    @each $key, $value in $traking {
-      --traking-#{'' + $key}: #{$value};
+    @each $key, $value in $tracking {
+      --tracking-#{'' + $key}: #{$value};
     }
 
     --RADIUS------------------------: 06;
 
-    @each $key, $value in $radiuses {
+    @each $key, $value in $border-radius {
       --radius-#{'' + $key}: #{$value};
-    }
-
-    --BLUR--------------------------: 07;
-
-    @each $key, $value in $blurs {
-      --blur-#{'' + $key}: #{$value};
     }
 
     --SHADOWS-----------------------: 08;
 
     --shadow-color: #{hex2rgb($shadow-color)};
 
-    @each $key, $value in $shadows {
+    @each $key, $value in $shadow-scale {
       --shadow-#{'' + $key}: #{shadow($value)};
     }
 
@@ -73,39 +67,48 @@
         )};
     }
 
-    --COLORS------------------------: 10;
-
-    @each $color, $color-value in $theme {
-      --#{'' + $color}: #{hex2rgb($color-value)};
-    }
-
     --BORDERS-----------------------: 11;
 
     @each $width, $width-value in $border-widths {
       --border-#{'' + $width}: #{border($width-value)};
     }
 
-    --border-color: #{color($border-color)};
-    --border-width: #{border($border-width)};
-    --border-style: #{$border-style};
+    --border-color: #{color($border-default-color)};
+    --border-width: #{border($border-default-width)};
+    --border-style: #{$border-default-style};
 
     --SPACE-------------------------: 12;
 
-    --space: #{$space};
+    --space: #{$space-base};
   }
 
+  /*
+   * Theme-specific CSS custom properties
+   */
   :root,
   .#{$prefix}light-mode,
   [data-theme="light"] {
+    --COLORS------------------------: 10;
+
+    $light-theme: map.get($themes, light);
     @each $color, $color-value in $light-theme {
-      --#{'' + $color}: #{hex2rgb($color-value)};
+      @if meta.type-of($color-value) == "map" {
+        --#{'' + $color}: #{hex2rgb(map.get($color-value, value))};
+      } @else {
+        --#{'' + $color}: #{hex2rgb($color-value)};
+      }
     }
   }
 
   .#{$prefix}dark-mode,
   [data-theme="dark"] {
+    $dark-theme: map.get($themes, dark);
     @each $color, $color-value in $dark-theme {
-      --#{'' + $color}: #{hex2rgb($color-value)};
+      @if meta.type-of($color-value) == "map" {
+        --#{'' + $color}: #{hex2rgb(map.get($color-value, value))};
+      } @else {
+        --#{'' + $color}: #{hex2rgb($color-value)};
+      }
     }
   }
 }

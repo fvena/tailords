@@ -1,37 +1,65 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/hover.core" as *;
+
+/*
+ * ================ Base Link Styles ================
+ *
+ * PHILOSOPHY:
+ * Link styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Anchor elements and link-like interactive elements
+ * APPLIES TO: <a>, .link class, and link states
+ * ACCESSIBILITY: Proper focus states and touch targets
+ */
 
 @if $enable-base {
   /*
-   * ================ Enlaces ================
+   * Reset image borders in links
+   * Legacy fix for older browsers
    */
-
   a img {
     border: 0;
   }
 
+  /*
+   * Primary link styling
+   * Semantic and visual link treatment with accessibility
+   */
   a,
   .link {
     display: inline-block;
-    color: color($link-text-color);
+    color: $link-text-color;
     text-decoration-thickness: 0.1em;
-    text-decoration-color: color($link-decoration-color);
+    text-decoration-color: $link-decoration-color;
     text-underline-offset: 1.5px;
     transition: color $transition-default-duration $transition-default-easing;
     text-decoration-skip-ink: auto;
 
-    @include hover {
-      color: color($link-hover-color);
+    /*
+     * Hover state for non-touch devices
+     * Improves UX by avoiding sticky hover on mobile
+     */
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not([disabled]) {
+        color: $link-hover-color;
+      }
     }
 
+    /*
+     * Interactive states
+     * Consistent behavior across states
+     */
     &:active,
     &:focus,
     &:visited {
       color: inherit;
     }
 
-    a[disabled] {
+    /*
+     * Disabled state
+     * Clear visual indication of non-interactive state
+     */
+    &[disabled] {
       cursor: not-allowed;
       opacity: 0.6;
     }

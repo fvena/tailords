@@ -1,65 +1,271 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/types.core" as *;
-@use "../core/sizes.core" as *;
+
+/*
+ * ================ Base Print Styles ================
+ *
+ * PHILOSOPHY:
+ * Print styles must work with ANY user configuration using real values
+ * optimized for paper output, never assuming user design tokens exist.
+ *
+ * SCOPE: Print-specific styling for better paper output
+ * APPLIES TO: All elements when printing
+ * FEATURES: Optimized typography, color removal, page breaks
+ */
 
 @if $enable-base {
   /*
-   * ================ Imágenes ================
-   *
-   * 1. Las imágenes ocupan todo el ancho para mejorar la adaptación a distintas pantallas.
-   * 2. Offset `alt` text from surrounding copy.
-   * 3. Elimina el espacio en blanco que aparece debajo del elemento 'img'.
-   *    Mejor alternativa que usar 'display:block'.
-   * 4. Si se define de forma explicita la altura o anchura de una imagen, tenemos
-   *    que evitar que se adapte para que no se deforme.
+   * ================ Print Media Query ================
+   * Styles applied only when printing
    */
-  img {
-    box-sizing: content-box;
-    max-width: 100%;
-    /* [1] */
-    height: auto;
-    font-style: italic;
-    /* [2] */
-    vertical-align: middle;
-    /* [3] */
-  }
+  @media print {
+    /*
+     * ================ Document Setup ================
+     * Optimize document for print output
+     */
 
-  img[width],
-  img[height] {
-    max-width: none;
-    /* [4] */
-  }
+    /*
+     * Remove unnecessary spacing and colors
+     * Conserve ink and improve readability
+     */
+    *,
+    *::before,
+    *::after {
+      background: transparent !important;
+      color: #000 !important; // Black text for all elements
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
 
-  /*
-   * ================ Pies de foto ================
-   */
+    /*
+     * ================ Typography Optimization ================
+     * Improve text readability on paper
+     */
 
-  figure {
-    margin: size(double) 0 size(triple);
+    /*
+     * Body text optimization
+     * Better paper reading experience
+     */
+    body {
+      font-size: 12pt; // Standard print size
+      line-height: 1.4; // Tighter line height for print
+      color: #000;
+      background: #fff;
+    }
 
+    /*
+     * Heading optimization
+     * Clear hierarchy for printed documents
+     */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #000;
+      page-break-after: avoid; // Keep headings with content
+    }
+
+    h1 {
+      font-size: 18pt;
+    }
+
+    h2 {
+      font-size: 16pt;
+    }
+
+    h3 {
+      font-size: 14pt;
+    }
+
+    h4,
+    h5,
+    h6 {
+      font-size: 12pt;
+    }
+
+    /*
+     * ================ Link Handling ================
+     * Make links useful in print context
+     */
+
+    /*
+     * Show URLs for external links
+     * Provide context in printed documents
+     */
+    a[href^="http"]:after {
+      content: " (" attr(href) ")";
+      font-size: 10pt;
+      color: #666;
+    }
+
+    /*
+     * Hide internal links URLs
+     * Avoid cluttering with anchor links
+     */
+    a[href^="#"]:after,
+    a[href^="/"]:after {
+      content: "";
+    }
+
+    /*
+     * ================ Content Visibility ================
+     * Hide non-essential elements for printing
+     */
+
+    /*
+     * Hide interactive elements
+     * Remove navigation and controls
+     */
+    nav,
+    .navigation,
+    .nav,
+    .menu,
+    .sidebar,
+    .footer,
+    .header,
+    .no-print {
+      display: none !important;
+    }
+
+    /*
+     * Hide form elements
+     * Remove interactive controls
+     */
+    button,
+    input,
+    select,
+    textarea {
+      display: none !important;
+    }
+
+    /*
+     * ================ Page Layout ================
+     * Optimize content layout for paper
+     */
+
+    /*
+     * Main content optimization
+     * Use full page width
+     */
+    .main-content,
+    .content,
+    article {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      float: none !important;
+    }
+
+    /*
+     * ================ Images and Media ================
+     * Handle visual content appropriately
+     */
+
+    /*
+     * Image optimization
+     * Ensure images print well
+     */
     img {
-      display: block;
-      width: 100%;
-      margin: 0 auto;
+      max-width: 100% !important;
+      height: auto !important;
+      page-break-inside: avoid;
     }
 
-    figcaption {
-      margin-top: size(quarter);
-      font-size: font-size(small1);
-      font-style: italic;
-      color: color($body-text-color);
-      text-align: center;
+    /*
+     * Hide decorative images
+     * Remove non-essential visual elements
+     */
+    .logo,
+    .icon,
+    .decoration {
+      display: none !important;
     }
-  }
 
-  /*
-   * ================ Google maps ================
-   *
-   * Los mapas de Google se rompen si `max-width: 100%`;
-   * usamos su propio selector para evitar este problema.
-   */
-  .gm-style img {
-    max-width: none;
+    /*
+     * ================ Tables ================
+     * Optimize table layout for printing
+     */
+
+    /*
+     * Table optimization
+     * Better table printing behavior
+     */
+    table {
+      border-collapse: collapse !important;
+      width: 100% !important;
+    }
+
+    th,
+    td {
+      border: 1px solid #000 !important;
+      padding: 4pt 8pt !important;
+    }
+
+    th {
+      background-color: #f0f0f0 !important;
+      font-weight: bold !important;
+    }
+
+    /*
+     * ================ Page Breaks ================
+     * Control content flow across pages
+     */
+
+    /*
+     * Avoid breaks within elements
+     * Keep content together when possible
+     */
+    blockquote,
+    pre,
+    img,
+    tr,
+    .keep-together {
+      page-break-inside: avoid;
+    }
+
+    /*
+     * Force breaks before major sections
+     * Logical page organization
+     */
+    .page-break-before,
+    .chapter,
+    .section {
+      page-break-before: always;
+    }
+
+    /*
+     * ================ Typography Refinements ================
+     * Final typography adjustments for print
+     */
+
+    /*
+     * Paragraph optimization
+     * Better text flow for reading
+     */
+    p {
+      orphans: 3; // Minimum lines at bottom of page
+      widows: 3; // Minimum lines at top of page
+    }
+
+    /*
+     * Code blocks
+     * Ensure code readability in print
+     */
+    pre,
+    code {
+      background: #f5f5f5 !important;
+      border: 1px solid #ccc !important;
+      page-break-inside: avoid;
+    }
+
+    /*
+     * Abbreviations
+     * Show full text in print
+     */
+    abbr[title]:after {
+      content: " (" attr(title) ")";
+      font-size: 10pt;
+    }
   }
 }

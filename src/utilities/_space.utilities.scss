@@ -4,6 +4,82 @@
 @use "../core/sizes.core" as *;
 
 /*
+ * ================ Dimensions Utilities Generator ================
+ */
+
+/*
+ * Widths - Relative sizes
+ */
+@if $generate-widths {
+  $template: map.get($utility-classes, widths);
+
+  // Relative sizes
+  @each $size-name, $size-value in $spacing-scale {
+    $class-name: parse-spacing-template($template, $size-name);
+
+    .#{$prefix}#{$class-name} {
+      @include responsive {
+        width: size($size-name) #{$important};
+      }
+    }
+  }
+
+  // Percentage sizes
+  @each $size, $value in $size-percentages {
+    $class-name: str-replace($template, "{size}", $size);
+
+    .#{$prefix}#{$class-name} {
+      @include responsive {
+        width: #{$value * 1%} #{$important};
+      }
+    }
+  }
+
+  // Auto width
+  .#{$prefix}w-auto {
+    @include responsive {
+      width: auto #{$important};
+    }
+  }
+}
+
+/*
+ * Heights - Relative sizes
+ */
+@if $generate-heights {
+  $template: map.get($utility-classes, heights);
+
+  // Relative sizes
+  @each $size-name, $size-value in $spacing-scale {
+    $class-name: parse-spacing-template($template, $size-name);
+
+    .#{$prefix}#{$class-name} {
+      @include responsive {
+        height: size($size-name) #{$important};
+      }
+    }
+  }
+
+  // Percentage sizes
+  @each $size, $value in $size-percentages {
+    $class-name: str-replace($template, "{size}", $size);
+
+    .#{$prefix}#{$class-name} {
+      @include responsive {
+        height: #{$value * 1%} #{$important};
+      }
+    }
+  }
+
+  // Auto height
+  .#{$prefix}h-auto {
+    @include responsive {
+      height: auto #{$important};
+    }
+  }
+}
+
+/*
  * ================ Spacing Utilities Generator ================
  */
 

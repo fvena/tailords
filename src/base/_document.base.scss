@@ -1,94 +1,259 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/types.core" as *;
-@use "../core/borders.core" as *;
-@use "../core/sizes.core" as *;
 
 /*
- * ================ Code ================
+ * ================ Base Document Styles ================
+ *
+ * PHILOSOPHY:
+ * Document-level styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Document-level foundational styling
+ * APPLIES TO: <html>, <body>, document-wide settings
+ * FEATURES: Typography foundation, responsive behavior, accessibility
  */
-
-/*
- * Reboot based on :
- * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
- * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
- */
-
-@if $enable-reset {
-  /**
-   * 1. Prevent overflow of the container in all browsers (opinionated).
-   */
-
-  :where(pre) {
-    -ms-overflow-style: scrollbar; // 1
-    overflow: auto; // 1
-  }
-
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
-   */
-
-  :where(pre, code, kbd, samp) {
-    font-family: font(mono), monospace; // 1
-    font-size: font(small1); // 2
-  }
-}
 
 @if $enable-base {
-  code,
-  pre,
-  kbd {
-    font-weight: font(medium);
-    line-height: initial;
-    color: color($code-text-color);
-    background-color: color($code-background-color);
-    border-radius: radius(small);
+  /*
+   * ================ HTML Element Foundation ================
+   * Document root styling and behavior
+   */
+
+  /*
+   * HTML root element
+   * Sets document-wide defaults and CSS custom property inheritance
+   */
+  html {
+    /*
+     * Font foundation
+     * Establishes baseline typography for the entire document
+     */
+    font-family: $body-font-family;
+    font-size: 100%; // Respect user's browser font size preference
+    line-height: 1.15; // Normalize line height across browsers
+
+    /*
+     * Text rendering optimizations
+     * Improves typography quality across devices
+     */
+    text-size-adjust: 100%; // Prevent font scaling in landscape while allowing user zoom
+    text-rendering: optimizeLegibility; // Enable ligatures and kerning
+    -webkit-font-smoothing: antialiased; // Improve font rendering on webkit
+    -moz-osx-font-smoothing: grayscale; // Improve font rendering on Firefox/macOS
+
+    /*
+     * Layout foundation
+     * Establishes document flow and box model
+     */
+    box-sizing: border-box; // More intuitive box model
+    scroll-behavior: smooth; // Smooth scrolling for anchor links
+
+    /*
+     * Accessibility improvements
+     * Better focus and interaction handling
+     */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); // Remove tap highlight on mobile
+    -webkit-touch-callout: none; // Disable callout on mobile
   }
 
   /*
-   * ================ Inline Code ================
+   * Universal box-sizing inheritance
+   * Apply border-box to all elements for consistent sizing
    */
-
-  code,
-  kbd {
-    display: inline-block;
-    padding: 0.1rem 0.3rem;
-    white-space: nowrap;
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
   }
 
   /*
-   * ================ Block Code ================
+   * ================ Body Element Foundation ================
+   * Main document content container
+   */
+  body {
+    /*
+     * Layout and positioning
+     * Establishes main content container behavior
+     */
+    margin: 0; // Remove default browser margins
+    padding: 0; // Remove default browser padding
+    min-height: 100vh; // Ensure full viewport height
+
+    /*
+     * Typography foundation
+     * Default text appearance for document content
+     */
+    font-family: $body-font-family;
+    font-size: $body-font-size;
+    font-weight: $body-font-weight;
+    line-height: $body-line-height;
+    color: $body-text-color;
+
+    /*
+     * Visual foundation
+     * Default appearance and rendering
+     */
+    background-color: $page-background-color;
+    text-rendering: optimizeSpeed; // Prioritize performance for body text
+
+    /*
+     * Interaction improvements
+     * Better touch and selection behavior
+     */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /*
+     * Responsive behavior
+     * Prevent horizontal scrolling and improve mobile experience
+     */
+    overflow-x: hidden; // Prevent horizontal scroll
+    word-wrap: break-word; // Prevent long words from breaking layout
+  }
+
+  /*
+   * ================ Document Language Support ================
+   * Directional and language-specific styling
    */
 
-  pre {
-    display: block;
-    padding: size(half) size(simple);
-    margin-bottom: size(simple);
-    overflow-x: auto;
+  /*
+   * Right-to-left language support
+   * Proper text flow for RTL languages
+   */
+  [dir="rtl"] {
+    text-align: right;
+  }
+
+  [dir="ltr"] {
     text-align: left;
-    word-spacing: normal;
-    hyphens: none;
-    word-break: normal;
-    word-wrap: normal;
-    tab-size: 4;
-    white-space: pre;
-    border-radius: radius(medium);
+  }
 
-    > code {
-      display: block;
-      padding: 0;
-      background: none;
+  /*
+   * ================ Focus Management ================
+   * Accessibility and keyboard navigation
+   */
+
+  /*
+   * Focus-visible support
+   * Modern focus indicators that only show for keyboard navigation
+   */
+  :focus {
+    outline: 2px solid transparent; // Reset default outline
+    outline-offset: 2px;
+  }
+
+  :focus-visible {
+    outline: 2px solid $input-focus-color; // Visible focus for keyboard navigation
+    outline-offset: 2px;
+  }
+
+  /*
+   * Focus within support
+   * Maintain smooth scrolling during focus navigation
+   */
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+
+  /*
+   * ================ Selection Styling ================
+   * Text selection appearance
+   */
+  ::selection {
+    background-color: rgba(221, 34, 78, 0.2); // Light brand color background
+    color: inherit;
+    text-shadow: none;
+  }
+
+  ::-moz-selection {
+    background-color: rgba(221, 34, 78, 0.2);
+    color: inherit;
+    text-shadow: none;
+  }
+
+  /*
+   * ================ Reduced Motion Support ================
+   * Accessibility for users who prefer reduced motion
+   */
+  @media (prefers-reduced-motion: reduce) {
+    /*
+     * Disable animations for users who prefer reduced motion
+     * Accessibility compliance for vestibular disorders
+     */
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 
   /*
-   * ================ kbd ================
+   * ================ High Contrast Mode Support ================
+   * Windows High Contrast Mode compatibility
    */
+  @media (prefers-contrast: high) {
+    /*
+     * Enhanced contrast for accessibility
+     * Ensures content remains readable in high contrast mode
+     */
+    body {
+      background: Canvas;
+      color: CanvasText;
+    }
 
-  kbd {
-    vertical-align: baseline;
-    color: color($kbd-text-color);
-    background-color: color($kbd-background-color);
+    a {
+      color: LinkText;
+    }
+
+    button {
+      background: ButtonFace;
+      color: ButtonText;
+      border: 1px solid ButtonText;
+    }
+  }
+
+  /*
+   * ================ Dark Mode Foundation ================
+   * Basic dark mode support using system preferences
+   */
+  @media (prefers-color-scheme: dark) {
+    /*
+     * Automatic dark mode styling
+     * Respects user's system preference when no explicit theme is set
+     */
+    html {
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: #121a1d; // Dark background
+      color: #f6f7f9; // Light text
+    }
+  }
+
+  /*
+   * ================ Print Optimization ================
+   * Document-level print styling
+   */
+  @media print {
+    /*
+     * Print-specific document optimization
+     * Better paper output and ink conservation
+     */
+    html {
+      font-size: 12pt; // Standard print size
+    }
+
+    body {
+      background: white !important;
+      color: black !important;
+      line-height: 1.4; // Tighter line height for print
+    }
   }
 }

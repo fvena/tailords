@@ -1,24 +1,26 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/sizes.core" as *;
 
 /*
- * ================ Button ================
+ * ================ Base Button Styles ================
+ *
+ * PHILOSOPHY:
+ * Button styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Button elements and button-like interactive elements
+ * APPLIES TO: <button>, input[type="submit"], [role="button"]
+ * ACCESSIBILITY: Proper focus states, disabled states, touch targets
  */
 
 /*
- * Reboot based on :
- * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
- * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
+ * Reset styles from normalize.css compatibility
  */
-
 @if $enable-reset {
   /*
    * 1. Remove the margin on controls in Safari
    * 2. Show the overflow in Edge
    * 3. Change the font styles in all browsers
    */
-
   :where(button) {
     margin: 0; // 1
     overflow: visible; // 2
@@ -29,42 +31,125 @@
   /*
    * Correct the inability to style buttons in iOS and Safari
    */
-
   :where(button, [type="button" i], [type="reset" i], [type="submit" i]) {
     -webkit-appearance: button;
   }
 }
 
 @if $enable-base {
+  /*
+   * Default button layout
+   * Full-width blocks for mobile-first approach
+   */
   button {
     display: block;
     width: 100%;
-    margin-bottom: simple();
+    margin-bottom: 1.6rem; // Base space unit
   }
 
+  /*
+   * Role-based button styling
+   * Removes default link appearance for semantic buttons
+   */
   [role="button"] {
     text-decoration: none;
   }
 
+  /*
+   * Comprehensive button styling
+   * Applies to all button-type elements for consistency
+   */
   button,
   input[type="submit"],
   input[type="button"],
   input[type="reset"],
   [role="button"] {
-    --background-color: #{color($button-background-color)};
-    --border-color: #{color($button-border-color)};
-    --color: #{color($button-text-color)};
-    padding: half() simple();
-    font-size: 1rem;
-    font-weight: var(--font-weight);
-    line-height: simple();
+    /*
+     * CSS custom properties for themeable button styling
+     * Allows easy customization while maintaining fallbacks
+     */
+    --background-color: #{$button-background-color};
+    --border-color: #{$button-border-color};
+    --color: #{$button-text-color};
+
+    /*
+     * Layout and spacing
+     * Comfortable touch targets and visual hierarchy
+     */
+    padding: 0.8rem 1.6rem; // Half and full base space
+    font-size: 1rem; // Base font size
+    font-weight: 600; // Semibold for button emphasis
+    line-height: 1.6; // Base line height
+
+    /*
+     * Visual styling
+     * Professional appearance with proper contrast
+     */
     color: var(--color);
     text-align: center;
     cursor: pointer;
     outline: none;
     background-color: var(--background-color);
-    border: border($border-default-width) solid var(--border-color);
-    border-radius: radius($border-default-radius);
-    box-shadow: var(--box-shadow);
+    border: 2px solid var(--border-color); // Default border width
+    border-radius: 0.5rem; // Default border radius
+
+    /*
+     * Interaction affordances
+     * Subtle shadow for depth and button-like appearance
+     */
+    box-shadow: var(--box-shadow, none);
+
+    /*
+     * Transition for smooth interactions
+     * Enhances perceived responsiveness
+     */
+    transition: all $transition-default-duration $transition-default-easing;
+
+    /*
+     * Touch device optimizations
+     * Prevents text selection and highlights
+     */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    /*
+     * Hover state for non-touch devices
+     * Avoids sticky hover states on mobile
+     */
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not([disabled]) {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    /*
+     * Active/pressed state
+     * Immediate feedback for user interaction
+     */
+    &:active:not([disabled]) {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /*
+     * Focus state for accessibility
+     * Clear indication for keyboard navigation
+     */
+    &:focus-visible {
+      outline: 2px solid $input-focus-color;
+      outline-offset: 2px;
+    }
+
+    /*
+     * Disabled state
+     * Clear visual indication of non-interactive state
+     */
+    &[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
   }
 }

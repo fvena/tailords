@@ -1,40 +1,63 @@
 @use "../variables" as *;
 @use "../core/responsive.core" as *;
-@use "../core/types.core" as *;
-@use "../core/sizes.core" as *;
-@use "../core/colors.core" as *;
 
-/* stylelint-disable no-descending-specificity */
+/*
+ * ================ Base List Styles ================
+ *
+ * PHILOSOPHY:
+ * List styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: List elements with semantic styling
+ * APPLIES TO: <ul>, <ol>, <dl>, <li>, <dt>, <dd>
+ * FEATURES: Custom markers, proper spacing, nested lists
+ */
+
 @if $enable-base {
   /*
-   * ================ Listados ================
+   * Base list spacing and structure
+   * Consistent vertical rhythm for content flow
    */
-
   ol,
   ul,
   dl {
     margin-top: 0;
-    margin-bottom: simple();
+    margin-bottom: 1.6rem; // Base space unit
   }
 
+  /*
+   * Nested list spacing
+   * Reduced spacing for hierarchy clarity
+   */
   ol ol,
   ul ul,
   ol ul,
   ul ol {
-    margin-top: quarter();
+    margin-top: 0.4rem; // Quarter base space
     margin-bottom: 0;
   }
 
+  /*
+   * Definition list terms
+   * Emphasized styling for term definitions
+   */
   dt {
-    font-weight: font-weight(bold);
+    font-weight: 700; // Bold weight
   }
 
+  /*
+   * Definition list descriptions
+   * Proper indentation and spacing
+   */
   dd {
-    margin-bottom: half();
-    margin-left: 0; // Deshace el valor predeterminado del navegador
+    margin-bottom: 0.8rem; // Half base space
+    margin-left: 0; // Reset browser default
   }
 
-  // Elimina el espacio vertical extra, cuando anidamos varias listas.
+  /*
+   * Nested list spacing fix
+   * Removes extra vertical space from nested lists
+   */
   li {
     > ul,
     > ol {
@@ -42,13 +65,18 @@
     }
   }
 
+  /*
+   * List item indentation
+   * Consistent left spacing for content alignment
+   */
   ul > li,
   ol > li {
-    margin-left: simple();
+    margin-left: 1.6rem; // Base space unit
   }
 
   /*
-   * ================ Listados numerados ================
+   * ================ Ordered Lists (Numbered) ================
+   * Custom numbering system with better visual hierarchy
    */
   ol {
     list-style: none;
@@ -56,73 +84,98 @@
 
     li {
       position: relative;
-      padding-left: simple();
-      margin-bottom: quarter();
+      padding-left: 1.6rem; // Base space for number spacing
+      margin-bottom: 0.4rem; // Quarter space between items
       margin-left: 0;
 
+      /*
+       * Custom number styling
+       * Professional appearance with accent color
+       */
       &::before {
         position: absolute;
-        left: quarter("-");
-        width: simple();
-        color: color($list-marker-color);
+        left: -0.4rem; // Quarter space offset
+        width: 1.6rem; // Base space width
+        color: $list-marker-color;
         text-align: right;
         content: counters(b, ".") " ";
         counter-increment: b;
+        font-weight: 600; // Semibold for emphasis
       }
 
+      /*
+       * Image handling within list items
+       * Proper spacing and width constraints
+       */
       img {
         display: block;
-        max-width: calc(100% - #{simple()});
-        margin: simple() auto;
+        max-width: calc(100% - 1.6rem); // Account for padding
+        margin: 1.6rem auto; // Base space vertical margins
       }
     }
   }
 
   /*
-   * ================ Listados no numerados ================
+   * ================ Unordered Lists (Bulleted) ================
+   * Custom bullet points with accent color
    */
-
   ul {
     list-style: none;
 
     li {
       position: relative;
-      padding-left: simple();
-      margin-bottom: quarter();
+      padding-left: 1.6rem; // Base space for bullet spacing
+      margin-bottom: 0.4rem; // Quarter space between items
       margin-left: 0;
 
+      /*
+       * Custom bullet styling
+       * Small circular markers with accent color
+       */
       &::before {
         position: absolute;
-        top: 11px;
-        left: 14px;
+        top: 11px; // Optical centering with text
+        left: 14px; // Precise positioning for bullet
         display: block;
         width: 6px;
         height: 6px;
-        text-align: right;
         content: "";
-        background-color: color($list-marker-color);
-        border-radius: 3px;
+        background-color: $list-marker-color;
+        border-radius: 3px; // Circular bullet
       }
     }
   }
 
   /*
-   * ================ Definiciones ================
+   * ================ Definition Lists ================
+   * Structured data presentation with responsive layout
    */
   dl {
     dt,
     dd {
       margin-left: 0;
 
+      /*
+       * Mobile layout adjustment
+       * Reduced indentation on small screens
+       */
       @include media(palm) {
-        margin-left: half();
+        margin-left: 0.8rem; // Half base space
       }
     }
 
+    /*
+     * Definition term styling
+     * Medium weight for visual distinction
+     */
     dt {
-      font-weight: font-weight(medium);
+      font-weight: 500;
     }
 
+    /*
+     * Spacing between term groups
+     * Visual separation for readability
+     */
     dd + dt {
       padding-top: 1rem;
     }

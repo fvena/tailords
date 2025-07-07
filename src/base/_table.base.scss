@@ -1,68 +1,108 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/types.core" as *;
-@use "../core/borders.core" as *;
-@use "../core/sizes.core" as *;
+
+/*
+ * ================ Base Table Styles ================
+ *
+ * PHILOSOPHY:
+ * Table styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Table elements with professional styling
+ * APPLIES TO: <table>, <th>, <td>, <thead>, <tbody>
+ * FEATURES: Bordered design, header emphasis, responsive considerations
+ */
 
 @if $enable-base {
   /*
-   * ================ Tabla ================
+   * Base table structure and layout
+   * Full-width design with proper spacing
    */
-
   table {
     width: 100%;
     min-width: 100%;
-    margin-bottom: size(simple);
+    margin-bottom: 1.6rem; // Base space unit
     border-spacing: 0;
-    border-collapse: separate;
+    border-collapse: separate; // Allows for rounded corners
   }
 
+  /*
+   * Cell styling foundation
+   * Consistent padding and alignment
+   */
   td,
   th {
-    padding: size(quarter);
+    padding: 0.4rem; // Quarter base space for comfortable content
     vertical-align: top;
     border-bottom: 1px solid transparent;
   }
 
+  /*
+   * Border application
+   * Clean separation between content sections
+   */
   th,
   td,
   tbody + tbody {
-    border-bottom-color: color($table-border-color);
+    border-bottom-color: $table-border-color;
   }
 
+  /*
+   * Table header styling
+   * Professional appearance with emphasis
+   */
   th {
-    font-size: font-size(small2);
-    font-weight: font-weight(bold);
+    font-size: 0.724rem; // Small2 scale position (-2)
+    font-weight: 700; // Bold for header emphasis
     vertical-align: bottom;
-    color: color($table-header-text-color);
+    color: $table-header-text-color;
     text-transform: uppercase;
-    background-color: color($table-header-background);
-    border-top: 1px solid color($table-border-color);
-    border-bottom-color: color($table-border-color);
+    background-color: $table-header-background;
+    border-top: 1px solid $table-border-color;
+    border-bottom-color: $table-border-color;
 
+    /*
+     * Rounded corner styling for first header cell
+     * Professional table appearance
+     */
     &:first-of-type {
-      border-left: 1px solid color($table-border-color);
-      border-radius: radius(medium) 0 0 radius(medium);
+      border-left: 1px solid $table-border-color;
+      border-radius: 0.5rem 0 0 0.5rem; // Medium radius on left
     }
 
+    /*
+     * Rounded corner styling for last header cell
+     * Completes the header border design
+     */
     &:last-of-type {
-      border-right: 1px solid color($table-border-color);
-      border-radius: 0 radius(medium) radius(medium) 0;
+      border-right: 1px solid $table-border-color;
+      border-radius: 0 0.5rem 0.5rem 0; // Medium radius on right
     }
   }
 
+  /*
+   * Table data cell styling
+   * Readable content with proper hierarchy
+   */
   td {
-    font-size: font-size(small1);
-    line-height: 1.4rem;
-    color: color($table-cell-text-color);
-    border-bottom: 1px solid color($table-border-color);
+    font-size: 0.851rem; // Small1 scale position (-1)
+    line-height: 1.4rem; // Tight line height for data
+    color: $table-cell-text-color;
+    border-bottom: 1px solid $table-border-color;
 
+    /*
+     * First column emphasis
+     * Row headers or key data identification
+     */
     &:first-of-type {
-      font-weight: font-weight(bold);
-      white-space: nowrap;
+      font-weight: 700; // Bold for row identification
+      white-space: nowrap; // Prevent breaking of key data
     }
   }
 
+  /*
+   * Multiple tbody separator
+   * Visual distinction between table sections
+   */
   tbody + tbody {
     border-bottom: 1px solid transparent;
   }

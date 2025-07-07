@@ -1,9 +1,10 @@
 // TailorDS - A Modern SCSS Framework
 // Main entry point for the framework
 
-// Core
+// Core - Order is critical for proper compilation
 @forward "core/utils.core";
 @forward "core/math.core";
+@forward "core/validations.core"; // Added validation functions
 @forward "config";
 @forward "base";
 @forward "tokens";

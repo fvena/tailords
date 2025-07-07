@@ -35,6 +35,14 @@ $primary-theme: map.get($framework, primary-theme);
 $themes: map.get($tokens, themes);
 $_themes-valid: validate-themes($themes, $primary-theme);
 
+// Extract and validate responsive configuration
+$framework-responsive-breakpoints: map.get($framework, responsive-breakpoints);
+$token-breakpoints: map.get($tokens, breakpoints);
+$_responsive-valid: validate-responsive-breakpoints(
+  $framework-responsive-breakpoints,
+  $token-breakpoints
+);
+
 /*
  * ================ Framework Configuration Variables ================
  * Extracted from $framework wrapper for internal use
@@ -131,7 +139,7 @@ $space-base: map.get($spacing-tokens, base);
 $spacing-scale: map.get($spacing-tokens, scale);
 $size-percentages: map.get($spacing-tokens, percentages);
 
-// Responsive tokens
+// Responsive tokens - UNIFIED NAMING
 $breakpoints: map.get($tokens, breakpoints);
 
 // Effect tokens
@@ -228,7 +236,10 @@ $transition-default-easing: map.get($animation-config, transition-easing);
 // Maintain old naming for internal compatibility
 $useReset: $enable-reset;
 $useBase: $enable-base;
-$medias: $responsive-breakpoints;
+
+// DEPRECATED: Use $responsive-breakpoints instead
+// This maintains backward compatibility but should be phased out
+$medias: $responsive-breakpoints !default;
 
 // Shadow configuration (maintain old variable names)
 $shadow-soft: $shadow-default-softness;

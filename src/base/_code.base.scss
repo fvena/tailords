@@ -1,94 +1,160 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/types.core" as *;
-@use "../core/borders.core" as *;
-@use "../core/sizes.core" as *;
 
 /*
- * ================ Code ================
+ * ================ Base Code Styles ================
+ *
+ * PHILOSOPHY:
+ * Code styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Code and keyboard elements with proper typography
+ * APPLIES TO: <code>, <pre>, <kbd>, <samp>
+ * FEATURES: Monospace typography, syntax highlighting support, proper spacing
  */
 
 /*
- * Reboot based on :
- * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
- * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
+ * Reset styles from normalize.css compatibility
  */
-
 @if $enable-reset {
-  /**
-   * 1. Prevent overflow of the container in all browsers (opinionated).
+  /*
+   * 1. Prevent overflow of the container in all browsers (opinionated)
    */
-
   :where(pre) {
     -ms-overflow-style: scrollbar; // 1
     overflow: auto; // 1
   }
 
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
+  /*
+   * 1. Correct the inheritance and scaling of font size in all browsers
+   * 2. Correct the odd `em` font sizing in all browsers
    */
-
   :where(pre, code, kbd, samp) {
-    font-family: font(mono), monospace; // 1
-    font-size: font(small1); // 2
+    font-family: monospace, monospace; // 1
+    font-size: 0.851rem; // 2 - Small1 scale position (-1)
   }
 }
 
 @if $enable-base {
+  /*
+   * Common code element styling
+   * Consistent appearance across all code elements
+   */
   code,
   pre,
   kbd {
-    font-weight: font(medium);
-    line-height: initial;
-    color: color($code-text-color);
-    background-color: color($code-background-color);
-    border-radius: radius(small);
+    font-weight: 500; // Medium weight for better readability
+    line-height: initial; // Reset line height for code
+    color: $code-text-color;
+    background-color: $code-background-color;
+    border-radius: 0.375rem; // Small border radius
   }
 
   /*
-   * ================ Inline Code ================
+   * ================ Inline Code Elements ================
+   * For code snippets within text content
    */
-
   code,
   kbd {
     display: inline-block;
-    padding: 0.1rem 0.3rem;
-    white-space: nowrap;
+    padding: 0.1rem 0.3rem; // Minimal padding for inline elements
+    white-space: nowrap; // Prevent code breaking across lines
   }
 
   /*
-   * ================ Block Code ================
+   * ================ Block Code Elements ================
+   * For code blocks and pre-formatted text
    */
-
   pre {
     display: block;
-    padding: size(half) size(simple);
-    margin-bottom: size(simple);
-    overflow-x: auto;
+    padding: 0.8rem 1.6rem; // Half and full base space
+    margin-bottom: 1.6rem; // Base space unit
+    overflow-x: auto; // Horizontal scrolling for long lines
+
+    /*
+     * Typography optimizations for code reading
+     */
     text-align: left;
     word-spacing: normal;
     hyphens: none;
     word-break: normal;
     word-wrap: normal;
-    tab-size: 4;
-    white-space: pre;
-    border-radius: radius(medium);
+    tab-size: 4; // Standard tab width
+    white-space: pre; // Preserve formatting
 
+    /*
+     * Visual styling
+     * Professional code block appearance
+     */
+    border-radius: 0.5rem; // Medium border radius
+
+    /*
+     * Code within pre elements
+     * Remove redundant styling for nested code
+     */
     > code {
       display: block;
       padding: 0;
       background: none;
+      border-radius: 0;
     }
   }
 
   /*
-   * ================ kbd ================
+   * ================ Keyboard Input Elements ================
+   * For representing user keyboard input
    */
-
   kbd {
     vertical-align: baseline;
-    color: color($kbd-text-color);
-    background-color: color($kbd-background-color);
+    color: $kbd-text-color;
+    background-color: $kbd-background-color;
+
+    /*
+     * Enhanced keyboard key appearance
+     * Resembles physical keyboard keys
+     */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+
+    /*
+     * Typography adjustments for keyboard keys
+     */
+    font-family: monospace, monospace;
+    font-size: 0.8em;
+    font-weight: 600; // Semibold for key emphasis
+
+    /*
+     * Nested kbd elements
+     * For key combinations like Ctrl+C
+     */
+    kbd {
+      padding: 0;
+      font-size: 0.9em;
+      font-weight: inherit;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+
+  /*
+   * ================ Sample Output Elements ================
+   * For representing sample program output
+   */
+  samp {
+    font-family: monospace, monospace;
+    font-size: 0.851rem; // Small1 scale position
+    color: $code-text-color;
+    background-color: transparent;
+  }
+
+  /*
+   * ================ Variable Elements ================
+   * For mathematical or programming variables
+   */
+  var {
+    font-family: monospace, monospace;
+    font-style: italic;
+    font-weight: 500;
+    color: $code-text-color;
   }
 }

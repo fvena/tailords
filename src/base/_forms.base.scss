@@ -1,12 +1,22 @@
 @use "../variables" as *;
-@use "../core/colors.core" as *;
-@use "../core/sizes.core" as *;
+
+/*
+ * ================ Base Form Styles ================
+ *
+ * PHILOSOPHY:
+ * Form styles must work with ANY user configuration using real values
+ * from $base configuration, never assuming user design tokens exist.
+ *
+ * SCOPE: Form elements and controls
+ * APPLIES TO: inputs, textareas, selects, buttons, checkboxes, radios
+ * ACCESSIBILITY: Focus states, disabled states, proper contrast
+ */
 
 @if $enable-base {
   /*
-   * ================ Formularios ================
+   * Font inheritance for form controls
+   * Ensures consistent typography across form elements
    */
-
   input,
   button,
   select,
@@ -16,58 +26,90 @@
     line-height: inherit;
   }
 
+  /*
+   * Block-level form elements
+   * Proper layout for form structure
+   */
   label,
   textarea,
   input[type="file"] {
     display: block;
   }
 
+  /*
+   * Interactive cursor for inputs
+   * Visual affordance for clickable elements
+   */
   input {
     cursor: pointer;
   }
 
+  /*
+   * Text input and textarea styling
+   * Consistent appearance across text input types
+   */
   input,
   textarea {
-    height: double();
-    padding: 0 simple();
-    line-height: double();
-    border: 1px solid color($input-border-color);
+    height: 3.2rem; // Double base space for comfortable touch targets
+    padding: 0 1.6rem; // Base space horizontal padding
+    line-height: 3.2rem; // Match height for vertical centering
+    border: 1px solid $input-border-color;
 
+    /*
+     * Focus state
+     * Clear visual indication of active input
+     */
     &:focus {
       outline: none;
-      border-color: color($input-focus-color);
+      border-color: $input-focus-color;
     }
 
+    /*
+     * Placeholder styling
+     * Subtle indication of expected input
+     */
     &::placeholder {
-      color: color($input-placeholder-color);
+      color: $input-placeholder-color;
       opacity: 1;
     }
 
+    /*
+     * Disabled and readonly states
+     * Clear indication of non-interactive elements
+     */
     &[disabled],
     &[readonly] {
-      color: color($input-disabled-color);
+      color: $input-disabled-color;
       cursor: not-allowed;
       opacity: 1;
     }
   }
 
   /*
-   * ================ Checkboxs y Radios ================
+   * Radio button styling
+   * Circular appearance for radio inputs
    */
-
   [type="radio"] {
-    border-radius: 9999px;
+    border-radius: 9999px; // Fully rounded
   }
 
+  /*
+   * Checkbox and radio button layout
+   * Proper alignment and spacing with labels
+   */
   [type="checkbox"],
   [type="radio"] {
     position: relative;
-    bottom: 1px;
+    bottom: 1px; // Fine-tune vertical alignment
     width: 1em;
     height: 1em;
-    margin-right: half();
+    margin-right: 0.8rem; // Half base space
     vertical-align: middle;
 
+    /*
+     * Checked state styling
+     * Visual feedback for selected state
+     */
     &:checked {
       background-color: currentColor;
       background-repeat: no-repeat;
@@ -77,18 +119,26 @@
     }
   }
 
+  /*
+   * Checkbox check mark
+   * SVG-based check mark for crisp rendering
+   */
   [type="checkbox"]:checked {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
   }
 
+  /*
+   * Radio button dot
+   * SVG-based dot for selected radio state
+   */
   [type="radio"]:checked {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='white'/%3e%3c/svg%3e");
   }
 
   /*
-   * ================ Selects ================
+   * Select dropdown styling
+   * Custom arrow for consistent cross-browser appearance
    */
-
   select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
     background-repeat: no-repeat;

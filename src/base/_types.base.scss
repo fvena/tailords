@@ -1,149 +1,190 @@
 @use "../variables" as *;
 @use "../core/colors.core" as *;
-@use "../core/types.core" as *;
-@use "../core/borders.core" as *;
-@use "../core/sizes.core" as *;
+
+/*
+ * ================ Base Typography Styles ================
+ *
+ * PHILOSOPHY:
+ * Base styles must work with ANY user configuration. They use concrete values
+ * and configuration variables from $base wrapper, never user design tokens.
+ *
+ * SCOPE: Typography styling for HTML semantic elements
+ * APPLIES TO: body, headings, paragraphs, text formatting elements
+ * FALLBACK SAFE: All values work even if user provides no tokens
+ */
 
 @if $enable-base {
   /*
-   * ================ Tipografía ================
+   * Document-level typography foundation
+   * Sets the baseline for all text rendering
    */
-
   body {
-    font-family: font($body-font-family);
-    font-size: font($body-font-size);
-    font-weight: font($body-font-weight);
-    line-height: leading($body-line-height);
-    color: color($body-text-color);
-    background-color: color($page-background-color);
+    font-family: $body-font-family;
+    font-size: $body-font-size;
+    font-weight: $body-font-weight;
+    line-height: $body-line-height;
+    color: $body-text-color;
+    background-color: $page-background-color;
   }
 
-  // Cabeceras
+  /*
+   * Heading elements hierarchy
+   * Establishes visual content structure with consistent styling
+   */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: font($heading-font-family);
-    font-weight: font($heading-font-weight);
-    color: color($heading-text-color);
+    font-family: $heading-font-family;
+    font-weight: $heading-font-weight;
+    color: $heading-text-color;
   }
 
+  /*
+   * Heading size scale
+   * Based on 1.175 modular scale for optimal visual hierarchy
+   * Values calculated: base * (1.175^scale-position)
+   */
   h1 {
-    font-size: font(h1);
+    font-size: 2.369rem; // Scale position +5
   }
 
   h2 {
-    font-size: font(h2);
+    font-size: 2.012rem; // Scale position +4
   }
 
   h3 {
-    font-size: font(h3);
+    font-size: 1.712rem; // Scale position +3
   }
 
   h4 {
-    font-size: font(h4);
+    font-size: 1.456rem; // Scale position +2
   }
 
   h5 {
-    font-size: font(h5);
+    font-size: 1.238rem; // Scale position +1
   }
 
   h6 {
-    font-size: font(base);
+    font-size: 1rem; // Scale position 0 (base)
   }
 
-  // Parrafos
+  /*
+   * Paragraph text
+   * Standard body text sizing
+   */
   p {
-    font-size: font(base);
+    font-size: 1rem;
   }
 
-  // Bold.
+  /*
+   * Text emphasis and formatting
+   */
+
+  // Strong emphasis - higher weight for better readability
   b,
   strong {
-    font-weight: font(semibold);
-    color: color(gray2);
+    font-weight: 600; // Semibold for clear emphasis
+    color: #3b4c54; // Slightly darker than body text
   }
 
-  // Italic.
+  // Italic emphasis - semantic styling
   em,
   i {
     font-style: italic;
   }
 
-  // Texto en linea pequeño.
+  /*
+   * Small text elements
+   * Used for disclaimers, captions, fine print
+   */
   small,
   .small {
-    font-size: font(small1);
+    font-size: 0.851rem; // Scale position -1
     font-style: normal;
-    font-weight: font(regular);
+    font-weight: 400;
   }
 
-  // Texto resaltado
+  /*
+   * Highlighted text
+   * For marking important content sections
+   */
   mark,
   .mark {
-    padding: quarter();
-    color: color(white);
-    background-color: color(brand);
-    border-radius: radius();
+    padding: 0.4rem; // 1/4 of base space unit (1.6rem)
+    color: #ffffff;
+    background-color: #dd224e; // Framework accent color
+    border-radius: 0.5rem;
   }
 
-  // Caption
+  /*
+   * Caption text
+   * For image captions and supplementary content
+   */
   .caption {
-    font-family: font($body-font-family);
-    font-size: font(h5);
+    font-family: $body-font-family;
+    font-size: 1.238rem; // h5 size
     font-style: italic;
-    color: color(gray4);
+    color: #9da6aa; // Light gray for secondary content
   }
 
+  /*
+   * Context-sensitive caption sizing
+   * Larger captions for larger headings
+   */
   h1 + .caption,
   .h1 + .caption {
-    margin-top: half();
-    margin-bottom: simple();
-    font-size: font(h4);
+    margin-top: 0.8rem; // 1/2 base space
+    margin-bottom: 1.6rem; // Full base space
+    font-size: 1.456rem; // h4 size
     font-style: normal;
-    line-height: leading(small);
+    line-height: 1.36; // Tight line height for captions
   }
 
-  /* stylelint-disable-next-line no-descending-specificity */
   h2 + .caption,
   .h2 + .caption {
-    margin-top: half();
-    margin-bottom: simple();
-    font-size: font(h5);
+    margin-top: 0.8rem;
+    margin-bottom: 1.6rem;
+    font-size: 1.238rem; // h5 size
     font-style: normal;
-    line-height: leading(small);
+    line-height: 1.36;
   }
 
-  /* stylelint-disable-next-line no-descending-specificity */
   h3 + .caption,
   .h3 + .caption {
-    margin-bottom: half();
-    font-size: font(base);
+    margin-bottom: 0.8rem;
+    font-size: 1rem; // Base size
     font-style: normal;
-    line-height: leading(small);
+    line-height: 1.36;
   }
 
-  // Abbreviations
+  /*
+   * Abbreviations
+   * Semantic markup for abbreviations with proper cursor
+   */
   abbr[title],
   abbr[data-original-title] {
     cursor: help;
     border-bottom: 0;
   }
 
-  // Quotes.
+  /*
+   * Block quotes
+   * For quoted content with proper spacing and typography
+   */
   blockquote,
   .blockquote {
-    margin: double() 0;
-    font-size: font(h5);
-    line-height: leading(small);
-    color: color(gray1);
+    margin: 3.2rem 0; // Double base space top/bottom
+    font-size: 1.238rem; // h5 size for emphasis
+    line-height: 1.36; // Tight reading line height
+    color: #121a1d; // Dark text for quotes
 
     p {
-      padding-right: 30%;
-      font-size: font(h5);
-      line-height: leading(small);
+      padding-right: 30%; // Narrow measure for better readability
+      font-size: 1.238rem;
+      line-height: 1.36;
     }
 
     p:last-of-type {
@@ -154,16 +195,20 @@
     > .footer {
       display: block;
       padding-right: 30%;
-      font-size: font(small1);
+      font-size: 0.851rem; // Small text for attribution
       font-style: italic;
-      color: color(gray4);
+      color: #9da6aa; // Light gray for attribution
 
       &::before {
-        content: "\2014 \00A0"; // em dash, nbsp
+        content: "\2014 \00A0"; // em dash + non-breaking space
       }
     }
   }
 
+  /*
+   * Subscript and superscript
+   * Mathematical and scientific notation
+   */
   sub,
   sup {
     position: relative;
@@ -180,15 +225,20 @@
     left: 0.25em;
   }
 
-  // Horizontal rule.
+  /*
+   * Horizontal rule
+   * Section divider with proper spacing
+   */
   hr {
-    margin-top: double();
-    margin-bottom: double();
-    border-top: border($border-default-width) $border-default-style color($border-default-color);
+    margin-top: 3.2rem; // Double base space
+    margin-bottom: 3.2rem;
+    border-top: 2px solid #6a7981; // Medium gray border
   }
 
-  // Ritmo vertical
-  /* stylelint-disable-next-line no-descending-specificity */
+  /*
+   * Vertical rhythm
+   * Consistent spacing for content flow
+   */
   p,
   h1,
   h2,
@@ -199,6 +249,6 @@
   table,
   blockquote,
   pre {
-    margin-bottom: simple();
+    margin-bottom: 1.6rem; // Base space unit
   }
 }

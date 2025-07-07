@@ -52,7 +52,19 @@ $framework: (
    * Responsive breakpoints to generate utility variants for
    * ACCEPTS: List of breakpoint names from $breakpoints in _tokens.scss
    * GENERATES: .class--palm, .class--desk style responsive variants
-   * AVAILABLE: palm, lap, small, desk, large, portrait, landscape, touch, screen, tablet
+   * AVAILABLE: Any breakpoints defined in tokens.breakpoints
+   *
+   * NOTE: These should match keys in your breakpoints map in _tokens.scss
+   * DEFAULT AVAILABLE: palm, lap, small, desk, large
+   *
+   * SEMANTIC ALIASES: The framework automatically generates these based on your breakpoints:
+   * - mobile: smallest breakpoint
+   * - tablet: middle breakpoint(s)
+   * - desktop: largest breakpoint
+   * - portrait: orientation-based
+   * - landscape: orientation-based
+   * - touch: touch device detection
+   * - no-touch: non-touch device detection
    */
   responsive-breakpoints: (palm, lap, small, desk, large)
 ) !default;

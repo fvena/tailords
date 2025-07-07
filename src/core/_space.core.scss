@@ -1,0 +1,49 @@
+@use "sass:map";
+@use "sass:meta";
+@use "../config" as *;
+@use "../tokens" as *;
+
+/*
+ * ================ Funciones ================
+ */
+
+/*
+ * Devuelve el tamaño relativo de un elemento en base al tamaño por defecto
+ *
+ * @param {string|integer} $value - Valor númerico o alias del listado de tamaños
+ * @return {Number} - valor del texto en rem
+ *
+ * @example SCSS
+ *   size(2) =>  3.2rem;
+ *   size(double) =>  3.2rem;
+ */
+
+@function size($value) {
+  $spacing-tokens: map.get($tokens, spacing);
+  $spacing-scale: map.get($spacing-tokens, scale);
+  $space-base: map.get($spacing-tokens, base);
+
+  // Compruebo si el valor pertenece al listado de tamaños relativos
+  @if meta.type-of($value) == "string" {
+    @if map.has-key($spacing-scale, $value) {
+      $token: map.get($spacing-scale, $value);
+
+      // Handle both simple values and maps with value/abbr structure
+      @if meta.type-of($token) == "map" {
+        $value: map.get($token, value);
+      } @else {
+        $value: $token;
+      }
+    } @else {
+      // No es un valor válido
+      $available-sizes: map.keys($spacing-scale);
+      @error "Size '#{$value}' does not exist. Available sizes: #{$available-sizes}";
+    }
+  }
+
+  @if $css-variables == true {
+    @return calc(var(--space) * #{$value * 1rem});
+  }
+
+  @return $space-base * $value * 1rem;
+}

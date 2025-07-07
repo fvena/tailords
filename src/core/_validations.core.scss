@@ -28,6 +28,12 @@
     @error "framework.primary-theme must be a string, got #{meta.type-of($primary-theme)}";
   }
 
+  // Validate responsive-breakpoints is list
+  $responsive-breakpoints: map.get($framework, responsive-breakpoints);
+  @if meta.type-of($responsive-breakpoints) != "list" {
+    @error "framework.responsive-breakpoints must be a list, got #{meta.type-of($responsive-breakpoints)}";
+  }
+
   @return true;
 }
 
@@ -82,6 +88,23 @@
     }
   }
 
+  // Validate breakpoints structure
+  $breakpoints: map.get($tokens, breakpoints);
+  @if meta.type-of($breakpoints) != "map" {
+    @error "tokens.breakpoints must be a map, got #{meta.type-of($breakpoints)}";
+  }
+
+  // Validate breakpoint values are numbers with units
+  @each $name, $value in $breakpoints {
+    @if meta.type-of($value) != "number" {
+      @error "Breakpoint '#{$name}' must be a number with units (e.g., 600px), got #{meta.type-of($value)}: #{$value}";
+    }
+
+    @if math.is-unitless($value) {
+      @error "Breakpoint '#{$name}' must have units (px, em, rem), got unitless: #{$value}";
+    }
+  }
+
   @return true;
 }
 
@@ -99,6 +122,34 @@
     @if not map.has-key($base, $key) {
       @warn "$base missing recommended key: #{$key}";
     }
+  }
+
+  @return true;
+}
+
+/*
+ * Validates that responsive breakpoints in framework config exist in tokens
+ */
+@function validate-responsive-breakpoints($framework-breakpoints, $token-breakpoints) {
+  @if meta.type-of($framework-breakpoints) != "list" {
+    @error "Framework responsive-breakpoints must be a list";
+  }
+
+  @if meta.type-of($token-breakpoints) != "map" {
+    @error "Token breakpoints must be a map";
+  }
+
+  $available-breakpoints: map.keys($token-breakpoints);
+  $invalid-breakpoints: ();
+
+  @each $breakpoint in $framework-breakpoints {
+    @if not map.has-key($token-breakpoints, $breakpoint) {
+      $invalid-breakpoints: list.append($invalid-breakpoints, $breakpoint);
+    }
+  }
+
+  @if list.length($invalid-breakpoints) > 0 {
+    @error "Invalid breakpoints in framework.responsive-breakpoints: #{$invalid-breakpoints}. Available breakpoints: #{$available-breakpoints}";
   }
 
   @return true;

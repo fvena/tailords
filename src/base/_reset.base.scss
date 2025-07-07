@@ -1,26 +1,98 @@
-@use "sass:map";
 @use "../variables" as *;
 
+/*
+ * ================ Base Reset Styles ================
+ *
+ * PHILOSOPHY:
+ * Reset styles must work universally across all browsers and configurations.
+ * These are browser normalization rules that create a consistent foundation.
+ *
+ * SCOPE: Browser default removal and normalization
+ * APPLIES TO: All HTML elements
+ * FEATURES: Cross-browser consistency, modern defaults, accessibility
+ * BASED ON: Modern reset methodologies (normalize.css, sanitize.css)
+ */
+
 @if $enable-reset {
-  * {
-    padding: 0;
+  /*
+   * ================ Universal Reset ================
+   * Remove browser defaults and establish consistent foundation
+   */
+
+  /*
+   * Universal margin, padding, and border reset
+   * Creates predictable spacing across all elements
+   */
+  *,
+  *::before,
+  *::after {
     margin: 0;
+    padding: 0;
     border: 0;
+    box-sizing: border-box; // More intuitive box model
   }
 
-  // prevent iOS font size change
+  /*
+   * ================ Document Foundation ================
+   * HTML and body element normalization
+   */
+
+  /*
+   * HTML element normalization
+   * Establishes document-wide defaults
+   */
   html {
+    /*
+     * Prevent font size adjustments after orientation changes
+     * Maintains consistent typography across device orientations
+     */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
+
+    /*
+     * Establish consistent line height
+     * Foundation for vertical rhythm
+     */
+    line-height: 1.15;
+
+    /*
+     * Tab size normalization
+     * Consistent tab width across browsers
+     */
+    -moz-tab-size: 4;
+    tab-size: 4;
   }
 
-  // reset body line-height
+  /*
+   * Body element foundation
+   * Establishes main content container defaults
+   */
   body {
+    /*
+     * Layout foundation
+     * Ensure full viewport usage and prevent layout issues
+     */
     min-height: 100vh;
     line-height: 1;
     text-rendering: optimizeSpeed;
+
+    /*
+     * Remove default margins
+     * Consistent starting point across browsers
+     */
+    margin: 0;
   }
 
-  // all media elements set to block and full width
+  /*
+   * ================ Media Element Reset ================
+   * Images, videos, and embedded content normalization
+   */
+
+  /*
+   * Media elements foundation
+   * Responsive and accessible media handling
+   */
   img,
   svg,
   video,
@@ -29,57 +101,309 @@
   iframe,
   embed,
   object {
-    display: block;
-    max-width: 100%;
+    display: block; // Remove inline spacing issues
+    max-width: 100%; // Responsive by default
+    height: auto; // Maintain aspect ratio
   }
 
-  // inherit fonts for inputs and buttons
+  /*
+   * Image-specific improvements
+   * Better accessibility and performance
+   */
+  img {
+    /*
+     * Better alt text styling
+     * Improves accessibility when images fail to load
+     */
+    font-style: italic;
+
+    /*
+     * Remove border on images inside links
+     * Legacy fix for older browsers
+     */
+    border-style: none;
+
+    /*
+     * Improve image rendering
+     * Better quality on high-DPI displays
+     */
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  /*
+   * SVG normalization
+   * Consistent SVG behavior across browsers
+   */
+  svg {
+    /*
+     * Fill currentColor by default
+     * Makes SVGs inherit text color for better theming
+     */
+    fill: currentColor;
+
+    /*
+     * Remove default overflow
+     * Prevents clipping issues
+     */
+    overflow: hidden;
+  }
+
+  /*
+   * ================ Form Element Reset ================
+   * Form controls and interactive elements
+   */
+
+  /*
+   * Form control inheritance
+   * Ensure form elements inherit typography from parent
+   */
   input,
   button,
   textarea,
-  select {
+  select,
+  optgroup {
+    font: inherit; // Inherit all font properties
+    line-height: inherit;
+    color: inherit;
+    margin: 0; // Remove browser defaults
+  }
+
+  /*
+   * Input and textarea normalization
+   * Consistent appearance across browsers
+   */
+  input,
+  textarea {
+    /*
+     * Remove browser-specific styling
+     * Create consistent foundation for custom styling
+     */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /*
+     * Remove default background
+     * Allows for consistent custom styling
+     */
+    background-color: transparent;
+
+    /*
+     * Remove default borders
+     * Prevents double borders with custom styling
+     */
+    border: none;
+
+    /*
+     * Remove default outline
+     * Custom focus styles will be applied instead
+     */
+    outline: none;
+
+    /*
+     * Full width by default
+     * More predictable form layout
+     */
+    width: 100%;
+  }
+
+  /*
+   * Specific input type normalization
+   * Address browser inconsistencies for different input types
+   */
+  [type="search"] {
+    /*
+     * Remove search input styling
+     * Consistent appearance across browsers
+     */
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
+
+  [type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  /*
+   * Number input normalization
+   * Remove spinner buttons for consistent appearance
+   */
+  [type="number"]::-webkit-inner-spin-button,
+  [type="number"]::-webkit-outer-spin-button {
+    height: auto;
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /*
+   * ================ Button Reset ================
+   * Button and interactive element normalization
+   */
+
+  /*
+   * Button foundation
+   * Consistent button behavior across browsers
+   */
+  button,
+  [type="button"],
+  [type="reset"],
+  [type="submit"] {
+    /*
+     * Remove browser-specific styling
+     * Foundation for custom button design
+     */
+    -webkit-appearance: button;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    /*
+     * Typography inheritance
+     * Buttons inherit text styling from parent
+     */
     font: inherit;
     line-height: inherit;
     color: inherit;
+
+    /*
+     * Remove default padding and margin
+     * Consistent starting point for button styling
+     */
+    padding: 0;
+    margin: 0;
+
+    /*
+     * Remove tap highlight
+     * Better mobile interaction experience
+     */
+    -webkit-tap-highlight-color: transparent;
+
+    /*
+     * Remove default focus outline
+     * Custom focus styles will be applied
+     */
+    outline: none;
   }
 
-  // collapse table
+  /*
+   * Button disabled state normalization
+   * Consistent disabled appearance
+   */
+  button[disabled],
+  [type="button"][disabled],
+  [type="reset"][disabled],
+  [type="submit"][disabled] {
+    cursor: not-allowed;
+  }
+
+  /*
+   * ================ Table Reset ================
+   * Table element normalization
+   */
+
+  /*
+   * Table foundation
+   * Consistent table behavior and spacing
+   */
   table {
+    /*
+     * Remove default spacing
+     * Foundation for custom table styling
+     */
     border-spacing: 0;
     border-collapse: collapse;
+
+    /*
+     * Full width by default
+     * More predictable table layout
+     */
+    width: 100%;
   }
 
-  // assign button hover state
-  button,
-  [role="button"] {
-    cursor: pointer;
-    background-color: transparent;
-    -webkit-tap-highlight-color: transparent;
+  /*
+   * Table cell normalization
+   * Consistent cell behavior
+   */
+  td,
+  th {
+    /*
+     * Remove default padding
+     * Foundation for custom cell styling
+     */
+    padding: 0;
 
-    &:focus {
-      outline: 0;
-    }
+    /*
+     * Consistent text alignment
+     * Remove browser defaults
+     */
+    text-align: left;
+    vertical-align: top;
   }
 
-  // reset anchor style
+  /*
+   * ================ Link Reset ================
+   * Anchor element normalization
+   */
+
+  /*
+   * Link foundation
+   * Remove browser defaults for consistent link styling
+   */
   a {
+    /*
+     * Remove default styling
+     * Foundation for custom link design
+     */
     color: inherit;
     text-decoration: inherit;
-    cursor: pointer;
+
+    /*
+     * Better touch interaction
+     * Improved mobile experience
+     */
     -webkit-tap-highlight-color: transparent;
+
+    /*
+     * Remove default outline
+     * Custom focus styles will be applied
+     */
+    outline: none;
   }
 
-  // reset header style
+  /*
+   * ================ Typography Reset ================
+   * Text element normalization
+   */
+
+  /*
+   * Heading normalization
+   * Remove browser defaults for consistent heading styling
+   */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
+    /*
+     * Typography inheritance
+     * Headings inherit base typography settings
+     */
     font-size: inherit;
     font-weight: inherit;
+    line-height: inherit;
+
+    /*
+     * Remove default margins
+     * Foundation for custom spacing
+     */
+    margin: 0;
   }
 
+  /*
+   * Paragraph and text normalization
+   * Consistent text element behavior
+   */
   p,
   h1,
   h2,
@@ -87,64 +411,121 @@
   h4,
   h5,
   h6 {
+    /*
+     * Better text wrapping
+     * Prevent layout breaking with long words
+     */
     overflow-wrap: break-word;
+    hyphens: auto;
   }
 
-  // reset list style
+  /*
+   * ================ List Reset ================
+   * List element normalization
+   */
+
+  /*
+   * List foundation
+   * Remove browser defaults for consistent list styling
+   */
   ol,
   ul {
+    /*
+     * Remove default styling
+     * Foundation for custom list design
+     */
     list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  // reset textarea style
-  // turn off scroll bars in IE unless needed
-  // move the label to the top
+  /*
+   * ================ Form Field Reset ================
+   * Specialized form field normalization
+   */
+
+  /*
+   * Textarea normalization
+   * Consistent textarea behavior
+   */
   textarea {
-    overflow: auto;
+    /*
+     * Remove default resize handle styling
+     * Allow for custom resize behavior
+     */
+    resize: vertical;
+
+    /*
+     * Consistent text alignment
+     * Remove browser defaults
+     */
     vertical-align: top;
+
+    /*
+     * Remove scrollbar in IE
+     * Consistent appearance across browsers
+     */
+    overflow: auto;
   }
 
-  // reset text input style
-  [type="date"],
-  [type="datetime"],
-  [type="datetime-local"],
-  [type="email"],
-  [type="month"],
-  [type="number"],
-  [type="password"],
-  [type="search"],
-  [type="tel"],
-  [type="text"],
-  [type="time"],
-  [type="url"],
-  [type="week"],
-  textarea,
-  select {
-    width: 100%;
-    appearance: none;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  // reset firefox placeholder opacity
+  /*
+   * Placeholder normalization
+   * Consistent placeholder appearance
+   */
   ::placeholder {
+    /*
+     * Consistent placeholder opacity
+     * Remove Firefox default opacity reduction
+     */
     opacity: 1;
+
+    /*
+     * Inherit color for better theming
+     * Allows for easier customization
+     */
+    color: inherit;
   }
 
-  // reset checkbox and radio style
+  /*
+   * ================ Checkbox and Radio Reset ================
+   * Form control normalization
+   */
+
+  /*
+   * Checkbox and radio foundation
+   * Remove browser defaults for consistent custom styling
+   */
   [type="checkbox"],
   [type="radio"] {
+    /*
+     * Remove browser-specific styling
+     * Foundation for custom control design
+     */
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
 
-    &:focus {
-      outline: 0;
-    }
+    /*
+     * Remove default focus outline
+     * Custom focus styles will be applied
+     */
+    outline: none;
   }
 
-  // remove all animations, transitions and smooth scroll for people that prefer not to see them
+  /*
+   * ================ Accessibility Improvements ================
+   * Enhanced accessibility through reset
+   */
+
+  /*
+   * Reduced motion support
+   * Respect user preferences for motion
+   */
   @media (prefers-reduced-motion: reduce) {
+    /*
+     * Remove all animations for users who prefer reduced motion
+     * Accessibility compliance for vestibular disorders
+     */
     html:focus-within {
       scroll-behavior: auto;
     }
@@ -152,10 +533,31 @@
     *,
     *::before,
     *::after {
-      transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+
+  /*
+   * ================ Screen Reader Improvements ================
+   * Better screen reader support
+   */
+
+  /*
+   * Screen reader only content
+   * Utility class for screen reader only content
+   */
+  .sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
   }
 }

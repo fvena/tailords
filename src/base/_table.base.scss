@@ -4,11 +4,15 @@
 @use "../core/borders.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Tabla ================
+   * ================ Base Table Styles ================
    */
 
+  /*
+   * Base table structure and layout
+   * Full-width design with proper spacing
+   */
   table {
     width: 100%;
     min-width: 100%;
@@ -17,6 +21,10 @@
     border-collapse: separate;
   }
 
+  /*
+   * Cell styling foundation
+   * Consistent padding and alignment
+   */
   td,
   th {
     padding: quarter();
@@ -24,12 +32,20 @@
     border-bottom: 1px solid transparent;
   }
 
+  /*
+   * Border application
+   * Clean separation between content sections
+   */
   th,
   td,
   tbody + tbody {
     border-bottom-color: color(gray3);
   }
 
+  /*
+   * Table header styling
+   * Professional appearance with emphasis
+   */
   th {
     font-size: font-size(small2);
     font-weight: font-weight(bold);
@@ -40,29 +56,49 @@
     border-top: 1px solid color(gray3);
     border-bottom-color: color(gray3);
 
+    /*
+     * Rounded corner styling for first header cell
+     * Professional table appearance
+     */
     &:first-of-type {
       border-left: 1px solid color(gray3);
       border-radius: radius(medium) 0 0 radius(medium);
     }
 
+    /*
+     * Rounded corner styling for last header cell
+     * Completes the header border design
+     */
     &:last-of-type {
       border-right: 1px solid color(gray3);
       border-radius: 0 radius(medium) radius(medium) 0;
     }
   }
 
+  /*
+   * Table data cell styling
+   * Readable content with proper hierarchy
+   */
   td {
     font-size: font-size(small1);
     line-height: 1.4rem;
     color: color(gray1);
     border-bottom: 1px solid color(gray3);
 
+    /*
+     * First column emphasis
+     * Row headers or key data identification
+     */
     &:first-of-type {
       font-weight: font-weight(bold);
       white-space: nowrap;
     }
   }
 
+  /*
+   * Multiple tbody separator
+   * Visual distinction between table sections
+   */
   tbody + tbody {
     border-bottom: 1px solid transparent;
   }

@@ -4,11 +4,15 @@
 @use "../core/borders.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Tipografía ================
+   * ================ Base Typography Styles ================
    */
 
+  /*
+   * Document-level typography foundation
+   * Sets the baseline for all text rendering
+   */
   body {
     font-family: font(body);
     font-size: font(base);
@@ -18,7 +22,10 @@
     background-color: color($page-background-color);
   }
 
-  // Cabeceras
+  /*
+   * Heading elements hierarchy
+   * Establishes visual content structure with consistent styling
+   */
   h1,
   h2,
   h3,
@@ -30,6 +37,11 @@
     color: color($font-header-color);
   }
 
+  /*
+   * Heading size scale
+   * Based on 1.175 modular scale for optimal visual hierarchy
+   * Values calculated: base * (1.175^scale-position)
+   */
   h1 {
     font-size: font(h1);
   }
@@ -54,25 +66,35 @@
     font-size: font(base);
   }
 
-  // Parrafos
+  /*
+   * Paragraph text
+   * Standard body text sizing
+   */
   p {
     font-size: font(base);
   }
 
-  // Bold.
+  /*
+   * Text emphasis and formatting
+   */
+
+  // Strong emphasis - higher weight for better readability
   b,
   strong {
     font-weight: font(semibold);
     color: color(gray2);
   }
 
-  // Italic.
+  // Italic emphasis - semantic styling
   em,
   i {
     font-style: italic;
   }
 
-  // Texto en linea pequeño.
+  /*
+   * Small text elements
+   * Used for disclaimers, captions, fine print
+   */
   small,
   .small {
     font-size: font(small1);
@@ -80,7 +102,10 @@
     font-weight: font(regular);
   }
 
-  // Texto resaltado
+  /*
+   * Highlighted text
+   * For marking important content sections
+   */
   mark,
   .mark {
     padding: quarter();
@@ -89,7 +114,10 @@
     border-radius: radius();
   }
 
-  // Caption
+  /*
+   * Caption text
+   * For image captions and supplementary content
+   */
   .caption {
     font-family: font(body);
     font-size: font(h5);
@@ -97,6 +125,10 @@
     color: color(gray4);
   }
 
+  /*
+   * Context-sensitive caption sizing
+   * Larger captions for larger headings
+   */
   h1 + .caption,
   .h1 + .caption {
     margin-top: half();
@@ -106,7 +138,6 @@
     line-height: leading(small);
   }
 
-  /* stylelint-disable-next-line no-descending-specificity */
   h2 + .caption,
   .h2 + .caption {
     margin-top: half();
@@ -116,7 +147,6 @@
     line-height: leading(small);
   }
 
-  /* stylelint-disable-next-line no-descending-specificity */
   h3 + .caption,
   .h3 + .caption {
     margin-bottom: half();
@@ -125,14 +155,20 @@
     line-height: leading(small);
   }
 
-  // Abbreviations
+  /*
+   * Abbreviations
+   * Semantic markup for abbreviations with proper cursor
+   */
   abbr[title],
   abbr[data-original-title] {
     cursor: help;
     border-bottom: 0;
   }
 
-  // Quotes.
+  /*
+   * Block quotes
+   * For quoted content with proper spacing and typography
+   */
   blockquote,
   .blockquote {
     margin: double() 0;
@@ -164,6 +200,10 @@
     }
   }
 
+  /*
+   * Subscript and superscript
+   * Mathematical and scientific notation
+   */
   sub,
   sup {
     position: relative;
@@ -180,15 +220,20 @@
     left: 0.25em;
   }
 
-  // Horizontal rule.
+  /*
+   * Horizontal rule
+   * Section divider with proper spacing
+   */
   hr {
     margin-top: double();
     margin-bottom: double();
     border-top: var(--border-width) var(--border-style) color($border-color);
   }
 
-  // Ritmo vertical
-  /* stylelint-disable-next-line no-descending-specificity */
+  /*
+   * Vertical rhythm
+   * Consistent spacing for content flow
+   */
   p,
   h1,
   h2,

@@ -2,11 +2,15 @@
 @use "../core/colors.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Formularios ================
+   * ================ Base Form Styles ================
    */
 
+  /*
+   * Font inheritance for form controls
+   * Ensures consistent typography across form elements
+   */
   input,
   button,
   select,
@@ -16,16 +20,28 @@
     line-height: inherit;
   }
 
+  /*
+   * Block-level form elements
+   * Proper layout for form structure
+   */
   label,
   textarea,
   input[type="file"] {
     display: block;
   }
 
+  /*
+   * Interactive cursor for inputs
+   * Visual affordance for clickable elements
+   */
   input {
     cursor: pointer;
   }
 
+  /*
+   * Text input and textarea styling
+   * Consistent appearance across text input types
+   */
   input,
   textarea {
     height: double();
@@ -33,16 +49,28 @@
     line-height: double();
     border: 1px solid color($border-color);
 
+    /*
+     * Focus state
+     * Clear visual indication of active input
+     */
     &:focus {
       outline: none;
       border-color: color(brand);
     }
 
+    /*
+     * Placeholder styling
+     * Subtle indication of expected input
+     */
     &::placeholder {
       color: color(gray3);
       opacity: 1;
     }
 
+    /*
+     * Disabled and readonly states
+     * Clear indication of non-interactive elements
+     */
     &[disabled],
     &[readonly] {
       color: color(gray4);
@@ -55,10 +83,18 @@
    * ================ Checkboxs y Radios ================
    */
 
+  /*
+   * Radio button styling
+   * Circular appearance for radio inputs
+   */
   [type="radio"] {
     border-radius: 9999px;
   }
 
+  /*
+   * Checkbox and radio button layout
+   * Proper alignment and spacing with labels
+   */
   [type="checkbox"],
   [type="radio"] {
     position: relative;
@@ -68,6 +104,10 @@
     margin-right: half();
     vertical-align: middle;
 
+    /*
+     * Checked state styling
+     * Visual feedback for selected state
+     */
     &:checked {
       background-color: currentColor;
       background-repeat: no-repeat;
@@ -77,10 +117,18 @@
     }
   }
 
+  /*
+   * Checkbox check mark
+   * SVG-based check mark for crisp rendering
+   */
   [type="checkbox"]:checked {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
   }
 
+  /*
+   * Radio button dot
+   * SVG-based dot for selected radio state
+   */
   [type="radio"]:checked {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='white'/%3e%3c/svg%3e");
   }
@@ -89,6 +137,10 @@
    * ================ Selects ================
    */
 
+  /*
+   * Select dropdown styling
+   * Custom arrow for consistent cross-browser appearance
+   */
   select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
     background-repeat: no-repeat;

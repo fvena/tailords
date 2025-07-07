@@ -3,18 +3,26 @@
 @use "../core/types.core" as *;
 @use "../core/sizes.core" as *;
 
-/* stylelint-disable no-descending-specificity */
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Listados ================
+   * ================ Base List Styles ================
    */
 
+  /*
+   * Base list spacing and structure
+   * Consistent vertical rhythm for content flow
+   */
   ol,
   ul,
   dl {
     margin-top: 0;
     margin-bottom: simple();
   }
+
+  /*
+   * Nested list spacing
+   * Reduced spacing for hierarchy clarity
+   */
 
   ol ol,
   ul ul,
@@ -24,16 +32,27 @@
     margin-bottom: 0;
   }
 
+  /*
+   * Definition list terms
+   * Emphasized styling for term definitions
+   */
   dt {
     font-weight: font-weight(bold);
   }
 
+  /*
+   * Definition list descriptions
+   * Proper indentation and spacing
+   */
   dd {
     margin-bottom: spacers("1/2");
     margin-left: 0; // Deshace el valor predeterminado del navegador
   }
 
-  // Elimina el espacio vertical extra, cuando anidamos varias listas.
+  /*
+   * Nested list spacing fix
+   * Removes extra vertical space from nested lists
+   */
   li {
     > ul,
     > ol {
@@ -41,13 +60,18 @@
     }
   }
 
+  /*
+   * List item indentation
+   * Consistent left spacing for content alignment
+   */
   ul > li,
   ol > li {
     margin-left: simple();
   }
 
   /*
-   * ================ Listados numerados ================
+   * ================ Ordered Lists (Numbered) ================
+   * Custom numbering system with better visual hierarchy
    */
   ol {
     list-style: none;
@@ -59,6 +83,10 @@
       margin-bottom: quarter();
       margin-left: 0;
 
+      /*
+       * Custom number styling
+       * Professional appearance with accent color
+       */
       &::before {
         position: absolute;
         left: quarter("-");
@@ -69,6 +97,10 @@
         counter-increment: b;
       }
 
+      /*
+       * Image handling within list items
+       * Proper spacing and width constraints
+       */
       img {
         display: block;
         max-width: calc(100% - #{simple()});
@@ -78,7 +110,8 @@
   }
 
   /*
-   * ================ Listados no numerados ================
+   * ================ Unordered Lists (Bulleted) ================
+   * Custom bullet points with accent color
    */
 
   ul {
@@ -90,6 +123,10 @@
       margin-bottom: quarter();
       margin-left: 0;
 
+      /*
+       * Custom bullet styling
+       * Small circular markers with accent color
+       */
       &::before {
         position: absolute;
         top: 11px;
@@ -106,22 +143,35 @@
   }
 
   /*
-   * ================ Definiciones ================
+   * ================ Definition Lists ================
+   * Structured data presentation with responsive layout
    */
   dl {
     dt,
     dd {
       margin-left: 0;
 
+      /*
+       * Mobile layout adjustment
+       * Reduced indentation on small screens
+       */
       @include media(palm) {
         margin-left: half();
       }
     }
 
+    /*
+     * Definition term styling
+     * Medium weight for visual distinction
+     */
     dt {
       font-weight: font-weight(medium);
     }
 
+    /*
+     * Spacing between term groups
+     * Visual separation for readability
+     */
     dd + dt {
       padding-top: 1rem;
     }

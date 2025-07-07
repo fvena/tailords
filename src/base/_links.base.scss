@@ -2,15 +2,23 @@
 @use "../core/colors.core" as *;
 @use "../core/hover.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Enlaces ================
+   * ================ Base Link Styles ================
    */
 
+  /*
+   * Remove default image border
+   * Prevents visual distortion of images
+   */
   a img {
     border: 0;
   }
 
+  /*
+   * Primary link styling
+   * Semantic and visual link treatment with accessibility
+   */
   a,
   .link {
     display: inline-block;
@@ -18,19 +26,33 @@
     text-decoration-thickness: 0.1em;
     text-decoration-color: color(brand);
     text-underline-offset: 1.5px;
-    transition: color $transition-duration $transition-easing;
+    transition: color $transition-default-duration $transition-default-easing;
     text-decoration-skip-ink: auto;
 
-    @include hover {
-      color: color(brand);
+    /*
+     * Hover state for non-touch devices
+     * Improves UX by avoiding sticky hover on mobile
+     */
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not([disabled]) {
+        color: $link-hover-color;
+      }
     }
 
+    /*
+     * Interactive states
+     * Consistent behavior across states
+     */
     &:active,
     &:focus,
     &:visited {
       color: inherit;
     }
 
+    /*
+     * Disabled state
+     * Clear visual indication of non-interactive state
+     */
     a[disabled] {
       cursor: not-allowed;
       opacity: 0.6;

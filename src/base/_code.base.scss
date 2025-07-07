@@ -4,38 +4,15 @@
 @use "../core/borders.core" as *;
 @use "../core/sizes.core" as *;
 
-/*
- * ================ Code ================
- */
-
-/*
- * Reboot based on :
- * - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
- * - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
- */
-
-@if $useReset {
-  /**
-   * 1. Prevent overflow of the container in all browsers (opinionated).
+@if $enable-base {
+  /*
+   * ================ Base Code Styles ================
    */
 
-  :where(pre) {
-    -ms-overflow-style: scrollbar; // 1
-    overflow: auto; // 1
-  }
-
-  /**
-   * 1. Correct the inheritance and scaling of font size in all browsers.
-   * 2. Correct the odd `em` font sizing in all browsers.
+  /*
+   * Common code element styling
+   * Consistent appearance across all code elements
    */
-
-  :where(pre, code, kbd, samp) {
-    font-family: font(mono), monospace; // 1
-    font-size: font(small1); // 2
-  }
-}
-
-@if $useBase {
   code,
   pre,
   kbd {
@@ -66,6 +43,10 @@
     padding: half() simple();
     margin-bottom: simple();
     overflow-x: auto;
+
+    /*
+     * Typography optimizations for code reading
+     */
     text-align: left;
     word-spacing: normal;
     hyphens: none;
@@ -73,8 +54,17 @@
     word-wrap: normal;
     tab-size: 4;
     white-space: pre;
+
+    /*
+     * Visual styling
+     * Professional code block appearance
+     */
     border-radius: radius(medium);
 
+    /*
+     * Code within pre elements
+     * Remove redundant styling for nested code
+     */
     > code {
       display: block;
       padding: 0;
@@ -83,12 +73,61 @@
   }
 
   /*
-   * ================ kbd ================
+   * ================ Keyboard Input Elements ================
    */
 
   kbd {
     vertical-align: baseline;
     color: color(white);
     background-color: color(gray1);
+
+    /*
+     * Enhanced keyboard key appearance
+     * Resembles physical keyboard keys
+     */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+
+    /*
+     * Typography adjustments for keyboard keys
+     */
+    font-family: monospace, monospace;
+    font-size: 0.8em;
+    font-weight: 600; // Semibold for key emphasis
+
+    /*
+     * Nested kbd elements
+     * For key combinations like Ctrl+C
+     */
+    kbd {
+      padding: 0;
+      font-size: 0.9em;
+      font-weight: inherit;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+
+  /*
+   * ================ Sample Output Elements ================
+   * For representing sample program output
+   */
+  samp {
+    font-family: monospace, monospace;
+    font-size: 0.851rem; // Small1 scale position
+    color: $code-text-color;
+    background-color: transparent;
+  }
+
+  /*
+   * ================ Variable Elements ================
+   * For mathematical or programming variables
+   */
+  var {
+    font-family: monospace, monospace;
+    font-style: italic;
+    font-weight: 500;
+    color: $code-text-color;
   }
 }

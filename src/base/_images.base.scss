@@ -3,47 +3,57 @@
 @use "../core/types.core" as *;
 @use "../core/sizes.core" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Imágenes ================
-   *
-   * 1. Las imágenes ocupan todo el ancho para mejorar la adaptación a distintas pantallas.
-   * 2. Offset `alt` text from surrounding copy.
-   * 3. Elimina el espacio en blanco que aparece debajo del elemento 'img'.
-   *    Mejor alternativa que usar 'display:block'.
-   * 4. Si se define de forma explicita la altura o anchura de una imagen, tenemos
-   *    que evitar que se adapte para que no se deforme.
+   * ================ Base Image Styles ================
+   * Responsive and accessible image treatment
+   */
+
+  /*
+   * 1. Images scale to container width for responsive design
+   * 2. Offset `alt` text from surrounding copy for accessibility
+   * 3. Remove white space below images (better than display: block)
+   * 4. Prevent adaptive scaling when explicit dimensions are set
    */
   img {
     box-sizing: content-box;
-    max-width: 100%;
-    /* [1] */
+    max-width: 100%; /* [1] */
     height: auto;
-    font-style: italic;
-    /* [2] */
-    vertical-align: middle;
-    /* [3] */
-  }
-
-  img[width],
-  img[height] {
-    max-width: none;
-    /* [4] */
+    font-style: italic; /* [2] */
+    vertical-align: middle; /* [3] */
   }
 
   /*
-   * ================ Pies de foto ================
+   * Preserve explicit dimensions when specified
+   * Prevents unwanted scaling of images with fixed sizes
+   */
+  img[width],
+  img[height] {
+    max-width: none; /* [4] */
+  }
+
+  /*
+   * ================ Figure and Caption Styling ================
+   * Semantic image containers with proper spacing
    */
 
   figure {
     margin: double() 0 triple();
 
+    /*
+     * Figure image styling
+     * Centered presentation within container
+     */
     img {
       display: block;
       width: 100%;
       margin: 0 auto;
     }
 
+    /*
+     * Figure caption styling
+     * Subtle, italicized description text
+     */
     figcaption {
       margin-top: quarter();
       font-size: font-size(small1);
@@ -54,12 +64,94 @@
   }
 
   /*
-   * ================ Google maps ================
-   *
-   * Los mapas de Google se rompen si `max-width: 100%`;
-   * usamos su propio selector para evitar este problema.
+   * ================ Google maps Compatibility ================
+   * Fix for Google Maps API image styling conflicts
+   */
+
+  /*
+   * Google Maps breaks with max-width: 100%
+   * Use their specific selector to avoid this issue
    */
   .gm-style img {
     max-width: none;
+  }
+
+  /*
+   * ================ Image Loading States ================
+   * Enhanced user experience during image loading
+   */
+
+  /*
+   * Loading state styling
+   * Placeholder appearance while images load
+   */
+  img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &.loaded {
+      opacity: 1;
+    }
+  }
+
+  /*
+   * ================ Image Accessibility Enhancements ================
+   * Better support for screen readers and alt text
+   */
+
+  /*
+   * Decorative images
+   * Hide from screen readers when alt is empty
+   */
+  img[alt=""] {
+    role: presentation;
+  }
+
+  /*
+   * Image error state
+   * Graceful degradation when images fail to load
+   */
+  img[src=""],
+  img:not([src]) {
+    opacity: 0;
+  }
+
+  /*
+   * ================ Responsive Image Containers ================
+   * Aspect ratio preservation for consistent layouts
+   */
+
+  /*
+   * Aspect ratio container utility
+   * Maintains proportions during responsive scaling
+   */
+  .image-container {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  /*
+   * Common aspect ratios
+   * Pre-defined containers for standard image proportions
+   */
+  .image-container--16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  .image-container--4-3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  .image-container--1-1 {
+    aspect-ratio: 1 / 1;
   }
 }

@@ -1,11 +1,20 @@
 @use "../variables" as *;
 
-@if $useBase {
+@if $enable-base {
   /*
-   * ================ Estilos para imprimir ================
+   * ================ Base Print Styles ================
+   * Styles applied only when printing
    */
-
   @media print {
+    /*
+     * ================ Document Setup ================
+     * Optimize document for print output
+     */
+
+    /*
+     * Remove unnecessary spacing and colors
+     * Conserve ink and improve readability
+     */
     *,
     *::before,
     *::after {
@@ -15,48 +24,236 @@
       box-shadow: none !important;
     }
 
-    a,
-    a:visited {
-      text-decoration: underline;
+    /*
+     * ================ Typography Optimization ================
+     * Improve text readability on paper
+     */
+
+    /*
+     * Body text optimization
+     * Better paper reading experience
+     */
+    body {
+      font-size: 12pt; // Standard print size
+      line-height: 1.4; // Tighter line height for print
+      color: #000;
+      background: #fff;
     }
 
-    a[href]::after {
+    /*
+     * Heading optimization
+     * Clear hierarchy for printed documents
+     */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #000;
+      page-break-after: avoid; // Keep headings with content
+    }
+
+    h1 {
+      font-size: 18pt;
+    }
+
+    h2 {
+      font-size: 16pt;
+    }
+
+    h3 {
+      font-size: 14pt;
+    }
+
+    h4,
+    h5,
+    h6 {
+      font-size: 12pt;
+    }
+
+    /*
+     * ================ Link Handling ================
+     * Make links useful in print context
+     */
+
+    /*
+     * Show URLs for external links
+     * Provide context in printed documents
+     */
+    a[href^="http"]:after {
       content: " (" attr(href) ")";
+      font-size: 10pt;
+      color: #666;
     }
 
-    abbr[title]::after {
-      content: " (" attr(title) ")";
+    /*
+     * Hide internal links URLs
+     * Avoid cluttering with anchor links
+     */
+    a[href^="#"]:after,
+    a[href^="/"]:after {
+      content: "";
     }
 
-    pre {
-      white-space: pre-wrap !important;
+    /*
+     * ================ Content Visibility ================
+     * Hide non-essential elements for printing
+     */
+
+    /*
+     * Hide interactive elements
+     * Remove navigation and controls
+     */
+    nav,
+    .navigation,
+    .nav,
+    .menu,
+    .sidebar,
+    .footer,
+    .header,
+    .no-print {
+      display: none !important;
     }
 
-    pre,
-    blockquote {
-      border: 1px solid #999999;
-      page-break-inside: avoid;
+    /*
+     * Hide form elements
+     * Remove interactive controls
+     */
+    button,
+    input,
+    select,
+    textarea {
+      display: none !important;
     }
 
-    thead {
-      display: table-header-group;
+    /*
+     * ================ Page Layout ================
+     * Optimize content layout for paper
+     */
+
+    /*
+     * Main content optimization
+     * Use full page width
+     */
+    .main-content,
+    .content,
+    article {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      float: none !important;
     }
 
-    tr,
+    /*
+     * ================ Images and Media ================
+     * Handle visual content appropriately
+     */
+
+    /*
+     * Image optimization
+     * Ensure images print well
+     */
     img {
+      max-width: 100% !important;
+      height: auto !important;
       page-break-inside: avoid;
     }
 
-    p,
-    h2,
-    h3 {
-      widows: 3;
-      orphans: 3;
+    /*
+     * Hide decorative images
+     * Remove non-essential visual elements
+     */
+    .logo,
+    .icon,
+    .decoration {
+      display: none !important;
     }
 
-    h2,
-    h3 {
-      page-break-after: avoid;
+    /*
+     * ================ Tables ================
+     * Optimize table layout for printing
+     */
+
+    /*
+     * Table optimization
+     * Better table printing behavior
+     */
+    table {
+      border-collapse: collapse !important;
+      width: 100% !important;
+    }
+
+    th,
+    td {
+      border: 1px solid #000 !important;
+      padding: 4pt 8pt !important;
+    }
+
+    th {
+      background-color: #f0f0f0 !important;
+      font-weight: bold !important;
+    }
+
+    /*
+     * ================ Page Breaks ================
+     * Control content flow across pages
+     */
+
+    /*
+     * Avoid breaks within elements
+     * Keep content together when possible
+     */
+    blockquote,
+    pre,
+    img,
+    tr,
+    .keep-together {
+      page-break-inside: avoid;
+    }
+
+    /*
+     * Force breaks before major sections
+     * Logical page organization
+     */
+    .page-break-before,
+    .chapter,
+    .section {
+      page-break-before: always;
+    }
+
+    /*
+     * ================ Typography Refinements ================
+     * Final typography adjustments for print
+     */
+
+    /*
+     * Paragraph optimization
+     * Better text flow for reading
+     */
+    p {
+      orphans: 3; // Minimum lines at bottom of page
+      widows: 3; // Minimum lines at top of page
+    }
+
+    /*
+     * Code blocks
+     * Ensure code readability in print
+     */
+    pre,
+    code {
+      background: #f5f5f5 !important;
+      border: 1px solid #ccc !important;
+      page-break-inside: avoid;
+    }
+
+    /*
+     * Abbreviations
+     * Show full text in print
+     */
+    abbr[title]:after {
+      content: " (" attr(title) ")";
+      font-size: 10pt;
     }
   }
 }

@@ -1,6 +1,6 @@
 @use "tailords" as * with (
-  $useBase: true,
-  $useReset: true,
+  $enable-base: true,
+  $enable-reset: true,
   $css-variables: true,
   $utility-class: true,
   $excludes: (),

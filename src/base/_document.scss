@@ -1,0 +1,17 @@
+// =============================================================================
+// TailorDS - DOCUMENT
+// =============================================================================
+//
+// Description: Base styles for the document.
+//
+// =============================================================================
+
+@use "../core/colors" as *;
+@use "../config" as *;
+
+@if $enable-base {
+  body {
+    color: color(foreground);
+    background-color: color(canvas);
+  }
+}

@@ -8,21 +8,21 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { link: "/", text: "Home" },
-      { link: "/markdown-examples", text: "Examples" },
+      { text: "Home", link: "/" },
+      { text: "Documentation", link: "/getting-started/" },
     ],
 
-    sidebar: [
-      {
-        items: [
-          { link: "/markdown-examples", text: "Markdown Examples" },
-          { link: "/api-examples", text: "Runtime API Examples" },
-        ],
-        text: "Examples",
-      },
-    ],
+    sidebar: {
+      "/": [
+        { text: "Getting Started", link: "/getting-started/" },
+        {
+          text: "Design Foundations",
+          items: [{ text: "Colors", link: "/foundations/colors" }],
+        },
+      ],
+    },
 
     socialLinks: [{ icon: "github", link: "https://github.com/fvena/tailords" }],
   },
-  title: "tailords",
+  title: "tailorDS - Design System",
 });

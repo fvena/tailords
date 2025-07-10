@@ -1,0 +1,78 @@
+// =============================================================================
+// TailorDS - COLORS UTILITIES
+// =============================================================================
+//
+// Description: Utilities for colors.
+//
+// =============================================================================
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:list";
+@use "sass:string";
+@use "../config" as *;
+@use "../theme" as *;
+@use "../core/colors" as *;
+@use "../tokens/colors" as *;
+
+// -----------------------------------------------------------------------------
+// MIXINS
+// -----------------------------------------------------------------------------
+
+/// Generates utility classes for a specific CSS property
+///
+/// @param {String} $property - The CSS property (e.g., 'background-color', 'color')
+/// @param {String} $class-prefix - The class prefix (e.g., 'bg', 'text')
+/// @param {String} $prefix - The global prefix (optional)
+/// @param {String} $important - The !important declaration (optional)
+///
+@mixin generate-color-utilities($property, $class-prefix, $prefix: "", $important: "") {
+  // Generate utility classes for base colors
+  @each $color-name, $color-value in $colors {
+    @if meta.type-of($color-value) == map {
+      @each $shade, $shade-value in $color-value {
+        .#{$prefix}#{$class-prefix}-#{$color-name}-#{$shade} {
+          #{$property}: var(#{build-color-var-name($color-name, $shade)}) #{$important};
+        }
+      }
+    } @else {
+      .#{$prefix}#{$class-prefix}-#{$color-name} {
+        #{$property}: var(#{build-color-var-name($color-name)}) #{$important};
+      }
+    }
+  }
+
+  // Generate utility classes for theme colors
+  @each $name, $color-value in $theme {
+    @if string.index($name, "color-") == 1 {
+      $color-name: string.slice($name, 7);
+      .#{$prefix}#{$class-prefix}-#{$color-name} {
+        #{$property}: var(--color-#{$color-name}) #{$important};
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// UTILITIES
+// -----------------------------------------------------------------------------
+
+$colors-utilities: map.get($utilities, colors);
+$colors-utilities-text: list.index($colors-utilities, text) != null;
+$colors-utilities-background: list.index($colors-utilities, background) != null;
+
+@if $colors-utilities {
+  // -----------------------------------------------------------------------------
+  // BACKGROUND
+  // -----------------------------------------------------------------------------
+  @if $colors-utilities-background {
+    @include generate-color-utilities("background-color", "bg", $prefix, $important);
+  }
+
+  // -----------------------------------------------------------------------------
+  // TEXT
+  // -----------------------------------------------------------------------------
+  @if $colors-utilities-text {
+    @include generate-color-utilities("color", "text", $prefix, $important);
+  }
+}

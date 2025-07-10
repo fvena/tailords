@@ -1,0 +1,34 @@
+// =============================================================================
+// TailorDS - CONFIG
+// =============================================================================
+//
+// Description: Definition of design system configuration
+//
+// Expose all config variables of design system that the user can customize
+//
+// =============================================================================
+
+// Enable base styles
+$enable-base: true !default;
+
+// Prefix for all css variables
+$prefix: "" !default;
+
+// Important flag for all css variables
+$important: "" !default;
+
+// Utilities classes to generate
+$utilities: (
+  colors: (
+    text,
+    background,
+  ),
+  spacing: (
+    margin,
+    padding,
+  ),
+  typography: (
+    size,
+    weight,
+  ),
+) !default;

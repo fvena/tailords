@@ -1,4 +1,60 @@
-// TailorDS - A Modern SCSS Framework
-// Main entry point for the framework
+// =============================================================================
+// TailorDS - MAIN FILE
+// =============================================================================
+//
+// Description: Main entry point for the design system
+//
+// Browser Support:
+//   - Chrome 90+
+//   - Firefox 88+
+//   - Safari 14+
+//   - Edge 90+
+//
+// Instructions:
+//   1. Import library in your main scss file
+//   2. Simple setup example:
+//      @use "tailor-ds" as *;  // without namespace
+//      @use "tailor-ds" as ds; // with namespace
+//   3. Customize setup example:
+//      @use "tailor-ds" as * with (
+//        enable-base: true,
+//        utilities: (
+//          colors: [text, background],
+//          spacing: [margin, padding],
+//          typography: [size, weight]
+//        )
+//      );
+//
+// =============================================================================
 
-$enable-base: true !default;
+// -----------------------------------------------------------------------------
+// PUBLIC API
+// -----------------------------------------------------------------------------
+
+@forward "config";
+@forward "theme";
+@forward "tokens/colors";
+
+// -----------------------------------------------------------------------------
+// FUNCTIONS AND MIXINS
+// -----------------------------------------------------------------------------
+
+@forward "core/colors";
+
+// -----------------------------------------------------------------------------
+// ROOT CSS VARIABLES
+// -----------------------------------------------------------------------------
+
+@forward "root";
+
+// -----------------------------------------------------------------------------
+// UTILITIES
+// -----------------------------------------------------------------------------
+
+@forward "utilities/colors";
+
+// -----------------------------------------------------------------------------
+// BASE
+// -----------------------------------------------------------------------------
+
+@forward "base/document";

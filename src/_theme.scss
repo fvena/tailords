@@ -1,0 +1,295 @@
+// =============================================================================
+// TailorDS - THEMES
+// =============================================================================
+//
+// Description: Defines the design system themes.
+//
+// The default theme provides all tokens used by the framework.
+// Additional themes can override these tokens, but only those defined
+// in the default theme are recognized. Missing tokens in additional
+// themes fall back to the default theme, while undefined tokens
+// in the default theme are ignored.
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// DEFAULT THEME
+// -----------------------------------------------------------------------------
+
+$theme: (
+  color-background: (
+    white,
+  ),
+  color-foreground: (
+    neutral,
+    950,
+  ),
+  color-card: (
+    white,
+  ),
+  color-card-foreground: (
+    neutral,
+    950,
+  ),
+  color-popover: (
+    white,
+  ),
+  color-popover-foreground: (
+    neutral,
+    950,
+  ),
+  color-primary: (
+    neutral,
+    900,
+  ),
+  color-primary-foreground: (
+    neutral,
+    50,
+  ),
+  color-secondary: (
+    neutral,
+    100,
+  ),
+  color-secondary-foreground: (
+    neutral,
+    900,
+  ),
+  color-muted: (
+    neutral,
+    100,
+  ),
+  color-muted-foreground: (
+    neutral,
+    500,
+  ),
+  color-accent: (
+    neutral,
+    100,
+  ),
+  color-accent-foreground: (
+    neutral,
+    900,
+  ),
+  color-destructive: (
+    red,
+    600,
+  ),
+  color-border: (
+    neutral,
+    200,
+  ),
+  color-input: (
+    neutral,
+    200,
+  ),
+  color-ring: (
+    neutral,
+    400,
+  ),
+  color-sidebar: (
+    neutral,
+    50,
+  ),
+  color-sidebar-foreground: (
+    neutral,
+    950,
+  ),
+  color-sidebar-primary: (
+    neutral,
+    900,
+  ),
+  color-sidebar-primary-foreground: (
+    neutral,
+    50,
+  ),
+  color-sidebar-accent: (
+    neutral,
+    100,
+  ),
+  color-sidebar-accent-foreground: (
+    neutral,
+    900,
+  ),
+  color-sidebar-border: (
+    neutral,
+    200,
+  ),
+  color-sidebar-ring: (
+    neutral,
+    400,
+  ),
+  color-surface: (
+    neutral,
+    50,
+  ),
+  color-surface-foreground: (
+    neutral,
+    950,
+  ),
+  color-code: (
+    neutral,
+    50,
+  ),
+  color-code-foreground: (
+    neutral,
+    950,
+  ),
+  color-code-highlight: (
+    neutral,
+    100,
+  ),
+  color-code-number: (
+    neutral,
+    500,
+  ),
+  color-selection: (
+    neutral,
+    950,
+  ),
+  color-selection-foreground: (
+    white,
+  ),
+) !default;
+
+// -----------------------------------------------------------------------------
+// DARK THEME
+// -----------------------------------------------------------------------------
+
+$theme-dark: (
+  color-background: (
+    neutral,
+    950,
+  ),
+  color-foreground: (
+    neutral,
+    50,
+  ),
+  color-card: (
+    neutral,
+    900,
+  ),
+  color-card-foreground: (
+    neutral,
+    50,
+  ),
+  color-popover: (
+    neutral,
+    800,
+  ),
+  color-popover-foreground: (
+    neutral,
+    50,
+  ),
+  color-primary: (
+    neutral,
+    200,
+  ),
+  color-primary-foreground: (
+    neutral,
+    900,
+  ),
+  color-secondary: (
+    neutral,
+    800,
+  ),
+  color-secondary-foreground: (
+    neutral,
+    50,
+  ),
+  color-muted: (
+    neutral,
+    800,
+  ),
+  color-muted-foreground: (
+    neutral,
+    400,
+  ),
+  color-accent: (
+    neutral,
+    700,
+  ),
+  color-accent-foreground: (
+    neutral,
+    50,
+  ),
+  color-destructive: (
+    red,
+    400,
+  ),
+  color-border: (
+    black,
+    0.1,
+  ),
+  color-input: (
+    black,
+    0.15,
+  ),
+  color-ring: (
+    neutral,
+    500,
+  ),
+  color-sidebar: (
+    neutral,
+    900,
+  ),
+  color-sidebar-foreground: (
+    neutral,
+    50,
+  ),
+  color-sidebar-primary: (
+    blue,
+    700,
+  ),
+  color-sidebar-primary-foreground: (
+    neutral,
+    50,
+  ),
+  color-sidebar-accent: (
+    neutral,
+    800,
+  ),
+  color-sidebar-accent-foreground: (
+    neutral,
+    50,
+  ),
+  color-sidebar-border: (
+    black,
+    0.1,
+  ),
+  color-sidebar-ring: (
+    neutral,
+    600,
+  ),
+  color-surface: (
+    neutral,
+    900,
+  ),
+  color-surface-foreground: (
+    neutral,
+    400,
+  ),
+  color-code: (
+    neutral,
+    900,
+  ),
+  color-code-foreground: (
+    neutral,
+    400,
+  ),
+  color-code-highlight: (
+    neutral,
+    800,
+  ),
+  color-code-number: (
+    neutral,
+    400,
+  ),
+  color-selection: (
+    neutral,
+    200,
+  ),
+  color-selection-foreground: (
+    neutral,
+    900,
+  ),
+) !default;

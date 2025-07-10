@@ -1,3 +1,7 @@
 @use "tailords" as * with (
   $enable-base: true
 );
+
+.section {
+  // color: color(destructive, 0.5);
+}

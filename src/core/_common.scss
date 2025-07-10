@@ -1,0 +1,28 @@
+// =============================================================================
+// TailorDS - COMMON
+// =============================================================================
+//
+// Description: Definition of design system common functions and mixins
+//
+// =============================================================================
+
+@use "sass:meta";
+@use "sass:string";
+@use "sass:list";
+@use "colors" as *;
+
+/// Generates CSS variables from a theme map.
+/// Colors are resolved using the `color()` function, other properties are output as literals.
+///
+/// @param {Map} $theme-map - A theme map
+///
+@mixin generate-theme-vars($theme-map) {
+  @each $name, $value in $theme-map {
+    // If the name starts with 'color-', it's a color reference
+    @if string.index($name, "color-") == 1 {
+      --#{$name}: #{color-var($value)};
+    } @else {
+      --#{$name}: #{$value};
+    }
+  }
+}

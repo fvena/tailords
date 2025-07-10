@@ -1,0 +1,148 @@
+// =============================================================================
+// TailorDS - COLORS
+// =============================================================================
+//
+// Description: Definition of design system colors functions and mixins
+//
+// =============================================================================
+
+@use "sass:meta";
+@use "sass:map";
+@use "sass:list";
+@use "../tokens/colors" as *;
+@use "../theme" as *;
+
+// -----------------------------------------------------------------------------
+// PRIVATE FUNCTIONS
+// -----------------------------------------------------------------------------
+
+/// Builds the name of a CSS variable for a color
+///
+/// @param {String} $color - The color name
+/// @param {String|Number} $shade - The shade of the color (optional)
+/// @return {String} - The name of the CSS variable
+///
+@function build-color-var-name($color, $shade: null) {
+  @return if($shade != null, "--color-#{$color}-#{$shade}", "--color-#{$color}");
+}
+
+/// Resolves a color reference to a CSS variable
+///
+/// @param {String|List} $input - The color reference
+/// @return {String} - The CSS variable
+///
+@function color-var($input) {
+  $color: null;
+  $shade: null;
+  $alpha: null;
+
+  @if meta.type-of($input) == list {
+    $color: list.nth($input, 1);
+    $shade: if(list.length($input) >= 2, list.nth($input, 2), null);
+    $alpha: if(list.length($input) == 3, list.nth($input, 3), 1);
+  } @else {
+    $color: $input;
+    $shade: null;
+    $alpha: 1;
+  }
+
+  $var-name: build-color-var-name($color, $shade);
+
+  @if $alpha == 1 {
+    @return var(#{$var-name});
+  } @else {
+    @return color-mix(in oklch, var(#{$var-name}), transparent #{$alpha * 100%});
+  }
+}
+
+/// Resolves a color value from a list or a string.
+///
+/// @param {String|List} $input - The color value to resolve.
+/// @return {String} - The resolved color value.
+///
+@function resolve-color($input) {
+  @if meta.type-of($input) == list {
+    $color-name: list.nth($input, 1);
+    $shade: if(list.length($input) >= 2, list.nth($input, 2), null);
+    $alpha: if(list.length($input) == 3, list.nth($input, 3), 1);
+    @return color($color-name, $shade, $alpha);
+  } @else {
+    @return color($input);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// PUBLIC FUNCTIONS
+// -----------------------------------------------------------------------------
+
+/// Returns a CSS color token value from the design system, with optional shade and opacity.
+///
+/// This function resolves colors from two sources:
+/// 1. `$colors`: base colors and palettes with shades.
+/// 2. `$theme`: semantic colors, referencing `$colors`, optionally with shade and/or alpha.
+///
+/// If `$shade` is a number ≤ 1, it is treated as the opacity instead of a shade.
+/// If no shade is provided, the function tries `$colors` first, then `$theme`.
+///
+/// Note: In TailorDS, shades are assumed to always be > 1 (e.g., 50, 100…),
+/// and alpha values ≤ 1. Passing `1` as a shade is considered invalid.
+///
+/// @param {String} $color - The color name
+/// @param {String|Number} $shade - The shade of the color or alpha (optional)
+/// @param {Number} $alpha - The alpha value (optional)
+/// @return {String} - The CSS variable
+///
+@function color($color, $shade: null, $alpha: 1) {
+  // Detect if $shade is really alpha
+  @if meta.type-of($shade) == number and ($shade <= 1) {
+    $alpha: $shade;
+    $shade: null;
+  }
+
+  @if meta.type-of($alpha) == number and ($alpha < 0 or $alpha > 1) {
+    @error "Alpha must be between 0 and 1";
+  }
+
+  // Case 1: If shade is provided, use the color from the palette
+  @if $shade {
+    $value: map.get($colors, $color, $shade);
+    @if $value {
+      @return #{color-var(($color, $shade, $alpha))};
+    }
+  } @else {
+    // Case 2: If no shade is provided, search in base colors
+    $value: map.get($colors, $color);
+    @if $value {
+      @return #{color-var(($color, null, $alpha))};
+    } @else {
+      // Case 3: Search in semantic theme
+      $value: map.get($theme, "color-" + $color);
+      @if $value {
+        @return #{color-var(($color, null, $alpha))};
+      }
+    }
+  }
+
+  @error "The color '#{$color}#{if($shade, '-#{$shade}', '')}' doesn't exist";
+}
+
+// -----------------------------------------------------------------------------
+// MIXINS
+// -----------------------------------------------------------------------------
+
+/// Generates CSS variables for all colors in the design system.
+///
+/// This mixin creates CSS variables for each color token in the `$colors` map.
+/// It handles both single-value colors and color palettes with shades.
+///
+@mixin generate-colors-vars() {
+  @each $color-name, $color-value in $colors {
+    @if meta.type-of($color-value) == map {
+      @each $shade, $shade-value in $color-value {
+        #{build-color-var-name($color-name, $shade)}: #{$shade-value};
+      }
+    } @else {
+      #{build-color-var-name($color-name)}: #{$color-value};
+    }
+  }
+}

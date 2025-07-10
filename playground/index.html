@@ -5,51 +5,194 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TailorDS - Design System Playground</title>
+    <style>
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid currentColor;
+      }
+      .section {
+        border-top: 1px solid currentColor;
+        padding: 1rem;
+      }
+    </style>
   </head>
+
   <body>
-    <div class="playground">
-      <header>
-        <h1>TailorDS Design System</h1>
-        <p>A modern, customizable SCSS framework for building design systems</p>
-      </header>
+    <header class="header bg-foreground text-background">
+      <h1>Design System – Todos los elementos</h1>
+      <button id="toggleTheme">Cambiar tema</button>
+    </header>
 
-      <section class="section">
-        <h2>🎨 Color Palette</h2>
-        <div class="color-palette">
-          <div class="color-swatch primary">Primary</div>
-          <div class="color-swatch secondary">Secondary</div>
-        </div>
-      </section>
+    <section class="section">
+      <h2>Tipografía</h2>
+      <h1>Encabezado H1</h1>
+      <h2>Encabezado H2</h2>
+      <h3>Encabezado H3</h3>
+      <h4>Encabezado H4</h4>
+      <h5>Encabezado H5</h5>
+      <h6>Encabezado H6</h6>
+      <p>
+        Párrafo normal. <strong>Negrita</strong>, <em>Cursiva</em>, <mark>Marcado</mark>,
+        <small>Pequeño</small>, <del>Tachado</del>, <ins>Insertado</ins>, <sub>Subíndice</sub>,
+        <sup>Superíndice</sup>, <abbr title="Abreviatura">Abbr</abbr>, <dfn>Definición</dfn>,
+        <cite>Cita</cite>.
+      </p>
+      <blockquote>Cita larga</blockquote>
+      <pre><code>pre y código</code></pre>
+      <address>Dirección</address>
+      <kbd>kbd</kbd> <samp>samp</samp>
+    </section>
 
-      <section class="section">
-        <h2>🔘 Buttons</h2>
-        <div class="button-group">
-          <button class="btn">Primary Button</button>
-          <button class="btn" disabled>Disabled Button</button>
-        </div>
-        <p><em>Check the console for click events!</em></p>
-      </section>
+    <section class="section">
+      <h2>Listas</h2>
+      <h3>Lista desordenada</h3>
+      <ul>
+        <li>
+          Item 1
+          <ul>
+            <li>Subitem</li>
+          </ul>
+        </li>
+        <li>Item 2</li>
+      </ul>
+      <h3>Lista ordenada</h3>
+      <ol>
+        <li>
+          Item 1
+          <ol>
+            <li>Subitem</li>
+          </ol>
+        </li>
+        <li>Item 2</li>
+      </ol>
+      <h3>Lista de definiciones</h3>
+      <dl>
+        <dt>Término</dt>
+        <dd>Definición</dd>
+      </dl>
+    </section>
 
-      <section class="section">
-        <h2>📝 Typography</h2>
-        <h1>Heading 1</h1>
-        <h2>Heading 2</h2>
-        <h3>Heading 3</h3>
-        <p>
-          This is a paragraph with regular text. The typography is defined by our SCSS framework.
-        </p>
-      </section>
+    <section class="section">
+      <h2>Formularios</h2>
+      <form>
+        <fieldset>
+          <legend>Formulario básico</legend>
+          <label>Texto: <input type="text" placeholder="Texto" /></label><br />
+          <label>Email: <input type="email" /></label><br />
+          <label>Password: <input type="password" /></label><br />
+          <label>Number: <input type="number" /></label><br />
+          <label>Search: <input type="search" /></label><br />
+          <label>Tel: <input type="tel" /></label><br />
+          <label>URL: <input type="url" /></label><br />
+          <label>Date: <input type="date" /></label><br />
+          <label>Time: <input type="time" /></label><br />
+          <label>Month: <input type="month" /></label><br />
+          <label>Week: <input type="week" /></label><br />
+          <label>Range: <input type="range" /></label><br />
+          <label>Color: <input type="color" /></label><br />
+          <label>File: <input type="file" /></label><br />
+          <label><input type="checkbox" checked /> Checkbox</label><br />
+          <label><input type="radio" name="r" checked /> Radio 1</label>
+          <label><input type="radio" name="r" /> Radio 2</label><br />
+          <textarea rows="3">Texto</textarea><br />
+          <select>
+            <optgroup label="Grupo 1">
+              <option>Opción 1</option>
+              <option>Opción 2</option>
+            </optgroup></select
+          ><br />
+          <button type="submit">Enviar</button>
+          <button type="reset">Reset</button>
+        </fieldset>
+      </form>
+    </section>
 
-      <section class="section">
-        <h2>✅ Framework Status</h2>
-        <p>✅ SCSS Framework loaded successfully</p>
-        <p>✅ Styles compiled and applied</p>
-        <p>✅ Design system ready to use</p>
-      </section>
+    <section class="section">
+      <h2>Tablas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Cabecera 1</th>
+            <th>Cabecera 2</th>
+            <th>Cabecera 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dato 1</td>
+            <td>Dato 2</td>
+            <td>Dato 3</td>
+          </tr>
+          <tr>
+            <td colspan="2">Colspan</td>
+            <td>Dato</td>
+          </tr>
+          <tr>
+            <td>Dato</td>
+            <td rowspan="2">Rowspan</td>
+            <td>Dato</td>
+          </tr>
+          <tr>
+            <td>Dato</td>
+            <td>Dato</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Pie</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
 
-      <div class="debug"></div>
-    </div>
+    <section class="section">
+      <h2>Medios</h2>
+      <figure>
+        <img src="https://via.placeholder.com/150" alt="Imagen" />
+        <figcaption>Figura con leyenda</figcaption>
+      </figure>
+      <audio controls></audio>
+      <video controls width="200"></video>
+      <iframe src="https://example.com" width="200" height="100"></iframe>
+    </section>
 
+    <section class="section">
+      <h2>Interactividad</h2>
+      <details open>
+        <summary>Detalles</summary>
+        Contenido de detalles
+      </details>
+      <progress value="50" max="100"></progress>
+      <meter value="0.6">60%</meter>
+    </section>
+
+    <section class="section">
+      <h2>Semántica y miscelánea</h2>
+      <hr />
+      <nav>Navegación</nav>
+      <aside>Aside</aside>
+      <main>Main</main>
+      <section>Section</section>
+      <article>Article</article>
+      <header>Header</header>
+      <footer>Footer</footer>
+      <time datetime="2025-07-10">Hoy</time>
+      <ruby>漢<rt>Kan</rt></ruby>
+      <bdo dir="rtl">Texto RTL</bdo>
+      <span>Span</span>
+    </section>
+
+    <script>
+      document.getElementById("toggleTheme").addEventListener("click", () => {
+        document.body.setAttribute(
+          "data-theme",
+          document.body.getAttribute("data-theme") === "dark" ? "light" : "dark",
+        );
+      });
+    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

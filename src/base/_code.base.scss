@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 @use "../core/colors.core" as *;
 @use "../core/types.core" as *;
 @use "../core/borders.core" as *;
@@ -16,11 +17,12 @@
   code,
   pre,
   kbd {
-    font-weight: font(medium);
+    font-family: $base-font-family-mono;
+    font-weight: $base-font-weight-normal; // Normal weight for code
     line-height: initial;
-    color: color($font-code-color);
-    background-color: color($code-background-color);
-    border-radius: radius(small);
+    color: $base-color-text;
+    background-color: $base-code-background; // Use muted background
+    border-radius: $base-border-radius;
   }
 
   /*
@@ -40,8 +42,8 @@
 
   pre {
     display: block;
-    padding: half() simple();
-    margin-bottom: simple();
+    padding: $base-spacing-sm $base-spacing-md;
+    margin-bottom: $base-spacing-md;
     overflow-x: auto;
 
     /*
@@ -59,7 +61,7 @@
      * Visual styling
      * Professional code block appearance
      */
-    border-radius: radius(medium);
+    border-radius: $base-border-radius;
 
     /*
      * Code within pre elements
@@ -78,8 +80,8 @@
 
   kbd {
     vertical-align: baseline;
-    color: color(white);
-    background-color: color(gray1);
+    color: white;
+    background-color: $base-color-emphasis;
 
     /*
      * Enhanced keyboard key appearance
@@ -92,9 +94,9 @@
     /*
      * Typography adjustments for keyboard keys
      */
-    font-family: monospace, monospace;
+    font-family: $base-font-family-mono;
     font-size: 0.8em;
-    font-weight: 600; // Semibold for key emphasis
+    font-weight: 600;
 
     /*
      * Nested kbd elements
@@ -114,9 +116,9 @@
    * For representing sample program output
    */
   samp {
-    font-family: monospace, monospace;
-    font-size: 0.851rem; // Small1 scale position
-    color: $code-text-color;
+    font-family: $base-font-family-mono;
+    font-size: $base-font-size-sm;
+    color: $base-color-text;
     background-color: transparent;
   }
 
@@ -125,9 +127,9 @@
    * For mathematical or programming variables
    */
   var {
-    font-family: monospace, monospace;
+    font-family: $base-font-family-mono;
     font-style: italic;
     font-weight: 500;
-    color: $code-text-color;
+    color: $base-color-text;
   }
 }

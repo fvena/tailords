@@ -20,18 +20,18 @@ $enable-base: true !default;
 /*
  * Prefijo para las clases
  */
-$usePrefix: "" !default;
-$prefix: check-prefix($usePrefix);
+$enable-prefix: "" !default;
+$prefix: check-prefix($enable-prefix);
 
 /*
  * Crear variables css globales
  */
-$css-variables: true !default;
+$enable-css-variables: true !default;
 
 /*
  * Crear clases con los estilos
  */
-$utility-class: true !default;
+$enable-utility-class: true !default;
 
 /*
  * Excluye las clases indicadas,
@@ -53,8 +53,8 @@ $enable-responsive: true !default;
 /*
  * Añade !important a todas las clases
  */
-$useImportant: false !default;
-$important: check-important($useImportant);
+$enable-important: false !default;
+$important: check-important($enable-important);
 
 /*
  * Crear clases hover
@@ -66,17 +66,20 @@ $enable-hover: true !default;
  *
 
  * Existen 5 tamaños de pantalla definidos:
- *   palm  - Móviles                                  (0 - 600px)
- *   lap   - Tablet verticales y Móviles horizontales (601px - 900px)
- *   small - Tablet horizontales                      (901px - 1200px)
- *   desk  - Portátiles y monitores pequeños          (1201px - 1600px)
- *   large - Monitores grandes                        (1601px - ...)
+ *   palm  - Móviles                                  (0 - 640px)
+ *   lap   - Tablet verticales y Móviles horizontales (641px - 768px)
+ *   small - Tablet horizontales                      (769px - 1024px)
+ *   desk  - Portátiles y monitores pequeños          (1025px - 1280px)
+ *   large - Monitores grandes                        (1281px - ...)
  */
 $screens: (
-  palm: 600px,
-  lap: 900px,
-  small: 1200px,
-  desk: 1600px,
+  palm: 640px,
+  // sm breakpoint de shadcn/ui
+  lap: 768px,
+  // md breakpoint de shadcn/ui
+  small: 1024px,
+  // lg breakpoint de shadcn/ui
+  desk: 1280px, // xl breakpoint de shadcn/ui
 ) !default;
 
 /*
@@ -87,77 +90,141 @@ $screens: (
 $medias: (palm, lap, small, desk, large) !default;
 
 /*
- * ================ Paleta de colores ================
+ * ================ Colors palette ================
  */
 
+// _variables.scss
+
 /*
- * Listado de los colores utilizados en la aplicación
+ * List of the primitives colors
  */
-$theme: (
-  brand-darkest: #4e011e,
-  brand-darker: #80002f,
-  brand-dark: #bb1642,
-  brand: #dd224e,
-  brand-light: #fb5067,
-  brand-lighter: #ff817a,
-  brand-lightest: #fae0df,
-  warning-darkest: #b37400,
-  warning-darker: #b37400,
-  warning-dark: #e69d00,
-  warning: #ffbe33,
-  warning-light: #ffd780,
-  warning-lighter: #ffefcc,
-  warning-lightest: #faf1dd,
-  success-darkest: #448a0f,
-  success-darker: #448a0f,
-  success-dark: #5faf23,
-  success: #77c23d,
-  success-light: #ace580,
-  success-lighter: #e3f7d4,
-  success-lightest: #ebfae0,
-  danger-darkest: #990f00,
-  danger-darker: #990f00,
-  danger-dark: #e61700,
-  danger: #ff4733,
-  danger-light: #ff8c80,
-  danger-lighter: #ffd1cc,
-  danger-lightest: #fce4e1,
+$primitives: (
+  white: oklch(1 0 0),
+  black: oklch(0 0 0),
+  // Neutral colors (zinc palette base)
+  neutral: (
+      50: oklch(98.5% 0 0),
+      100: oklch(97% 0 0),
+      200: oklch(92.2% 0 0),
+      300: oklch(87% 0 0),
+      400: oklch(70.8% 0 0),
+      500: oklch(55.6% 0 0),
+      600: oklch(43.9% 0 0),
+      700: oklch(37.1% 0 0),
+      800: oklch(26.9% 0 0),
+      900: oklch(20.5% 0 0),
+      950: oklch(14.5% 0 0),
+    ),
+
+  // Red colors
+  red: (
+      50: oklch(97.1% 0.013 17.38),
+      100: oklch(93.6% 0.032 17.717),
+      200: oklch(88.5% 0.062 18.334),
+      300: oklch(80.8% 0.114 19.571),
+      400: oklch(70.4% 0.191 22.216),
+      500: oklch(63.7% 0.237 25.331),
+      600: oklch(57.7% 0.245 27.325),
+      700: oklch(50.5% 0.213 27.518),
+      800: oklch(44.4% 0.177 26.899),
+      900: oklch(39.6% 0.141 25.723),
+      950: oklch(25.8% 0.092 26.042),
+    ),
+
+  // Blue colors
+  blue: (
+      50: oklch(97% 0.014 254.604),
+      100: oklch(93.2% 0.032 255.585),
+      200: oklch(88.2% 0.059 254.128),
+      300: oklch(80.9% 0.105 251.813),
+      400: oklch(70.7% 0.165 254.624),
+      500: oklch(62.3% 0.214 259.815),
+      600: oklch(54.6% 0.245 262.881),
+      700: oklch(48.8% 0.243 264.376),
+      800: oklch(42.4% 0.199 265.638),
+      900: oklch(37.9% 0.146 265.522),
+      950: oklch(28.2% 0.091 267.935),
+    ),
 ) !default;
 
 /*
- * Listado de grises utilizados en la aplicación en modo claro
+ * Theme tokens for light mode
  */
 $light-theme: (
-  black: #000000,
-  gray1: #121a1d,
-  gray2: #3b4c54,
-  gray3: #6a7981,
-  gray4: #9da6aa,
-  gray5: #ced5d9,
-  gray6: #e7ebee,
-  gray7: #f6f7f9,
-  gray8: #fcfcfd,
-  gray9: #f7f6f5,
-  gray10: #f7f6f5,
-  white: #ffffff,
+  background: map.get($primitives, white),
+  foreground: map.get($primitives, neutral, 950),
+  card: map.get($primitives, white),
+  card-foreground: map.get($primitives, neutral, 950),
+  popover: map.get($primitives, white),
+  popover-foreground: map.get($primitives, neutral, 950),
+  primary: map.get($primitives, neutral, 900),
+  primary-foreground: map.get($primitives, neutral, 50),
+  secondary: map.get($primitives, neutral, 100),
+  secondary-foreground: map.get($primitives, neutral, 900),
+  muted: map.get($primitives, neutral, 100),
+  muted-foreground: map.get($primitives, neutral, 500),
+  accent: map.get($primitives, neutral, 100),
+  accent-foreground: map.get($primitives, neutral, 900),
+  destructive: map.get($primitives, red, 600),
+  border: map.get($primitives, neutral, 200),
+  input: map.get($primitives, neutral, 200),
+  ring: map.get($primitives, neutral, 400),
+  sidebar: map.get($primitives, neutral, 50),
+  sidebar-foreground: map.get($primitives, neutral, 950),
+  sidebar-primary: map.get($primitives, neutral, 900),
+  sidebar-primary-foreground: map.get($primitives, neutral, 50),
+  sidebar-accent: map.get($primitives, neutral, 100),
+  sidebar-accent-foreground: map.get($primitives, neutral, 900),
+  sidebar-border: map.get($primitives, neutral, 200),
+  sidebar-ring: map.get($primitives, neutral, 400),
+  surface: map.get($primitives, neutral, 50),
+  surface-foreground: map.get($primitives, neutral, 950),
+  code: map.get($primitives, neutral, 50),
+  code-foreground: map.get($primitives, neutral, 950),
+  code-highlight: map.get($primitives, neutral, 100),
+  code-number: map.get($primitives, neutral, 500),
+  selection: map.get($primitives, neutral, 950),
+  selection-foreground: map.get($primitives, white),
 ) !default;
 
 /*
- * Listado de grises utilizados en la aplicación en modo oscuro
+ * Theme tokens for dark mode
  */
 $dark-theme: (
-  black: #ffffff,
-  gray1: #f7f6f5,
-  gray2: #f7f6f5,
-  gray3: #fcfcfd,
-  gray4: #f6f7f9,
-  gray5: #e7ebee,
-  gray6: #ced5d9,
-  gray7: #9da6aa,
-  gray8: #6a7981,
-  gray9: #3b4c54,
-  gray10: #172226,
-  white: #000000,
+  background: map.get($primitives, neutral, 950),
+  foreground: map.get($primitives, neutral, 50),
+  card: map.get($primitives, neutral, 900),
+  card-foreground: map.get($primitives, neutral, 50),
+  popover: map.get($primitives, neutral, 800),
+  popover-foreground: map.get($primitives, neutral, 50),
+  primary: map.get($primitives, neutral, 200),
+  primary-foreground: map.get($primitives, neutral, 900),
+  secondary: map.get($primitives, neutral, 800),
+  secondary-foreground: map.get($primitives, neutral, 50),
+  muted: map.get($primitives, neutral, 800),
+  muted-foreground: map.get($primitives, neutral, 400),
+  accent: map.get($primitives, neutral, 700),
+  accent-foreground: map.get($primitives, neutral, 50),
+  destructive: map.get($primitives, red, 400),
+  border: oklch(1 0 0 / 10%),
+  input: oklch(1 0 0 / 15%),
+  ring: map.get($primitives, neutral, 500),
+  sidebar: map.get($primitives, neutral, 900),
+  sidebar-foreground: map.get($primitives, neutral, 50),
+  sidebar-primary: map.get($primitives, blue, 700),
+  sidebar-primary-foreground: map.get($primitives, neutral, 50),
+  sidebar-accent: map.get($primitives, neutral, 800),
+  sidebar-accent-foreground: map.get($primitives, neutral, 50),
+  sidebar-border: oklch(1 0 0 / 10%),
+  sidebar-ring: map.get($primitives, neutral, 600),
+  surface: map.get($primitives, neutral, 900),
+  surface-foreground: map.get($primitives, neutral, 400),
+  code: map.get($primitives, neutral, 900),
+  code-foreground: map.get($primitives, neutral, 400),
+  code-highlight: map.get($primitives, neutral, 800),
+  code-number: map.get($primitives, neutral, 400),
+  selection: map.get($primitives, neutral, 200),
+  selection-foreground: map.get($primitives, neutral, 900),
 ) !default;
 
 /*
@@ -168,7 +235,7 @@ $page-background-color: gray8 !default;
 /*
  * Color de fondo del código
  */
-$code-background-color: gray8 !default;
+$code-background-color: gray7 !default;
 
 /*
  * Color de fondo de una entrada de teclado "kbd"
@@ -176,9 +243,13 @@ $code-background-color: gray8 !default;
 $kbd-background-color: gray2 !default;
 
 /*
- * Listado de degradados
+ * Listado de degradados adaptados
  */
 $gradients: (
+  primary: (
+    primary,
+    ring,
+  ),
   brand: (
     brand-light,
     brand-dark,
@@ -208,7 +279,7 @@ $gradients: (
 /*
  * Tipo de gradiente por defecto: linear, radial, conic
  */
-$gradient-default: radial !default;
+$gradient-default: linear !default;
 
 /*
  * ================ Bordes ================
@@ -219,8 +290,9 @@ $gradient-default: radial !default;
  */
 $border-widths: (
   thin: 1,
-  medium: 2,
-  thick: 4,
+  medium: 1,
+  thick: 2,
+  extra-thick: 4,
 ) !default;
 
 /*
@@ -231,7 +303,7 @@ $border-styles: (solid, dashed, dotted, hidden, none) !default;
 /*
  * Color del borde por defecto
  */
-$border-color: gray3 !default;
+$border-color: gray6 !default;
 
 /*
  * Anchura del borde por defecto
@@ -281,12 +353,12 @@ $opacities: (
 /*
  * Color base de la sombra
  */
-$shadow-color: #0b0f11 !default;
+$shadow-color: hsl(0, 0%, 0%) !default;
 
 /*
  * Suavidad por defecto de las sombras
  */
-$shadow-soft: 2 !default;
+$shadow-soft: 1 !default;
 
 /*
  * Desplazamiento horizontal por defecto de la sombras
@@ -294,14 +366,14 @@ $shadow-soft: 2 !default;
 $shadow-horizontal: 0 !default;
 
 /*
- * Desplazamiento horizontal por defecto de la sombras
+ * Desplazamiento vertical por defecto de la sombras
  */
-$shadow-vertical: 2 !default;
+$shadow-vertical: 1 !default;
 
 /*
  * Dureza por defecto de la sombras
  */
-$shadow-hard: 2 !default;
+$shadow-hard: 1 !default;
 
 /*
  * Indica si debe invertirse el alpha, genera sombras más difusas
@@ -309,7 +381,7 @@ $shadow-hard: 2 !default;
 $shadow-invert-alpha: false !default;
 
 /*
- * Listado de sombras generadas por defecto
+ * Listado de sombras generadas por defecto - equivalentes a shadcn/ui
  */
 $shadows: (
   1: 1,
@@ -320,6 +392,15 @@ $shadows: (
   6: 6,
 ) !default;
 
+$shadows-shadcn: (
+  1: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+  2: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+  3: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+  4: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+  5: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+  6: "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+) !default;
+
 /*
  * ================ Tamaños ================
  */
@@ -327,7 +408,7 @@ $shadows: (
 /*
  * Tamaño del espacio base tomado como referencia en la aplicación
  */
-$space: 1.6 !default;
+$space: 1.6 !default; // 4px base unit
 
 /*
  * Listado de tamaños relativos al tamaño base
@@ -341,6 +422,48 @@ $sizes-relatives: (
   quadruple: 4,
   quintuple: 5,
   sextuple: 6,
+  none: 0,
+) !default;
+
+$sizes-relatives-shadcn: (
+  0: 0,
+  // 0px
+  1: 1,
+  // 4px
+  2: 2,
+  // 8px
+  3: 3,
+  // 12px
+  4: 4,
+  // 16px
+  5: 5,
+  // 20px
+  6: 6,
+  // 24px
+  8: 8,
+  // 32px
+  10: 10,
+  // 40px
+  12: 12,
+  // 48px
+  16: 16,
+  // 64px
+  20: 20,
+  // 80px
+  24: 24,
+  // 96px
+  32: 32,
+
+  // 128px
+  // Alias más semánticos
+  quarter: 1,
+  half: 2,
+  simple: 4,
+  double: 8,
+  triple: 12,
+  quadruple: 16,
+  quintuple: 20,
+  sextuple: 24,
   none: 0,
 ) !default;
 
@@ -365,13 +488,22 @@ $sizes-percentages: (
  * Listado de radios de los bordes de los elementos
  */
 $radiuses: (
-  xxsmall: pxToRem(3),
-  xsmall: pxToRem(4),
-  small: pxToRem(6),
-  medium: pxToRem(8),
-  large: pxToRem(12),
-  xlarge: pxToRem(16),
-  xxlarge: pxToRem(24),
+  none: 0,
+  sm: 0.125rem,
+  // 2px
+  default: 0.25rem,
+  // 4px
+  md: 0.375rem,
+  // 6px
+  lg: 0.5rem,
+  // 8px
+  xl: 0.75rem,
+  // 12px
+  2xl: 1rem,
+  // 16px
+  3xl: 1.5rem,
+  // 24px
+  full: 9999px, // Fully rounded
 ) !default;
 
 /*
@@ -383,12 +515,31 @@ $radiuses: (
  */
 $font-families: (
   body: (
+    "Geist Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
     sans-serif,
   ),
   header: (
-    serif,
+    "Geist Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif,
   ),
   mono: (
+    "Geist Mono",
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
     monospace,
   ),
 ) !default;
@@ -405,20 +556,23 @@ $font-families: (
  *   perfect-fifth: 1.5
  *   golden: 1.618
  */
-$modular-scale: 1.175 !default;
+$modular-scale: 1.125 !default; // Major second
 
 /*
  * Pesos tipográficos
  */
 $font-weights: (
-  ultralight: 100,
-  extralight: 200,
-  light: 300,
-  regular: 400,
+  normal: 400,
   medium: 500,
   semibold: 600,
   bold: 700,
   extrabold: 800,
+
+  // Alias legacy
+  ultralight: 100,
+  extralight: 200,
+  light: 300,
+  regular: 400,
   ultrabold: 900,
 ) !default;
 
@@ -426,33 +580,82 @@ $font-weights: (
  * Tamaños de fuentes
  */
 $font-sizes: (
-  h1: 5,
-  h2: 4,
-  h3: 3,
-  h4: 2,
-  h5: 1,
+  xs: -3,
+  // 0.75rem - 12px
+  sm: -2,
+  // 0.875rem - 14px
   base: 0,
-  small1: -1,
-  small2: -2,
+  // 1rem - 16px
+  lg: 1,
+  // 1.125rem - 18px
+  xl: 2,
+  // 1.25rem - 20px
+  // 2xl: 3,    // 1.5rem - 24px
+  // 3xl: 4,    // 1.875rem - 30px
+  // 4xl: 5,    // 2.25rem - 36px
+  // Alias para headings
+  h6: -1,
+  // small
+  h5: 0,
+  // base
+  h4: 1,
+  // lg
+  h3: 2,
+  // xl
+  h2: 3,
+  // 2xl
+  h1: 4,
+
+  // 3xl
+  // Alias legacy
+  small1: -2,
+  small2: -3,
 ) !default;
 
 /*
  * Alturas de linea
  */
 $leading: (
-  xxsmall: 0.55,
-  xsmall: 0.7,
-  small: 0.85,
-  medium: 1,
-  large: 1.15,
-  xlarge: 1.3,
-  xxlarge: 1.45,
+  3: 0.75,
+  // 12px
+  4: 1,
+  // 16px
+  5: 1.25,
+  // 20px
+  6: 1.5,
+  // 24px
+  7: 1.75,
+  // 28px
+  8: 2,
+
+  // 32px
+  // Semantic aliases
+  tight: 1.25,
+  normal: 1.5,
+  loose: 1.75,
+
+  // Legacy aliases
+  xxsmall: 1,
+  xsmall: 1.15,
+  small: 1.25,
+  medium: 1.5,
+  large: 1.75,
+  xlarge: 2,
+  xxlarge: 2.25,
 ) !default;
 
 /*
  * Separación entre caracteres
  */
 $traking: (
+  tighter: -0.05em,
+  tight: -0.025em,
+  normal: 0,
+  wide: 0.025em,
+  wider: 0.05em,
+  widest: 0.1em,
+
+  // Legacy aliases
   xxsmall: -0.1em,
   xsmall: -0.05em,
   small: -0.02em,
@@ -465,12 +668,12 @@ $traking: (
 /*
  * Color por defecto del cuerpo del texto
  */
-$font-base-color: gray3 !default;
+$font-base-color: gray2 !default;
 
 /*
  * Peso tipográfico por defecto del cuerpo del texto
  */
-$font-base-weight: regular !default;
+$font-base-weight: normal !default;
 
 /*
  * Color por defecto de los títulos
@@ -485,17 +688,12 @@ $font-header-weight: semibold !default;
 /*
  * Color de los marcadores en los listados
  */
-$list-markers-color: brand !default;
+$list-markers-color: primary !default;
 
 /*
  * Color del código
  */
-$font-code-color: gray3 !default;
-
-/*
- * Color de una entrada de teclado "kbd"
- */
-$kbd-background-color: gray8 !default;
+$font-code-color: gray2 !default;
 
 /*
  * ================ Guía de estilos ================
@@ -520,14 +718,16 @@ $font-style-guide: (
     small2,
   ),
   weights: (
-    regular,
+    normal,
+    medium,
     semibold,
+    bold,
   ),
   colors: (
     gray1,
     gray4,
-    brand,
-    danger,
+    primary,
+    destructive,
     success,
     warning,
   ),
@@ -540,13 +740,13 @@ $font-style-guide: (
  */
 
 $blurs: (
-  2xs: 4px,
-  xs: 8px,
-  sm: 12px,
-  md: 16px,
-  lg: 24px,
-  xl: 32px,
-  2xl: 48px,
+  sm: 4px,
+  default: 8px,
+  md: 12px,
+  lg: 16px,
+  xl: 24px,
+  2xl: 40px,
+  3xl: 64px,
 ) !default;
 
 /*
@@ -564,12 +764,12 @@ $cursors: (auto, default, pointer, wait, text, move, not-allowed) !default;
 /*
  * Duración de las transiciones por defecto
  */
-$transition-duration: 0.3s !default;
+$transition-duration: 150ms !default;
 
 /*
  * Tipo de transición por defecto
  */
-$transition-easing: ease-in-out !default;
+$transition-easing: cubic-bezier(0.4, 0, 0.2, 1) !default;
 
 /*
  * Listado de animaciones por defecto

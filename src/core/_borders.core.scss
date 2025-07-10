@@ -27,7 +27,7 @@
 
   // Compruebo si el valor pertenece al listado de anchuras de borde
   @if map.get($border-widths, $size) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--border-#{$size});
     }
 
@@ -48,9 +48,9 @@
  *   radius(lg) =>  1.125rem;
  */
 
-@function radius($radius: medium) {
+@function radius($radius: md) {
   @if map.get($radiuses, $radius) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--radius-#{$radius});
     }
 

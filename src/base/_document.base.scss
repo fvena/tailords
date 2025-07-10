@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 
 @if $enable-base {
   /*
@@ -18,7 +19,7 @@
      * Font foundation
      * Establishes baseline typography for the entire document
      */
-    font-family: $body-font-family;
+    font-family: $base-font-family-primary;
     font-size: 100%; // Respect user's browser font size preference
     line-height: 1.15; // Normalize line height across browsers
 
@@ -35,8 +36,8 @@
      * Layout foundation
      * Establishes document flow and box model
      */
-    box-sizing: border-box; // More intuitive box model
-    scroll-behavior: smooth; // Smooth scrolling for anchor links
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 
     /*
      * Accessibility improvements
@@ -65,26 +66,27 @@
      * Layout and positioning
      * Establishes main content container behavior
      */
-    margin: 0; // Remove default browser margins
-    padding: 0; // Remove default browser padding
-    min-height: 100vh; // Ensure full viewport height
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 
     /*
      * Typography foundation
      * Default text appearance for document content
      */
-    font-family: $body-font-family;
-    font-size: $body-font-size;
-    font-weight: $body-font-weight;
-    line-height: $body-line-height;
-    color: $body-text-color;
+    font-family: $base-font-family-primary;
+    font-size: $base-font-size-base;
+    font-weight: $base-font-weight-normal;
+    font-synthesis-weight: none; /* Prevents synthetic bold generation for better performance */
+    line-height: $base-line-height-normal;
+    color: $base-color-text;
 
     /*
      * Visual foundation
      * Default appearance and rendering
      */
-    background-color: $page-background-color;
-    text-rendering: optimizeSpeed; // Prioritize performance for body text
+    background-color: $base-color-background;
+    text-rendering: optimizeLegibility; /* Enhanced text rendering quality */
 
     /*
      * Interaction improvements
@@ -97,8 +99,8 @@
      * Responsive behavior
      * Prevent horizontal scrolling and improve mobile experience
      */
-    overflow-x: hidden; // Prevent horizontal scroll
-    word-wrap: break-word; // Prevent long words from breaking layout
+    overflow-x: hidden;
+    word-wrap: break-word;
   }
 
   /*
@@ -128,13 +130,20 @@
    * Modern focus indicators that only show for keyboard navigation
    */
   :focus {
-    outline: 2px solid transparent; // Reset default outline
+    outline: 2px solid transparent;
     outline-offset: 2px;
   }
 
   :focus-visible {
-    outline: 2px solid $input-focus-color; // Visible focus for keyboard navigation
+    outline: $base-focus-outline;
     outline-offset: 2px;
+  }
+
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
 
   /*
@@ -149,15 +158,10 @@
    * ================ Selection Styling ================
    * Text selection appearance
    */
-  ::selection {
-    background-color: rgba(221, 34, 78, 0.2); // Light brand color background
-    color: inherit;
-    text-shadow: none;
-  }
-
+  ::selection,
   ::-moz-selection {
-    background-color: rgba(221, 34, 78, 0.2);
-    color: inherit;
+    background-color: var(--selection);
+    color: var(--selection-foreground);
     text-shadow: none;
   }
 
@@ -177,9 +181,9 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
+      animation-duration: $base-reduced-motion-duration !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: $base-reduced-motion-duration !important;
       scroll-behavior: auto !important;
     }
   }
@@ -222,9 +226,18 @@
       color-scheme: dark;
     }
 
+    /*
+     * Automatic dark mode styling
+     * Respects user's system preference when no explicit theme is set
+     */
     body {
-      background-color: #121a1d; // Dark background
-      color: #f6f7f9; // Light text
+      background-color: var(--background);
+      color: var(--foreground);
+    }
+
+    ::selection {
+      background-color: var(--selection);
+      color: var(--selection-foreground);
     }
   }
 
@@ -238,13 +251,24 @@
      * Better paper output and ink conservation
      */
     html {
-      font-size: 12pt; // Standard print size
+      font-size: $base-print-font-size;
     }
 
     body {
       background: white !important;
       color: black !important;
-      line-height: 1.4; // Tighter line height for print
+      line-height: 1.4;
+    }
+  }
+
+  /*
+   * ================ Specialized Features ================
+   * Safari-specific styling with system font support
+   */
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    [data-wrapper] {
+      border-top: 1px solid var(--color-border);
+      min-height: 100vh; /* from min-[1800px]:border-t */
     }
   }
 }

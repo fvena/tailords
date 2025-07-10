@@ -108,7 +108,7 @@
   $color-stops: ();
 
   @each $key, $value in $scrim {
-    @if $css-variables == true and $color == $shadow-color {
+    @if $enable-css-variables == true and $color == $shadow-color {
       $color-stops: list.append(
         $color-stops,
         string.unquote("rgba(var(--shadow-color), #{$key * $opacity}) #{$value}"),

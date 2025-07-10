@@ -172,8 +172,8 @@ module.exports = {
 ```scss
 @use "tailords" as * with (
   // Framework behavior
-  $utility-class: true,
-  $css-variables: true,
+  $enable-utility-class: true,
+  $enable-css-variables: true,
   $enable-responsive: true,
 
   // Generate only what you need
@@ -188,7 +188,6 @@ module.exports = {
     ),
 
   $font-sizes: (xs: -2, sm: -1, base: 0, lg: 1, xl: 2, xxl: 3),
-
   $spacing: (xs: 0.25, sm: 0.5, md: 1, lg: 2, xl: 4)
 );
 ```

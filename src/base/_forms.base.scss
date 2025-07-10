@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 @use "../core/colors.core" as *;
 @use "../core/sizes.core" as *;
 
@@ -12,7 +13,6 @@
    * Ensures consistent typography across form elements
    */
   input,
-  button,
   select,
   textarea {
     font-family: inherit;
@@ -40,14 +40,16 @@
 
   /*
    * Text input and textarea styling
-   * Consistent appearance across text input types
+   * Consistent appearance across text input types - shadcn/ui style
    */
   input,
   textarea {
-    height: double();
-    padding: 0 simple();
-    line-height: double();
-    border: 1px solid color($border-color);
+    height: $base-input-height;
+    padding: 0 $base-spacing-md;
+    line-height: $base-input-height;
+    border: $base-border-width solid $base-color-border;
+    border-radius: $base-border-radius;
+    font-size: $base-font-size-base;
 
     /*
      * Focus state
@@ -55,7 +57,7 @@
      */
     &:focus {
       outline: none;
-      border-color: color(brand);
+      border-color: $base-color-accent;
     }
 
     /*
@@ -63,7 +65,7 @@
      * Subtle indication of expected input
      */
     &::placeholder {
-      color: color(gray3);
+      color: $base-color-muted;
       opacity: 1;
     }
 
@@ -73,7 +75,7 @@
      */
     &[disabled],
     &[readonly] {
-      color: color(gray4);
+      color: $base-color-muted;
       cursor: not-allowed;
       opacity: 1;
     }
@@ -101,7 +103,7 @@
     bottom: 1px;
     width: 1em;
     height: 1em;
-    margin-right: half();
+    margin-right: $base-spacing-sm;
     vertical-align: middle;
 
     /*

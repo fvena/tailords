@@ -68,7 +68,7 @@
       $opacity: math.div($hardness, 2 * ($size - $i + 4));
     }
 
-    @if $css-variables == true and $color == $shadow-color {
+    @if $enable-css-variables == true and $color == $shadow-color {
       $shadow:
         #{$shadow},
         #{$x}px #{$y}px #{$blur}px rgba(var(--shadow-color), $opacity);

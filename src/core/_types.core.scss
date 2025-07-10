@@ -45,7 +45,7 @@
 
   // Compruebo si el valor pertenece al listado de tamaños de texto
   @if map.get($font-sizes, $size) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--font-#{$size});
     }
 
@@ -82,7 +82,7 @@
 
   // Compruebo si el valor pertenece al listado de alturas de línea
   @if map.get($leading, $size) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--leading-#{$size});
     }
 
@@ -106,7 +106,7 @@
 @function font-weight($weight) {
   // Compruebo si el valor pertenece al listado de pesos tipográficos
   @if map.get($font-weights, $weight) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--font-#{$weight});
     }
 
@@ -130,7 +130,7 @@
 @function font-family($family) {
   // Compruebo si el valor pertenece al listados de familias
   @if map.get($font-families, $family) {
-    @if $css-variables == true {
+    @if $enable-css-variables == true {
       @return var(--font-#{$family});
     }
 

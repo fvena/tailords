@@ -28,7 +28,7 @@
     @error "[#{$size}] does not exist";
   }
 
-  @if $css-variables == true {
+  @if $enable-css-variables == true {
     @return calc(var(--space) * #{$value * 1rem});
   }
 

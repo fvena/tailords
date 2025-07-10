@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TailorDS - Base Elements Preview</title>
+
+    <style>
+      /* Container styling for better presentation */
+      .preview-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: rgba(var(--gray8), 1);
+      }
+
+      .section {
+        margin-bottom: 4rem;
+        padding: 2rem;
+        background-color: rgba(var(--white), 1);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: rgba(var(--gray1), 1);
+        margin-bottom: 2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(var(--brand), 1);
+      }
+
+      .example-group {
+        margin-bottom: 2rem;
+      }
+
+      .example-title {
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: rgba(var(--gray2), 1);
+        margin-bottom: 1rem;
+      }
+
+      .code-example {
+        background-color: rgba(var(--gray7), 1);
+        padding: 1rem;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid rgba(var(--brand), 1);
+      }
+
+      /* Table container for responsive tables */
+      .table-container {
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+
+      /* Form styling improvements */
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      /* Image gallery */
+      .image-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      /* Button showcase */
+      .button-showcase {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      /* Typography scale */
+      .typography-scale {
+        border-left: 3px solid rgba(var(--brand), 1);
+        padding-left: 1rem;
+        margin: 1rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-container">
+      <!-- Header -->
+      <header style="text-align: center; margin-bottom: 3rem">
+        <h1
+          style="
+            font-size: 3rem;
+            font-weight: 700;
+            color: rgba(var(--brand), 1);
+            margin-bottom: 0.5rem;
+          "
+        >
+          TailorDS Base Elements
+        </h1>
+        <p style="font-size: 1.25rem; color: rgba(var(--gray3), 1)">
+          Preview of all base HTML elements styled by the framework
+        </p>
+      </header>
+
+      <!-- Typography Section -->
+      <section class="section">
+        <h2 class="section-title">Typography</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Headings Hierarchy</h3>
+          <div class="typography-scale">
+            <h1>Heading 1 - Main Page Title</h1>
+            <h2>Heading 2 - Section Title</h2>
+            <h3>Heading 3 - Subsection Title</h3>
+            <h4>Heading 4 - Content Title</h4>
+            <h5>Heading 5 - Minor Title</h5>
+            <h6>Heading 6 - Small Title</h6>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Body Text & Emphasis</h3>
+          <p>
+            This is a regular paragraph with <strong>strong emphasis</strong> and
+            <em>italic emphasis</em>. You can also use <mark>highlighted text</mark> for important
+            information.
+          </p>
+          <p>
+            Here's a paragraph with <small>small text</small> and some <code>inline code</code>.
+            Mathematical expressions might include E=mc<sup>2</sup> or H<sub>2</sub>O.
+          </p>
+          <p class="caption">
+            This is caption text used for image descriptions and supplementary content.
+          </p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Blockquote</h3>
+          <blockquote>
+            <p>Design is not just what it looks like and feels like. Design is how it works.</p>
+            <footer>Steve Jobs</footer>
+          </blockquote>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Abbreviations & Special Text</h3>
+          <p>
+            The <abbr title="World Wide Web">WWW</abbr> was created by Tim Berners-Lee. You can
+            press <kbd>Ctrl</kbd> + <kbd>C</kbd> to copy text.
+          </p>
+        </div>
+
+        <hr />
+
+        <div class="example-group">
+          <h3 class="example-title">Text with Caption</h3>
+          <h2>Major Section Heading</h2>
+          <div class="caption">
+            This caption explains the context and provides additional information about the section
+            above.
+          </div>
+        </div>
+      </section>
+
+      <!-- Lists Section -->
+      <section class="section">
+        <h2 class="section-title">Lists</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Unordered Lists</h3>
+          <ul>
+            <li>First item in the list</li>
+            <li>
+              Second item with more content
+              <ul>
+                <li>Nested item one</li>
+                <li>Nested item two</li>
+              </ul>
+            </li>
+            <li>Third item</li>
+            <li>Fourth item</li>
+          </ul>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Ordered Lists</h3>
+          <ol>
+            <li>First step in the process</li>
+            <li>
+              Second step with details
+              <ol>
+                <li>Sub-step A</li>
+                <li>Sub-step B</li>
+              </ol>
+            </li>
+            <li>Third step</li>
+            <li>Final step</li>
+          </ol>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Definition Lists</h3>
+          <dl>
+            <dt>Design System</dt>
+            <dd>
+              A collection of reusable components, guided by clear standards, that can be assembled
+              together to build applications.
+            </dd>
+
+            <dt>SCSS</dt>
+            <dd>
+              Syntactically Awesome Style Sheets - a CSS preprocessor that adds features like
+              variables, nesting, and mixins.
+            </dd>
+
+            <dt>Utility-First</dt>
+            <dd>
+              A CSS approach where you compose designs by applying pre-existing classes rather than
+              writing custom CSS.
+            </dd>
+          </dl>
+        </div>
+      </section>
+
+      <!-- Code Section -->
+      <section class="section">
+        <h2 class="section-title">Code Elements</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Inline Code</h3>
+          <p>
+            To install the framework, run <code>npm install tailords</code> in your terminal. You
+            can import it with <code>@use "tailords" as *;</code> in your SCSS file.
+          </p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Code Blocks</h3>
+          <pre><code>// Example SCSS usage
+@use "tailords" as * with (
+  $theme: (
+    brand: #dd224e,
+    success: #77c23d,
+  ),
+  $enable-utility-class: true,
+  $enable-css-variables: true
+);
+
+.my-component {
+  background-color: color(brand);
+  padding: size(double);
+  border-radius: radius(medium);
+}</code></pre>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Keyboard Input</h3>
+          <p>
+            Use <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> on Mac or <kbd>Ctrl</kbd> +
+            <kbd>Shift</kbd> + <kbd>P</kbd> on Windows to open the command palette.
+          </p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Sample Output & Variables</h3>
+          <p>The command returned: <samp>Build completed successfully in 2.3s</samp></p>
+          <p>
+            In the equation <var>E</var> = <var>mc</var><sup>2</sup>, <var>E</var> represents
+            energy.
+          </p>
+        </div>
+      </section>
+
+      <!-- Forms Section -->
+      <section class="section">
+        <h2 class="section-title">Form Elements</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Text Inputs</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="text-input">Text Input</label>
+              <input type="text" id="text-input" placeholder="Enter your text here" />
+            </div>
+
+            <div class="form-group">
+              <label for="email-input">Email Input</label>
+              <input type="email" id="email-input" placeholder="your@email.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="password-input">Password Input</label>
+              <input type="password" id="password-input" placeholder="Your password" />
+            </div>
+
+            <div class="form-group">
+              <label for="search-input">Search Input</label>
+              <input type="search" id="search-input" placeholder="Search..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Textarea & Select</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="textarea">Message</label>
+              <textarea id="textarea" rows="4" placeholder="Enter your message here..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="select">Select Option</label>
+              <select id="select">
+                <option>Choose an option</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Checkboxes & Radio Buttons</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem">
+            <div>
+              <h4>Checkboxes</h4>
+              <label><input type="checkbox" checked /> Design System</label><br />
+              <label><input type="checkbox" /> Component Library</label><br />
+              <label><input type="checkbox" /> Style Guide</label><br />
+              <label><input type="checkbox" disabled /> Disabled Option</label>
+            </div>
+
+            <div>
+              <h4>Radio Buttons</h4>
+              <label
+                ><input type="radio" name="framework" value="tailords" checked /> TailorDS</label
+              ><br />
+              <label><input type="radio" name="framework" value="tailwind" /> Tailwind CSS</label
+              ><br />
+              <label><input type="radio" name="framework" value="bootstrap" /> Bootstrap</label
+              ><br />
+              <label
+                ><input type="radio" name="framework" value="other" disabled /> Other
+                (disabled)</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Form States</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="disabled-input">Disabled Input</label>
+              <input type="text" id="disabled-input" value="Disabled state" disabled />
+            </div>
+
+            <div class="form-group">
+              <label for="readonly-input">Readonly Input</label>
+              <input type="text" id="readonly-input" value="Readonly state" readonly />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Buttons Section -->
+      <section class="section">
+        <h2 class="section-title">Buttons</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Button Types</h3>
+          <div class="button-showcase">
+            <div class="button">Class Button</div>
+            <button>Default Button</button>
+            <input type="button" value="Input Button" />
+            <input type="submit" value="Input Submit" />
+            <input type="reset" value="Input Reset" />
+            <div role="button">Role Button</div>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Button States</h3>
+          <div class="button-showcase">
+            <button>Normal State</button>
+            <button>Active State</button>
+            <button disabled>Disabled State</button>
+            <button aria-invalid="true">Invalid State</button>
+            <button>Focus State</button>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Button Variants</h3>
+          <div class="button-showcase">
+            <button class="button--default">Default Button</button>
+            <button class="button--destructive">Destructive Button</button>
+            <button class="button--secondary">Secondary Button</button>
+            <button class="button--outline">Outline Button</button>
+            <button class="button--ghost">Ghost Button</button>
+            <button class="button--link">Link Button</button>
+            <button class="button--icon">Icon Button</button>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Button Sizes</h3>
+          <div class="button-showcase">
+            <button class="button--small">Small Button</button>
+            <button class="button--medium">Medium Button</button>
+            <button class="button--large">Large Button</button>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Form Integration</h3>
+          <form style="max-width: 400px">
+            <div class="form-group" style="margin-bottom: 1rem">
+              <label for="form-email">Email Address</label>
+              <input type="email" id="form-email" placeholder="your@email.com" />
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem">
+              <label for="form-password">Password</label>
+              <input type="password" id="form-password" placeholder="Your password" />
+            </div>
+            <button type="submit">Sign In</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Links Section -->
+      <section class="section">
+        <h2 class="section-title">Links</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Link Types</h3>
+          <p>
+            Here's a <a href="#typography">regular link</a> within text content. You can also have
+            <a href="https://example.com" target="_blank">external links</a> and
+            <a href="#" class="link">links with class="link"</a>.
+          </p>
+
+          <p>
+            Links can be <a href="#" disabled>disabled</a> to prevent interaction. Here's a
+            <a href="mailto:hello@example.com">email link</a> and a
+            <a href="tel:+1234567890">phone link</a>.
+          </p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Links with Images</h3>
+          <p>
+            <a href="#">
+              <img
+                src="https://picsum.photos/100/60"
+                alt="Sample linked image"
+                style="display: inline; margin-right: 8px"
+              />
+              This link contains an image
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <!-- Images Section -->
+      <section class="section">
+        <h2 class="section-title">Images & Media</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Responsive Images</h3>
+          <div class="image-gallery">
+            <img src="https://picsum.photos/300/200?random=1" alt="Sample responsive image 1" />
+            <img src="https://picsum.photos/300/200?random=2" alt="Sample responsive image 2" />
+            <img src="https://picsum.photos/300/200?random=3" alt="Sample responsive image 3" />
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Figure with Caption</h3>
+          <figure>
+            <img src="https://picsum.photos/600/300?random=4" alt="Beautiful landscape" />
+            <figcaption>
+              This is a figure caption that provides context and description for the image above.
+              Captions are styled differently from regular text to distinguish them.
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Image Containers with Aspect Ratios</h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 1rem;
+            "
+          >
+            <div class="image-container image-container--16-9">
+              <img src="https://picsum.photos/400/225?random=5" alt="16:9 aspect ratio" />
+            </div>
+            <div class="image-container image-container--4-3">
+              <img src="https://picsum.photos/400/300?random=6" alt="4:3 aspect ratio" />
+            </div>
+            <div class="image-container image-container--1-1">
+              <img src="https://picsum.photos/300/300?random=7" alt="1:1 aspect ratio" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tables Section -->
+      <section class="section">
+        <h2 class="section-title">Tables</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Data Table</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Framework</th>
+                  <th>Type</th>
+                  <th>Size</th>
+                  <th>Performance</th>
+                  <th>Customization</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>TailorDS</td>
+                  <td>SCSS Framework</td>
+                  <td>Small</td>
+                  <td>Excellent</td>
+                  <td>Full Control</td>
+                </tr>
+                <tr>
+                  <td>Tailwind CSS</td>
+                  <td>Utility-First</td>
+                  <td>Medium</td>
+                  <td>Good</td>
+                  <td>Limited</td>
+                </tr>
+                <tr>
+                  <td>Bootstrap</td>
+                  <td>Component</td>
+                  <td>Large</td>
+                  <td>Good</td>
+                  <td>Moderate</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Complex Table</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Basic Plan</th>
+                  <th>Pro Plan</th>
+                  <th>Enterprise</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Design Tokens</td>
+                  <td>Basic</td>
+                  <td>Advanced</td>
+                  <td>Custom</td>
+                </tr>
+                <tr>
+                  <td>Components</td>
+                  <td>20</td>
+                  <td>50</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td>Team Members</td>
+                  <td>5</td>
+                  <td>25</td>
+                  <td>Unlimited</td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <td>Support</td>
+                  <td>Email</td>
+                  <td>Priority</td>
+                  <td>Dedicated</td>
+                </tr>
+                <tr>
+                  <td>SLA</td>
+                  <td>-</td>
+                  <td>99.5%</td>
+                  <td>99.9%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Document Structure -->
+      <section class="section">
+        <h2 class="section-title">Document Structure</h2>
+
+        <div class="example-group">
+          <h3 class="example-title">Horizontal Rules</h3>
+          <p>Content above the horizontal rule.</p>
+          <hr />
+          <p>Content below the horizontal rule.</p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Selection Styling</h3>
+          <p>
+            Try selecting this text to see the custom selection styling. The framework provides
+            branded selection colors for better user experience.
+          </p>
+        </div>
+
+        <div class="example-group">
+          <h3 class="example-title">Focus Indicators</h3>
+          <p>
+            Tab through the form elements and buttons on this page to see the focus indicators. The
+            framework provides accessible focus styling for keyboard navigation.
+          </p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer
+        style="
+          text-align: center;
+          margin-top: 4rem;
+          padding: 2rem;
+          border-top: 1px solid rgba(var(--gray5), 1);
+        "
+      >
+        <p style="color: rgba(var(--gray3), 1)">
+          TailorDS Base Elements Preview -
+          <a href="../index.html">View Utilities Demo</a> |
+          <a href="https://fvena.github.io/tailords/">Documentation</a>
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

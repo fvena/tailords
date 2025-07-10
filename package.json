@@ -34,10 +34,7 @@
     "playground": "npm run dev --workspace=playground -- --force"
   },
   "lint-staged": {
-    "*": "prettier -w --ignore-unknown",
-    "*.scss": [
-      "stylelint --fix"
-    ]
+    "*": "prettier -w --ignore-unknown"
   },
   "keywords": [
     "scss",

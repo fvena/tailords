@@ -1,5 +1,7 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 @use "../core/responsive.core" as *;
+@use "../core/colors.core" as *;
 @use "../core/types.core" as *;
 @use "../core/sizes.core" as *;
 
@@ -16,7 +18,7 @@
   ul,
   dl {
     margin-top: 0;
-    margin-bottom: simple();
+    margin-bottom: $base-spacing-md;
   }
 
   /*
@@ -28,7 +30,7 @@
   ul ul,
   ol ul,
   ul ol {
-    margin-top: quarter();
+    margin-top: $base-spacing-xs;
     margin-bottom: 0;
   }
 
@@ -37,7 +39,7 @@
    * Emphasized styling for term definitions
    */
   dt {
-    font-weight: font-weight(bold);
+    font-weight: $base-font-weight-emphasis;
   }
 
   /*
@@ -45,7 +47,7 @@
    * Proper indentation and spacing
    */
   dd {
-    margin-bottom: spacers("1/2");
+    margin-bottom: $base-spacing-sm;
     margin-left: 0; // Deshace el valor predeterminado del navegador
   }
 
@@ -66,7 +68,7 @@
    */
   ul > li,
   ol > li {
-    margin-left: simple();
+    margin-left: $base-spacing-md;
   }
 
   /*
@@ -79,8 +81,8 @@
 
     li {
       position: relative;
-      padding-left: simple();
-      margin-bottom: quarter();
+      padding-left: $base-spacing-md;
+      margin-bottom: $base-list-item-spacing;
       margin-left: 0;
 
       /*
@@ -89,9 +91,9 @@
        */
       &::before {
         position: absolute;
-        left: quarter("-");
-        width: simple();
-        color: $list-markers-color;
+        left: -#{$base-spacing-xs};
+        width: $base-spacing-md;
+        color: $base-color-accent;
         text-align: right;
         content: counters(b, ".") " ";
         counter-increment: b;
@@ -103,8 +105,8 @@
        */
       img {
         display: block;
-        max-width: calc(100% - #{simple()});
-        margin: simple() auto;
+        max-width: calc(100% - #{$base-spacing-md});
+        margin: $base-spacing-md auto;
       }
     }
   }
@@ -119,8 +121,8 @@
 
     li {
       position: relative;
-      padding-left: simple();
-      margin-bottom: quarter();
+      padding-left: $base-spacing-md;
+      margin-bottom: $base-list-item-spacing;
       margin-left: 0;
 
       /*
@@ -136,7 +138,7 @@
         height: 6px;
         text-align: right;
         content: "";
-        background-color: $list-markers-color;
+        background-color: $base-color-accent;
         border-radius: 3px;
       }
     }
@@ -156,7 +158,7 @@
        * Reduced indentation on small screens
        */
       @include media(palm) {
-        margin-left: half();
+        margin-left: $base-spacing-sm;
       }
     }
 
@@ -165,7 +167,7 @@
      * Medium weight for visual distinction
      */
     dt {
-      font-weight: font-weight(medium);
+      font-weight: $base-font-weight-emphasis;
     }
 
     /*
@@ -173,7 +175,7 @@
      * Visual separation for readability
      */
     dd + dt {
-      padding-top: 1rem;
+      padding-top: $base-spacing-md;
     }
   }
 }

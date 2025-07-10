@@ -18,7 +18,7 @@
   /*
    * Si no se habilitan las utilidades de clases no se genera ninguna
    */
-  @if $utility-class == false {
+  @if $enable-utility-class == false {
     @return false;
   }
 
@@ -52,7 +52,7 @@
  */
 
 @function isVar($name, $value) {
-  @if $css-variables == true {
+  @if $enable-css-variables == true {
     @return var(#{$name});
   }
 

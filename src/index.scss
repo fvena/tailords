@@ -16,6 +16,7 @@
 @forward "core/types.core";
 
 // Base
+@forward "base/reset.base";
 @forward "base/button.base";
 @forward "base/code.base";
 @forward "base/document.base";
@@ -24,7 +25,6 @@
 @forward "base/links.base";
 @forward "base/list.base";
 @forward "base/print.base";
-@forward "base/reset.base";
 @forward "base/table.base";
 @forward "base/types.base";
 

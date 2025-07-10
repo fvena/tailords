@@ -1,12 +1,12 @@
 @use "tailords" as * with (
   $enable-base: true,
   $enable-reset: true,
-  $css-variables: true,
-  $utility-class: true,
+  $enable-css-variables: true,
+  $enable-utility-class: true,
   $excludes: (),
   $includes: (),
   $enable-responsive: true,
-  $useImportant: true,
+  $enable-important: true,
   $enable-hover: true,
   $medias: (
     palm,

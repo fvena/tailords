@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 
 @if $enable-base {
   /*
@@ -34,8 +35,8 @@
      * Better paper reading experience
      */
     body {
-      font-size: 12pt; // Standard print size
-      line-height: 1.4; // Tighter line height for print
+      font-size: $base-print-font-size;
+      line-height: 1.4;
       color: #000;
       background: #fff;
     }
@@ -51,7 +52,7 @@
     h5,
     h6 {
       color: #000;
-      page-break-after: avoid; // Keep headings with content
+      page-break-after: avoid;
     }
 
     h1 {
@@ -139,7 +140,7 @@
     .main-content,
     .content,
     article {
-      width: 100% !important;
+      width: $base-content-width !important;
       margin: 0 !important;
       padding: 0 !important;
       float: none !important;
@@ -155,7 +156,7 @@
      * Ensure images print well
      */
     img {
-      max-width: 100% !important;
+      max-width: $base-content-width !important;
       height: auto !important;
       page-break-inside: avoid;
     }
@@ -181,7 +182,7 @@
      */
     table {
       border-collapse: collapse !important;
-      width: 100% !important;
+      width: $base-content-width !important;
     }
 
     th,
@@ -232,8 +233,8 @@
      * Better text flow for reading
      */
     p {
-      orphans: 3; // Minimum lines at bottom of page
-      widows: 3; // Minimum lines at top of page
+      orphans: 3;
+      widows: 3;
     }
 
     /*

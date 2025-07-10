@@ -1,0 +1,51 @@
+// === ELEMENT: Button ===
+// Interactive button component with multiple visual variants, sizes, and accessibility features
+// Supports icon-only layouts and flexible content with Radix Slot pattern
+
+// BASE
+// Core button styling with consistent interaction patterns and accessibility
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* from gap-2 */
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem; /* from text-sm */
+  font-weight: 500; /* from font-medium */
+  transition: all 0.15s ease-in-out; /* from transition-all */
+  pointer-events: auto;
+  flex-shrink: 0;
+  outline: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*
+VARIABLES USED:
+--radius-md: calc(var(--radius) - 2px) // Medium border radius for consistent component rounding
+--color-primary: oklch(0.205 0 0) // Primary brand color for default button variant
+--color-primary-foreground: oklch(0.985 0 0) // High contrast text on primary background
+--color-destructive: oklch(0.577 0.245 27.325) // Destructive action color for dangerous operations
+--color-background: oklch(1 0 0) // Base background color for outlined buttons
+--color-border: oklch(0.922 0 0) // Border color for outlined button variant
+--color-accent: oklch(0.97 0 0) // Accent color for hover states and ghost buttons
+--color-accent-foreground: oklch(0.205 0 0) // Text color on accent backgrounds
+--color-secondary: oklch(0.97 0 0) // Secondary button background color
+--color-secondary-foreground: oklch(0.205 0 0) // Text color on secondary backgrounds
+--color-ring: oklch(0.708 0 0) // Focus ring color for accessibility compliance
+--color-input: oklch(0.922 0 0) // Input-related color used in dark mode variants
+
+HARDCODED VALUES THAT COULD BE VARIABLES:
+gap: 0.5rem; // Could be --button-gap-default from gap-2 class
+font-size: 0.875rem; // Could be --button-font-size from text-sm class
+font-weight: 500; // Could be --button-font-weight from font-medium class
+height: 2.25rem; // Could be --button-height-default from h-9 class
+height: 2rem; // Could be --button-height-small from h-8 class
+height: 2.5rem; // Could be --button-height-large from h-10 class
+width: 2.25rem; // Could be --button-size-icon from size-9 class
+gap: 0.375rem; // Could be --button-gap-small from gap-1.5 class
+opacity: 0.5; // Could be --button-opacity-disabled from disabled:opacity-50 class
+*/

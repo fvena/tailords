@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 @use "../core/colors.core" as *;
 @use "../core/types.core" as *;
 @use "../core/borders.core" as *;
@@ -14,12 +15,12 @@
    * Sets the baseline for all text rendering
    */
   body {
-    font-family: font(body);
-    font-size: font(base);
-    font-weight: font($font-base-weight);
-    line-height: leading(medium);
-    color: color($font-base-color);
-    background-color: color($page-background-color);
+    font-family: $base-font-family-primary;
+    font-size: $base-font-size-base;
+    font-weight: $base-font-weight-normal;
+    line-height: $base-line-height-normal;
+    color: $base-color-text;
+    background-color: $base-color-background;
   }
 
   /*
@@ -32,38 +33,38 @@
   h4,
   h5,
   h6 {
-    font-family: font(header);
-    font-weight: font($font-header-weight);
-    color: color($font-header-color);
+    font-family: $base-font-family-secondary;
+    font-weight: $base-font-weight-emphasis;
+    color: $base-color-emphasis;
+    line-height: $base-line-height-tight;
   }
 
   /*
    * Heading size scale
-   * Based on 1.175 modular scale for optimal visual hierarchy
-   * Values calculated: base * (1.175^scale-position)
+   * Based on modular scale for optimal visual hierarchy
    */
   h1 {
-    font-size: font(h1);
+    font-size: font-size(h1);
   }
 
   h2 {
-    font-size: font(h2);
+    font-size: font-size(h2);
   }
 
   h3 {
-    font-size: font(h3);
+    font-size: font-size(h3);
   }
 
   h4 {
-    font-size: font(h4);
+    font-size: font-size(h4);
   }
 
   h5 {
-    font-size: font(h5);
+    font-size: font-size(h5);
   }
 
   h6 {
-    font-size: font(base);
+    font-size: $base-font-size-base;
   }
 
   /*
@@ -71,7 +72,7 @@
    * Standard body text sizing
    */
   p {
-    font-size: font(base);
+    font-size: $base-font-size-base;
   }
 
   /*
@@ -81,8 +82,8 @@
   // Strong emphasis - higher weight for better readability
   b,
   strong {
-    font-weight: font(semibold);
-    color: color(gray2);
+    font-weight: $base-font-weight-emphasis;
+    color: $base-color-emphasis;
   }
 
   // Italic emphasis - semantic styling
@@ -97,9 +98,9 @@
    */
   small,
   .small {
-    font-size: font(small1);
+    font-size: $base-font-size-sm;
     font-style: normal;
-    font-weight: font(regular);
+    font-weight: $base-font-weight-normal;
   }
 
   /*
@@ -108,10 +109,10 @@
    */
   mark,
   .mark {
-    padding: quarter();
-    color: color(white);
-    background-color: color(brand);
-    border-radius: radius();
+    padding: $base-spacing-xs;
+    color: white;
+    background-color: $base-color-accent;
+    border-radius: $base-border-radius;
   }
 
   /*
@@ -119,10 +120,10 @@
    * For image captions and supplementary content
    */
   .caption {
-    font-family: font(body);
-    font-size: font(h5);
+    font-family: $base-font-family-primary;
+    font-size: $base-font-size-lg;
     font-style: italic;
-    color: color(gray4);
+    color: $base-color-muted;
   }
 
   /*
@@ -131,28 +132,28 @@
    */
   h1 + .caption,
   .h1 + .caption {
-    margin-top: half();
-    margin-bottom: simple();
-    font-size: font(h4);
+    margin-top: $base-spacing-sm;
+    margin-bottom: $base-spacing-md;
+    font-size: font-size(h4);
     font-style: normal;
-    line-height: leading(small);
+    line-height: $base-line-height-tight;
   }
 
   h2 + .caption,
   .h2 + .caption {
-    margin-top: half();
-    margin-bottom: simple();
-    font-size: font(h5);
+    margin-top: $base-spacing-sm;
+    margin-bottom: $base-spacing-md;
+    font-size: $base-font-size-lg;
     font-style: normal;
-    line-height: leading(small);
+    line-height: $base-line-height-tight;
   }
 
   h3 + .caption,
   .h3 + .caption {
-    margin-bottom: half();
-    font-size: font(base);
+    margin-bottom: $base-spacing-sm;
+    font-size: $base-font-size-base;
     font-style: normal;
-    line-height: leading(small);
+    line-height: $base-line-height-tight;
   }
 
   /*
@@ -171,15 +172,15 @@
    */
   blockquote,
   .blockquote {
-    margin: double() 0;
-    font-size: font(h5);
-    line-height: leading(small);
-    color: color(gray1);
+    margin: $base-spacing-lg 0;
+    font-size: $base-font-size-lg;
+    line-height: $base-line-height-tight;
+    color: $base-color-emphasis;
 
     p {
       padding-right: 30%;
-      font-size: font(h5);
-      line-height: leading(small);
+      font-size: $base-font-size-lg;
+      line-height: $base-line-height-tight;
     }
 
     p:last-of-type {
@@ -190,9 +191,9 @@
     > .footer {
       display: block;
       padding-right: 30%;
-      font-size: font(small1);
+      font-size: $base-font-size-sm;
       font-style: italic;
-      color: color(gray4);
+      color: $base-color-muted;
 
       &::before {
         content: "\2014 \00A0"; // em dash, nbsp
@@ -225,9 +226,9 @@
    * Section divider with proper spacing
    */
   hr {
-    margin-top: double();
-    margin-bottom: double();
-    border-top: var(--border-width) var(--border-style) color($border-color);
+    margin-top: $base-spacing-lg;
+    margin-bottom: $base-spacing-lg;
+    border-top: $base-border-width solid $base-color-border;
   }
 
   /*
@@ -244,6 +245,6 @@
   table,
   blockquote,
   pre {
-    margin-bottom: simple();
+    margin-bottom: $base-spacing-md;
   }
 }

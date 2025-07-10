@@ -1,4 +1,5 @@
 @use "../variables" as *;
+@use "../base.variables" as *;
 @use "../core/colors.core" as *;
 @use "../core/types.core" as *;
 @use "../core/borders.core" as *;
@@ -14,20 +15,20 @@
    * Full-width design with proper spacing
    */
   table {
-    width: 100%;
-    min-width: 100%;
-    margin-bottom: simple();
+    width: $base-content-width;
+    min-width: $base-content-width;
+    margin-bottom: $base-spacing-md;
     border-spacing: 0;
     border-collapse: separate;
   }
 
   /*
    * Cell styling foundation
-   * Consistent padding and alignment
+   * Consistent padding and alignment - shadcn/ui compact style
    */
   td,
   th {
-    padding: quarter();
+    padding: $base-table-cell-padding;
     vertical-align: top;
     border-bottom: 1px solid transparent;
   }
@@ -39,7 +40,7 @@
   th,
   td,
   tbody + tbody {
-    border-bottom-color: color(gray3);
+    border-bottom-color: $base-color-border;
   }
 
   /*
@@ -47,22 +48,22 @@
    * Professional appearance with emphasis
    */
   th {
-    font-size: font-size(small2);
-    font-weight: font-weight(bold);
+    font-size: $base-font-size-sm;
+    font-weight: $base-font-weight-emphasis;
     vertical-align: bottom;
-    color: color(gray1);
+    color: $base-color-emphasis;
     text-transform: uppercase;
     background-color: color(gray5);
-    border-top: 1px solid color(gray3);
-    border-bottom-color: color(gray3);
+    border-top: $base-border-width solid $base-color-border;
+    border-bottom-color: $base-color-border;
 
     /*
      * Rounded corner styling for first header cell
      * Professional table appearance
      */
     &:first-of-type {
-      border-left: 1px solid color(gray3);
-      border-radius: radius(medium) 0 0 radius(medium);
+      border-left: $base-border-width solid $base-color-border;
+      border-radius: $base-border-radius 0 0 $base-border-radius;
     }
 
     /*
@@ -70,8 +71,8 @@
      * Completes the header border design
      */
     &:last-of-type {
-      border-right: 1px solid color(gray3);
-      border-radius: 0 radius(medium) radius(medium) 0;
+      border-right: $base-border-width solid $base-color-border;
+      border-radius: 0 $base-border-radius $base-border-radius 0;
     }
   }
 
@@ -80,17 +81,17 @@
    * Readable content with proper hierarchy
    */
   td {
-    font-size: font-size(small1);
+    font-size: $base-font-size-sm;
     line-height: 1.4rem;
-    color: color(gray1);
-    border-bottom: 1px solid color(gray3);
+    color: $base-color-emphasis;
+    border-bottom: $base-border-width solid $base-color-border;
 
     /*
      * First column emphasis
      * Row headers or key data identification
      */
     &:first-of-type {
-      font-weight: font-weight(bold);
+      font-weight: $base-font-weight-emphasis;
       white-space: nowrap;
     }
   }

@@ -44,6 +44,35 @@ features:
 
 <div class="vp-doc homepage-content">
 
+## How TailorDS works
+
+TailorDS follows a simple, 3-step flow to keep your colors consistent and maintainable:
+
+```mermaid
+flowchart LR
+    A["1️⃣<br>Define your tokens<br>$colors / $spacing / …"]
+    B["2️⃣<br>Generate CSS variables<br>with provided mixins"]
+    C["3️⃣<br>Use everywhere<br>via helpers or utility classes"]
+
+    A --> B --> C
+
+    style A fill:#f5f5f5,stroke:#ccc,stroke-width:1px
+    style B fill:#f5f5f5,stroke:#ccc,stroke-width:1px
+    style C fill:#f5f5f5,stroke:#ccc,stroke-width:1px
+
+```
+
+**Define once, use everywhere — and seamlessly switch themes at runtime.**
+
+1. **Define your palette** <br>
+   Declare all the tokens your system needs in the appropriate Sass map (`$colors`, `$spacing`, `$typography`, etc.). Define primitives and optionally semantic tokens for meaning.
+
+2. **Generate CSS variables** <br>
+   Use the corresponding `generate-…-variables()` mixin to turn your tokens into CSS custom properties. These variables become the runtime source of truth and enable theme switching.
+
+3. **Use helpers and utilities** <br>
+   Always use the provided helper functions or generated utility classes. They resolve to the right CSS variable, keeping your UI consistent and easy to maintain.
+
 ## Every Framework Makes You Choose
 
 <div class="comparison-grid">

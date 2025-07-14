@@ -81,7 +81,8 @@ Only generate what you need:
     typography: (
         size,
         weight,
-      ), // .text-*, .font-*
+      ),
+    // .text-*, .font-*
   )
 );
 ```

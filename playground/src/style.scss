@@ -1,7 +1,14 @@
-@use "tailords" as * with (
-  $enable-base: true
+@use "config";
+@use "tailords-config" as * with (
+  $important: config.$important,
+  $prefix: config.$prefix,
+  $default-theme: config.$default-theme,
+  $colors: config.$colors,
+  $utilities: config.$utilities,
+  $templates: config.$templates
 );
 
-.section {
-  // color: color(destructive, 0.5);
+body {
+  color: color(brand, 12);
+  background-color: color(brand, 1);
 }

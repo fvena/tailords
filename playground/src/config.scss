@@ -1,0 +1,188 @@
+// ================================
+// TailorDS - Global configuration
+// ================================
+$important: true;
+$prefix: "tds";
+$default-theme: "light";
+
+// ================================
+// Utilities y Templates
+// ================================
+$utilities: (
+  colors: (
+    text,
+    background,
+    border,
+    fill,
+    stroke,
+  ),
+);
+
+$templates: (
+  colors: (
+    text: ".text-{color}",
+    background: ".bg-{color}",
+    border: ".border-{color}",
+    fill: ".fill-{color}",
+    stroke: ".stroke-{color}",
+  ),
+);
+
+// ================================
+// Colors by theme
+// ================================
+
+// Note: Each theme has the same internal categories: base, neutral, brand.
+// Alphabetical order of categories; logical order of keys within each category.
+
+$light: (
+  // Base colors
+  "white": oklch(1 0 0),
+  "black": oklch(0 0 0),
+  "red": (white),
+  "green": oklch(50% 0.1 277.7),
+  "blue": oklch(50% 0.1 277.7),
+  "yellow": oklch(50% 0.1 277.7),
+  "purple": oklch(50% 0.1 277.7),
+  "orange": oklch(50% 0.1 277.7),
+  "pink": oklch(50% 0.1 277.7),
+  // Neutral colors
+  neutral: (
+      "1": oklch(99.1% 0.0015 277.7),
+      "2": oklch(98.2% 0.003 277.7),
+      "3": oklch(95.6% 0.0045 277.7),
+      "4": oklch(93.1% 0.0061 277.7),
+      "5": oklch(91% 0.0077 277.7),
+      "6": oklch(88.8% 0.0093 277.7),
+      "7": oklch(85.3% 0.0117 277.7),
+      "8": oklch(79.4% 0.016 277.7),
+      "9": oklch(64.6% 0.0165 277.7),
+      "10": oklch(61% 0.0161 277.7),
+      "11": oklch(50.3% 0.0139 277.7),
+      "12": oklch(24.1% 0.0099 277.7),
+      a1: color(display-p3 0.0235 0.0235 0.349 / 0.012),
+      a2: color(display-p3 0.0235 0.0235 0.349 / 0.024),
+      a3: color(display-p3 0.0078 0.0667 0.2549 / 0.063),
+      a4: color(display-p3 0.0118 0.051 0.2157 / 0.095),
+      a5: color(display-p3 0.0039 0.0392 0.2 / 0.122),
+      a6: color(display-p3 0.0039 0.0275 0.1804 / 0.153),
+      a7: color(display-p3 0.0078 0.0275 0.1843 / 0.197),
+      a8: color(display-p3 0.0039 0.0314 0.1765 / 0.275),
+      a9: color(display-p3 0.0039 0.0196 0.1059 / 0.455),
+      a10: color(display-p3 0.0039 0.0196 0.098 / 0.499),
+      a11: color(display-p3 0 0.0078 0.0588 / 0.616),
+      a12: color(display-p3 0 0.0039 0.0275 / 0.883),
+      contrast: #ffffff,
+      surface: color(display-p3 1 1 1 / 80%),
+      indicator: oklch(64.6% 0.0165 277.7),
+      track: oklch(64.6% 0.0165 277.7),
+    ),
+
+  // Brand colors
+  brand: (
+      "1": oklch(99.3% 0.0075 211.7),
+      "2": oklch(98% 0.0139 211.7),
+      "3": oklch(96.1% 0.0334 211.7),
+      "4": oklch(93.6% 0.0498 211.7),
+      "5": oklch(90.3% 0.0652 211.7),
+      "6": oklch(86.1% 0.0808 211.7),
+      "7": oklch(80.6% 0.1004 211.7),
+      "8": oklch(72.9% 0.1347 211.7),
+      "9": oklch(86.1% 0.1438 211.7),
+      "10": oklch(83% 0.1453 211.7),
+      "11": oklch(52.6% 0.1438 211.7),
+      "12": oklch(35.1% 0.0801 211.7),
+      a1: color(display-p3 0.0235 0.8392 1 / 0.024),
+      a2: color(display-p3 0.0039 0.7373 0.9373 / 0.059),
+      a3: color(display-p3 0.0039 0.7765 0.9686 / 0.122),
+      a4: color(display-p3 0.0078 0.7451 0.9216 / 0.197),
+      a5: color(display-p3 0.0039 0.6824 0.8706 / 0.271),
+      a6: color(display-p3 0.0039 0.6431 0.8157 / 0.361),
+      a7: color(display-p3 0.0039 0.6118 0.7647 / 0.483),
+      a8: color(display-p3 0 0.5961 0.7529 / 0.667),
+      a9: color(display-p3 0 0.8314 0.9804 / 0.557),
+      a10: color(display-p3 0 0.7725 0.9608 / 0.604),
+      a11: color(display-p3 0 0.3333 0.4353 / 0.797),
+      a12: color(display-p3 0 0.1843 0.2392 / 0.899),
+      contrast: #04272d,
+      surface: color(display-p3 0.9333 0.9804 0.9922 / 0.8),
+      indicator: oklch(86.1% 0.1438 211.7),
+      track: oklch(86.1% 0.1438 211.7),
+    )
+);
+
+$dark: (
+  // Base colors
+  "white": oklch(1 0 0),
+  "black": oklch(0 0 0),
+  "red": oklch(50% 0.1 277.7),
+  "green": oklch(50% 0.1 277.7),
+  "blue": oklch(50% 0.1 277.7),
+  "yellow": oklch(50% 0.1 277.7),
+  "purple": oklch(50% 0.1 277.7),
+  "orange": oklch(50% 0.1 277.7),
+  "pink": oklch(50% 0.1 277.7),
+  // Neutral colors
+  neutral: (
+      "1": oklch(17.8% 0.0042 277.7),
+      "2": oklch(21.5% 0.004 277.7),
+      "3": oklch(25.5% 0.0055 277.7),
+      "4": oklch(28.4% 0.0075 277.7),
+      "5": oklch(31.4% 0.0089 277.7),
+      "6": oklch(35% 0.01 277.7),
+      "7": oklch(40.2% 0.0121 277.7),
+      "8": oklch(49.2% 0.0157 277.7),
+      "9": oklch(54% 0.0167 277.7),
+      "10": oklch(58.6% 0.0165 277.7),
+      "11": oklch(77% 0.0138 277.7),
+      "12": oklch(94.9% 0.0026 277.7),
+      a1: color(display-p3 0.0667 0.0667 0.9412 / 0.009),
+      a2: color(display-p3 0.8 0.8 0.9804 / 0.043),
+      a3: color(display-p3 0.851 0.898 0.9882 / 0.085),
+      a4: color(display-p3 0.8392 0.8706 1 / 0.122),
+      a5: color(display-p3 0.8471 0.8745 1 / 0.156),
+      a6: color(display-p3 0.8784 0.898 1 / 0.194),
+      a7: color(display-p3 0.8745 0.9059 0.9961 / 0.257),
+      a8: color(display-p3 0.8941 0.9059 1 / 0.37),
+      a9: color(display-p3 0.8902 0.9098 1 / 0.433),
+      a10: color(display-p3 0.902 0.9176 1 / 0.488),
+      a11: color(display-p3 0.9451 0.949 1 / 0.719),
+      a12: color(display-p3 0.9922 0.9922 1 / 0.937),
+      contrast: #ffffff,
+      surface: color(display-p3 0 0 0 / 5%),
+      indicator: oklch(54% 0.0167 277.7),
+      track: oklch(54% 0.0167 277.7),
+    ),
+
+  // Brand colors
+  brand: (
+      "1": oklch(17.8% 0.0322 211.7),
+      "2": oklch(21.3% 0.0378 211.7),
+      "3": oklch(27% 0.0772 211.7),
+      "4": oklch(31.9% 0.1043 211.7),
+      "5": oklch(36.8% 0.1181 211.7),
+      "6": oklch(42.1% 0.1291 211.7),
+      "7": oklch(48.4% 0.1446 211.7),
+      "8": oklch(55.7% 0.1704 211.7),
+      "9": oklch(83.5% 0.1453 211.7),
+      "10": oklch(80.3% 0.1453 211.7),
+      "11": oklch(79% 0.1666 211.7),
+      "12": oklch(92.4% 0.0868 211.7),
+      a1: color(display-p3 0 0.5922 0.9843 / 0.03),
+      a2: color(display-p3 0 0.6667 0.9961 / 0.072),
+      a3: color(display-p3 0.0196 0.7373 1 / 0.164),
+      a4: color(display-p3 0.1569 0.7961 1 / 0.227),
+      a5: color(display-p3 0.2314 0.8275 1 / 0.29),
+      a6: color(display-p3 0.2824 0.8392 1 / 0.366),
+      a7: color(display-p3 0.3176 0.8392 1 / 0.458),
+      a8: color(display-p3 0.3529 0.8549 1 / 0.568),
+      a9: color(display-p3 0.4078 0.8863 1 / 0.984),
+      a10: color(display-p3 0.4 0.8784 1 / 0.937),
+      a11: color(display-p3 0.3961 0.8706 1 / 0.937),
+      a12: color(display-p3 0.7059 0.9647 1 / 0.992),
+      contrast: #04272d,
+      surface: color(display-p3 0 0.1569 0.1961 / 0.5),
+      indicator: oklch(83.5% 0.1453 211.7),
+      track: oklch(83.5% 0.1453 211.7),
+    )
+);

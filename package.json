@@ -25,7 +25,7 @@
     "format": "prettier --write .",
     "lint": "stylelint 'src/**/*.scss'",
     "lint:fix": "stylelint 'src/**/*.scss' --fix",
-    "test": "sass-true",
+    "test": "sass test/colors.core.spec.scss > /dev/null",
     "prepare": "husky",
     "semantic-release": "semantic-release",
     "docs:dev": "vitepress dev docs",
@@ -77,7 +77,8 @@
     "sass-true": "^9.0.0",
     "semantic-release": "^24.2.6",
     "stylelint": "^16.21.0",
-    "vitepress": "^1.6.3"
+    "vitepress": "^1.6.3",
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
     "sass": "^1.0.0"

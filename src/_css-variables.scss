@@ -1,0 +1,180 @@
+/// =============================================================================
+/// TAILORDS - GENERADOR DE VARIABLES CSS
+/// =============================================================================
+///
+/// Sistema para generar variables CSS de todas las foundations.
+/// Maneja themes para colores y generación directa para otras foundations.
+///
+
+@use "common" as *;
+@use "config" as *;
+
+/// =============================================================================
+/// GENERACIÓN DE PROPIEDADES PARA FOUNDATIONS ESPECÍFICAS
+/// =============================================================================
+
+/// Generates CSS custom properties for colors in a nested map
+/// @param {Map} $map - The map to process
+/// @param {String} $prefix - The current path prefix for variable names
+@mixin generate-color-properties($map, $prefix: "") {
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", "#{$key}", "#{$prefix}-#{$key}");
+
+    @if is-color($value) {
+      $default-color: map.get($colors, $default-theme, string.split($property-name, "-")...);
+
+      @if not $default-color {
+        @warn "generate-color-properties(): Color '#{$property-name}' will be ignored because it doesn't exist in the default theme '#{$default-theme}'.";
+      } @else {
+        --color-#{$property-name}: #{$value};
+      }
+    } @else if meta.type-of($value) == "list" {
+      // Handle color references - check if the path exists and resolves to a color
+      $referenced-color: map.get($colors, $default-theme, $value...);
+
+      @if $referenced-color and is-color($referenced-color) {
+        // Generate CSS variable reference using the path
+        $reference-path: string-join($value, "-");
+        --color-#{$property-name}: var(--color-#{$reference-path});
+      } @else {
+        @warn "generate-color-properties(): Color reference '#{$property-name}' (#{$value}) will be ignored because it doesn't exist in the default theme '#{$default-theme}'.";
+      }
+    } @else if is-map($value) {
+      @include generate-color-properties($value, $property-name);
+    }
+  }
+}
+
+/// Generates CSS custom properties for a generic foundation (spacing, typography, etc.)
+/// @param {Map} $map - The map to process
+/// @param {String} $foundation - Foundation name (for variable prefix)
+/// @param {String} $prefix - The current path prefix for variable names
+@mixin generate-foundation-properties($map, $foundation, $prefix: "") {
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", "#{$key}", "#{$prefix}-#{$key}");
+
+    @if is-map($value) {
+      @include generate-foundation-properties($value, $foundation, $property-name);
+    } @else {
+      // Any value type - generate CSS variable
+      --#{$foundation}-#{$property-name}: #{$value};
+    }
+  }
+}
+
+/// =============================================================================
+/// GENERADORES DE VARIABLES POR FOUNDATION
+/// =============================================================================
+
+/// Generates CSS custom properties for all color themes defined in $colors
+@mixin generate-color-variables() {
+  @include validate-foundation("colors", true);
+
+  // Generate CSS selectors and properties for each theme
+  @each $theme-name, $theme-colors in $colors {
+    // Build selectors for the current theme
+    $selectors: ();
+
+    // Add :root selector only for default theme
+    @if $theme-name == $default-theme {
+      $selectors: list.append($selectors, ":root", "comma");
+    }
+
+    // Add class selector
+    $selectors: list.append($selectors, ".#{$theme-name}-theme", "comma");
+
+    // Add data attribute selector
+    $selectors: list.append($selectors, '[data-theme="#{$theme-name}"]', "comma");
+
+    // Generate the CSS rule with all selectors
+    #{$selectors} {
+      --COLORS------------------------: 12;
+      @include generate-color-properties($theme-colors);
+    }
+  }
+}
+
+/// Generates CSS custom properties for spacing tokens
+@mixin generate-spacing-variables() {
+  @include validate-foundation("spacing");
+
+  :root {
+    --SPACING-----------------------: 12;
+    @include generate-foundation-properties($spacing, "spacing");
+  }
+}
+
+/// Generates CSS custom properties for typography tokens
+@mixin generate-typography-variables() {
+  @include validate-foundation("typography");
+
+  :root {
+    --TYPOGRAPHY--------------------: 12;
+    @include generate-foundation-properties($typography, "typography");
+  }
+}
+
+/// =============================================================================
+/// GENERADOR MAESTRO
+/// =============================================================================
+
+/// Generates all CSS custom properties for all configured foundations
+@mixin generate-all-variables() {
+  // Generate colors (with theme support)
+  @if get-foundation-data("colors") {
+    @include generate-color-variables();
+  }
+
+  // Generate spacing
+  @if get-foundation-data("spacing") {
+    @include generate-spacing-variables();
+  }
+
+  // Generate typography
+  @if get-foundation-data("typography") {
+    @include generate-typography-variables();
+  }
+}
+
+/// =============================================================================
+/// GENERADOR GENÉRICO (PARA FOUNDATIONS PERSONALIZADAS)
+/// =============================================================================
+
+/// Generic foundation variable generator for custom foundations
+/// @param {String} $foundation-name - Name of the foundation
+/// @param {Map} $foundation-data - The foundation data map
+/// @param {Boolean} $use-themes - Whether this foundation supports themes
+@mixin generate-custom-foundation-variables(
+  $foundation-name,
+  $foundation-data,
+  $use-themes: false
+) {
+  @if not is-map($foundation-data) {
+    @error "generate-custom-foundation-variables(): Foundation data must be a map.";
+  }
+
+  @if $use-themes {
+    // Handle themes (similar to colors)
+    @each $theme-name, $theme-data in $foundation-data {
+      $selectors: ();
+
+      @if $theme-name == $default-theme {
+        $selectors: list.append($selectors, ":root", "comma");
+      }
+
+      $selectors: list.append($selectors, ".#{$theme-name}-theme", "comma");
+      $selectors: list.append($selectors, '[data-theme="#{$theme-name}"]', "comma");
+
+      #{$selectors} {
+        --#{string.to-upper-case($foundation-name)}------------------------: 12;
+        @include generate-foundation-properties($theme-data, $foundation-name);
+      }
+    }
+  } @else {
+    // Handle direct foundation (like spacing, typography)
+    :root {
+      --#{string.to-upper-case($foundation-name)}------------------------: 12;
+      @include generate-foundation-properties($foundation-data, $foundation-name);
+    }
+  }
+}

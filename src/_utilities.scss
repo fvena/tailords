@@ -1,0 +1,206 @@
+/// =============================================================================
+/// GENERADOR GENÉRICO DE UTILITIES PARA TAILORDS
+/// =============================================================================
+///
+/// Sistema flexible para generar utilities classes para cualquier foundation
+/// (colors, spacing, typography, etc.) manteniendo siempre la referencia a
+/// variables CSS como única fuente de verdad.
+///
+
+/// Configuración de mappings por foundation
+/// Define qué propiedades CSS controla cada utility de cada foundation
+$foundation-utility-mappings: (
+  colors: (
+    "text": "color",
+    "background": "background-color",
+    "border": "border-color",
+    "fill": "fill",
+    "stroke": "stroke",
+  ),
+  spacing: (
+    "margin": "margin",
+    "margin-top": "margin-top",
+    "margin-right": "margin-right",
+    "margin-bottom": "margin-bottom",
+    "margin-left": "margin-left",
+    "margin-x": (
+      "margin-left",
+      "margin-right",
+    ),
+    "margin-y": (
+      "margin-top",
+      "margin-bottom",
+    ),
+    "padding": "padding",
+    "padding-top": "padding-top",
+    "padding-right": "padding-right",
+    "padding-bottom": "padding-bottom",
+    "padding-left": "padding-left",
+    "padding-x": (
+      "padding-left",
+      "padding-right",
+    ),
+    "padding-y": (
+      "padding-top",
+      "padding-bottom",
+    ),
+    "gap": "gap",
+  ),
+  typography: (
+    "size": "font-size",
+    "weight": "font-weight",
+    "family": "font-family",
+    "line-height": "line-height",
+    "letter-spacing": "letter-spacing",
+  ),
+);
+
+/// Recursively collects all token paths from a nested foundation map
+/// @param {Map} $map - The map to process
+/// @param {String} $foundation - Foundation name for validation
+/// @param {String} $prefix - The current path prefix
+/// @param {List} $token-paths - Accumulated list of token paths
+/// @returns {List} List of all token paths in the map
+/// @example
+///   $map: (
+///     'colors': (
+///       'primary': 'red',
+///       'secondary': 'blue'
+///     )
+///   );
+///   collect-token-paths($map) => ('colors-primary', 'colors-secondary')
+@function collect-token-paths($map, $prefix: "", $token-paths: ()) {
+  @if not is-map($map) {
+    @return $token-paths;
+  }
+
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", $key, $prefix + "-" + $key);
+
+    @if is-map($value) {
+      // Es un mapa anidado, seguir explorando
+      $token-paths: collect-token-paths($value, $property-name, $token-paths);
+    } @else {
+      // Es un valor final (cualquier tipo), añadir el path
+      $token-paths: list.append($token-paths, $property-name, "comma");
+    }
+  }
+
+  @return $token-paths;
+}
+
+/// =============================================================================
+/// GENERADOR GENÉRICO DE UTILITY CLASSES
+/// =============================================================================
+
+/// Generates utility classes for any foundation from the default theme
+/// @param {String} $foundation - Foundation name (colors, spacing, typography, etc.)
+/// @param {String|List} $css-properties - CSS property/properties to set
+/// @param {String} $template - Class name template with placeholder
+/// @param {String} $placeholder - Placeholder to replace in template (default: based on foundation)
+@mixin generate-foundation-utilities($foundation, $css-properties, $template, $placeholder: null) {
+  // Determine placeholder based on foundation if not provided
+  @if not $placeholder {
+    $placeholder: if(
+      $foundation == "colors",
+      "{color}",
+      if($foundation == "spacing", "{size}", if($foundation == "typography", "{value}", "{token}"))
+    );
+  }
+
+  // Get foundation data from global variables
+  $foundation-data: null;
+  @if $foundation == "colors" {
+    // Validate that the default theme exists for colors
+    @if not map.has-key($colors, $default-theme) {
+      @error "generate-foundation-utilities(): The default theme '#{$default-theme}' does not exist in '$colors'.";
+    }
+
+    // Get default theme data for colors
+    $foundation-data: map.get($foundation-data, $default-theme);
+  } @else if $foundation == "spacing" {
+    $foundation-data: $spacing;
+  } @else if $foundation == "typography" {
+    $foundation-data: $typography;
+  } @else {
+    @error "generate-foundation-utilities(): Foundation '#{$foundation}' not supported. Add it to the function.";
+  }
+
+  // Validate foundation data exists
+  @if not is-map($foundation-data) {
+    @error "generate-foundation-utilities(): The variable '$#{$foundation}' must be a map.";
+  }
+
+  // Validate template contains placeholder
+  @if not string.index($template, $placeholder) {
+    @error "generate-foundation-utilities(): The template '#{$template}' must contain a '#{$placeholder}' placeholder.";
+  }
+
+  // Collect all token paths from the foundation data
+  $token-paths: collect-token-paths($foundation-data, $foundation);
+
+  // Generate utility class for each token
+  @each $token-path in $token-paths {
+    // Replace placeholder with the actual token path
+    $class-name: string-replace($template, $placeholder, $token-path);
+
+    // Generate the CSS class
+    #{$class-name} {
+      // Handle multiple properties (like margin-x, padding-y)
+      @if meta.type-of($css-properties) == "list" {
+        @each $property in $css-properties {
+          #{$property}: var(--#{$foundation}-#{$token-path});
+        }
+      } @else {
+        #{$css-properties}: var(--#{$foundation}-#{$token-path});
+      }
+    }
+  }
+}
+
+/// =============================================================================
+/// SISTEMA AUTOMÁTICO DE GENERACIÓN
+/// =============================================================================
+
+/// Generates all configured utilities for a specific foundation
+/// @param {String} $foundation - Foundation name (colors, spacing, typography)
+@mixin generate-all-foundation-utilities($foundation) {
+  // Get foundation mappings
+  $foundation-map: map.get($foundation-utility-mappings, $foundation);
+
+  @if not $foundation-map {
+    @warn "generate-all-foundation-utilities(): No mappings found for foundation '#{$foundation}'.";
+    @return;
+  }
+
+  // Get foundation utilities (merged templates)
+  $foundation-utilities: map.get($utilities, $foundation);
+
+  @if not $foundation-utilities {
+    @warn "generate-all-foundation-utilities(): No utilities configured for foundation '#{$foundation}'.";
+    @return; // No utilities configured for this foundation
+  }
+
+  // Generate utilities for each configured utility type
+  @each $property-name, $css-properties in $foundation-map {
+    $property-template: map.get($foundation-utilities, $property-name);
+
+    @if not $property-template {
+      @warn "generate-all-foundation-utilities(): No template found for utility '#{$property-name}' in foundation '#{$foundation}'.";
+      @return;
+    }
+
+    @include generate-foundation-utilities($foundation, $css-properties, $property-template);
+  }
+}
+
+/// =============================================================================
+/// GENERACIÓN AUTOMÁTICA DE TODAS LAS UTILITIES
+/// =============================================================================
+
+/// Master mixin that generates all utilities for all configured foundations
+@mixin generate-all-utilities() {
+  @each $foundation in map.keys($foundation-utility-mappings) {
+    @include generate-all-foundation-utilities($foundation);
+  }
+}

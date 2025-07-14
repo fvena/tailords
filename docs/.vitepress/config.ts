@@ -9,20 +9,35 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
-      { text: "Documentation", link: "/getting-started/" },
+      { text: "Documentation", link: "/docs/getting-started/" },
+      { text: "Guides", link: "/guides/" },
     ],
 
     sidebar: {
-      "/": [
-        { text: "Getting Started", link: "/getting-started/" },
+      "/docs/": [
+        { text: "Vision", link: "/docs/vision" },
+        { text: "Getting Started", link: "/docs/getting-started" },
         {
-          text: "Design Foundations",
-          items: [{ text: "Colors", link: "/foundations/colors" }],
+          text: "Foundations",
+          items: [
+            { text: "Colors", link: "/docs/colors" },
+            // Espacio para spacing, typography más adelante
+          ],
+        },
+      ],
+
+      "/guides/": [
+        {
+          text: "Guides",
+          items: [
+            { text: "Build Colors", link: "/guides/build-colors" },
+            // Espacio para spacing, typography más adelante
+          ],
         },
       ],
     },
 
     socialLinks: [{ icon: "github", link: "https://github.com/fvena/tailords" }],
   },
-  title: "tailorDS - Design System",
+  title: "tailorDS",
 });

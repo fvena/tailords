@@ -1,0 +1,116 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+@use "sass:list";
+@use "../config" as *;
+
+// =============================================================================
+// TailorDS - COMMONS CORE
+// =============================================================================
+//
+// Description: Shared utility functions for TailorDS core modules
+//
+// This module provides common helper functions used across different TailorDS
+// core modules. It includes utilities for type checking, configuration validation,
+// and utility template management that support the main functionality of color,
+// typography, spacing, and other design token systems.
+//
+// Key functions:
+//   - is-map(): Type checking for Sass map values
+//   - has-utilities(): Validates foundation utility configuration
+//   - get-utility-template(): Retrieves utility class templates
+//
+// These functions ensure consistent behavior and validation across all
+// TailorDS modules while providing a clean API for utility class generation
+// and configuration management.
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// TYPE CHECKING UTILITIES
+// -----------------------------------------------------------------------------
+// Helper functions for validating Sass data types
+
+/// Helper function to check if a value is a map
+///
+/// @param {Any} $value - The value to check
+/// @returns {Boolean} True if the value is a map, false otherwise
+///
+@function is-map($value) {
+  @return meta.type-of($value) == "map";
+}
+
+// -----------------------------------------------------------------------------
+// UTILITY CONFIGURATION HELPERS
+// -----------------------------------------------------------------------------
+// Functions for working with $utilities configuration and template management
+
+/// Checks if a foundation exists and is not empty in $utilities
+///
+/// Validates that a foundation (colors, spacing, typography, etc.) is properly
+/// configured in the $utilities map and contains at least one utility definition.
+/// This prevents generation of empty utility sections and provides clean error handling.
+///
+/// @param {String} $foundation - Foundation name (colors, spacing, typography)
+/// @returns {Boolean} True if foundation exists and contains utilities, false otherwise
+///
+/// @example scss
+///   @if has-utilities('colors') {
+///     @include generate-color-utilities();
+///   }
+///
+@function has-utilities($foundation) {
+  @return map.has-key($utilities, $foundation) and is-map(map.get($utilities, $foundation)) and
+    list.length(map.get($utilities, $foundation)) > 0;
+}
+
+/// Gets a specific utility template if it exists
+///
+/// Retrieves the template string for a specific utility type within a foundation.
+/// Templates contain placeholders (like {color}, {size}) that are replaced with
+/// actual token names during utility class generation. Returns null if the
+/// utility is not configured, allowing for graceful handling of missing utilities.
+///
+/// @param {String} $foundation - Foundation name (colors, spacing, typography)
+/// @param {String} $utility - Utility name (text, background, border, margin, etc.)
+/// @returns {String|null} The template string with placeholders, or null if not found
+///
+/// @example scss
+///   $template: get-utility-template('colors', 'text');     // → '.text-{color}' or null
+///   $template: get-utility-template('spacing', 'margin');  // → '.m-{direction}-{size}' or null
+///
+@function get-utility-template($foundation, $utility) {
+  $foundation-utilities: map.get($utilities, $foundation);
+
+  @if $foundation-utilities and map.has-key($foundation-utilities, $utility) {
+    @return map.get($foundation-utilities, $utility);
+  }
+
+  @return null;
+}
+
+// -----------------------------------------------------------------------------
+// STRING MANIPULATION
+// -----------------------------------------------------------------------------
+// Functions for manipulating strings
+
+/// Replace all occurrences of $search with $replace in $string
+///
+/// @param {String} $string - The string to search in
+/// @param {String} $search - The substring to search for
+/// @param {String} $replace - The replacement substring
+/// @returns {String} The string with replacements made
+///
+@function string-replace($string, $search, $replace: "") {
+  $result: $string;
+  $index: string.index($result, $search);
+
+  @while $index {
+    $before: if($index > 1, string.slice($result, 1, $index - 1), "");
+    $after: string.slice($result, $index + string.length($search));
+    $result: $before + $replace + $after;
+    $index: string.index($result, $search);
+  }
+
+  @return $result;
+}

@@ -1,0 +1,709 @@
+// =============================================================================
+// TailorDS - COLORS TESTS
+// =============================================================================
+//
+// Description: Comprehensive test suite for color functions and mixins
+//
+// =============================================================================
+
+@use "sass:meta";
+@use "sass:map";
+@use "sass:string";
+@use "sass:list";
+@use "../node_modules/sass-true" as *;
+
+// Opcional: configurar salida terminal
+$terminal-output: true;
+
+// Test data setup
+$test-colors: (
+  light: (
+    primary: (
+      base: #1d4ed8,
+      light: #3b82f6,
+      dark: #1e40af,
+      variants: (
+        "50": #eff6ff,
+        "100": #dbeafe,
+        "200": #bfdbfe,
+      ),
+    ),
+    secondary: (
+      base: #f59e0b,
+      light: #fbbf24,
+    ),
+    neutral: (
+      "white": #ffffff,
+      "black": #000000,
+      "gray": (
+        "100": #f3f4f6,
+        "200": #e5e7eb,
+        "300": #d1d5db,
+      ),
+    ),
+    status: (
+      success: #10b981,
+      error: #ef4444,
+    ),
+    // Color references
+    background: (
+        primary,
+        variants,
+        "50",
+      ),
+    surface: (
+      neutral,
+      "white",
+    ),
+    invalid-reference: (
+      nonexistent,
+      color,
+    ),
+  ),
+  dark: (
+    primary: (
+      base: #3b82f6,
+      light: #60a5fa,
+      variants: (
+        "50": #1e3a8a,
+        "100": #1e40af,
+      ),
+    ),
+    secondary: (
+      base: #f59e0b,
+    ),
+    neutral: (
+      "white": #1f2937,
+      "black": #f9fafb,
+      "gray": (
+        "100": #1f2937,
+        "200": #374151,
+      ),
+    ),
+    status: (
+      success: #34d399,
+    ),
+    background: (
+      primary,
+      variants,
+      "50",
+    ),
+    surface: (
+      neutral,
+      "white",
+    ),
+    // Color that doesn't exist in light theme
+    extra-color: #ff0000,
+  ),
+);
+
+$test-default-theme: "light";
+
+@use "../src/tokens/_colors.tokens" as * with (
+  $colors: $test-colors
+);
+
+@use "../src/config" as * with (
+  $default-theme: $test-default-theme
+);
+
+@use "../src/core/_colors.core" as colors;
+
+// Test rápido
+$test-list: (primary, variants, 50);
+$test-result: string.join($test-list, "-");
+@debug "Test result: #{$test-result}"; // Debería mostrar: "primary-variants-50"
+
+// =============================================================================
+// PRIVATE FUNCTIONS TESTS
+// =============================================================================
+
+@include test-module("Private Functions") {
+  // -------------------------------------------------------------------------
+  // is-color() function tests
+  // -------------------------------------------------------------------------
+
+  @include test("is-color() function") {
+    @include assert-true(colors.is-color(#ff0000), "Should return true for hex color");
+    @include assert-true(colors.is-color(rgb(255, 0, 0)), "Should return true for rgb color");
+    @include assert-true(colors.is-color(hsl(0, 100%, 50%)), "Should return true for hsl color");
+    @include assert-false(colors.is-color("red"), "Should return false for string");
+    @include assert-false(colors.is-color(16px), "Should return false for number");
+    @include assert-false(colors.is-color(()), "Should return false for list");
+    @include assert-false(
+      colors.is-color(
+        (
+          key: value,
+        )
+      ),
+      "Should return false for map"
+    );
+    @include assert-false(colors.is-color(null), "Should return false for null");
+  }
+
+  // -------------------------------------------------------------------------
+  // collect-color-paths() function tests
+  // -------------------------------------------------------------------------
+
+  @include test("collect-color-paths() function") {
+    $simple-map: (
+      "red": #ff0000,
+      "blue": #0000ff,
+    );
+
+    $nested-map: (
+      primary: (
+        base: #1d4ed8,
+        light: #3b82f6,
+      ),
+      secondary: (
+        base: #f59e0b,
+      ),
+    );
+
+    $map-with-references: (
+      primary: (
+        base: #1d4ed8,
+      ),
+      background: (
+        primary,
+        base,
+      ),
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths($simple-map),
+      (red, blue),
+      "Should collect simple color paths"
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths($nested-map),
+      (primary-base, primary-light, secondary-base),
+      "Should collect nested color paths"
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths($map-with-references),
+      (primary-base, background),
+      "Should collect paths including references"
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths("not-a-map"),
+      (),
+      "Should return empty list for non-map input"
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths(()),
+      (),
+      "Should return empty list for empty map"
+    );
+  }
+}
+
+// =============================================================================
+// PUBLIC FUNCTIONS TESTS
+// =============================================================================
+
+@include test-module("Public Functions") {
+  // -------------------------------------------------------------------------
+  // color() function - Basic functionality
+  // -------------------------------------------------------------------------
+
+  @include test("color() function - Basic functionality") {
+    @include assert-equal(
+      colors.color("primary-base"),
+      var(--color-primary-base),
+      "Should return CSS variable for dash-separated path"
+    );
+
+    @include assert-equal(
+      colors.color("primary", "base"),
+      var(--color-primary-base),
+      "Should return CSS variable for multiple arguments"
+    );
+
+    @include assert-equal(
+      colors.color("primary", "variants", "50"),
+      var(--color-primary-variants-50),
+      "Should return CSS variable for deeply nested path"
+    );
+
+    @include assert-equal(
+      colors.color("background"),
+      var(--color-background),
+      "Should return CSS variable for color reference"
+    );
+
+    @include assert-equal(
+      colors.color("surface"),
+      var(--color-surface),
+      "Should return CSS variable for simple reference"
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // color() function - Edge cases
+  // -------------------------------------------------------------------------
+
+  @include test("color() function - Edge cases") {
+    @include assert-equal(
+      colors.color("status-success"),
+      var(--color-status-success),
+      "Should handle single-level nested colors"
+    );
+
+    @include assert-equal(
+      colors.color("neutral", "gray", "100"),
+      var(--color-neutral-gray-100),
+      "Should handle three-level nesting"
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // color() function - Error cases
+  // -------------------------------------------------------------------------
+
+  // @include test("color() function - Error cases") {
+  //   @include assert-error {
+  //     $result: colors.color();
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color('nonexistent');
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color('primary', 'nonexistent');
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color('primary');
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color('primary', 'base', 'extra');
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color(123);
+  //   }
+
+  //   @include assert-error {
+  //     $result: colors.color('primary', 123);
+  //   }
+  // }
+}
+
+// =============================================================================
+// MIXINS TESTS
+// =============================================================================
+
+@include test-module("Mixins") {
+  // -------------------------------------------------------------------------
+  // generate-color-properties() mixin tests
+  // -------------------------------------------------------------------------
+
+  @include test("generate-color-properties() mixin") {
+    $simple-colors: (
+      "red": #ff0000,
+      "blue": #0000ff,
+    );
+
+    @include assert {
+      @include output {
+        @include colors.generate-color-properties($simple-colors);
+      }
+
+      @include expect {
+        --color-red: #ff0000;
+        --color-blue: #0000ff;
+      }
+    }
+  }
+
+  @include test("generate-color-properties() mixin with prefix") {
+    $nested-colors: (
+      base: #1d4ed8,
+      light: #3b82f6,
+    );
+
+    @include assert {
+      @include output {
+        @include colors.generate-color-properties($nested-colors, "primary");
+      }
+
+      @include expect {
+        --color-primary-base: #1d4ed8;
+        --color-primary-light: #3b82f6;
+      }
+    }
+  }
+
+  @include test("generate-color-properties() mixin with color references") {
+    $colors-with-references: (
+      primary: (
+        base: #1d4ed8,
+      ),
+      background: (
+        primary,
+        base,
+      ),
+    );
+
+    @include assert {
+      @include output {
+        @include colors.generate-color-properties($colors-with-references);
+      }
+
+      @include expect {
+        --color-primary-base: #1d4ed8;
+        --color-background: var(--color-primary-base);
+      }
+    }
+  }
+
+  @include test("generate-color-properties() mixin with nested maps") {
+    $nested-map: (
+      primary: (
+        variants: (
+          50: #eff6ff,
+          100: #dbeafe,
+        ),
+      ),
+    );
+
+    @include assert {
+      @include output {
+        @include colors.generate-color-properties($nested-map);
+      }
+
+      @include expect {
+        --color-primary-variants-50: #eff6ff;
+        --color-primary-variants-100: #dbeafe;
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // generate-color-variables() mixin tests
+  // -------------------------------------------------------------------------
+
+  @include test("generate-color-variables() mixin - Default theme selectors") {
+    @include assert {
+      @include output {
+        @include colors.generate-color-variables();
+      }
+
+      @include contains {
+        :root,
+        .light-theme,
+        [data-theme="light"] {
+          --color-primary-base: #1d4ed8;
+          --color-background: var(--color-primary-variants-50);
+        }
+      }
+    }
+  }
+
+  @include test("generate-color-variables() mixin - Non-default theme selectors") {
+    @include assert {
+      @include output {
+        @include colors.generate-color-variables();
+      }
+
+      @include contains {
+        .dark-theme,
+        [data-theme="dark"] {
+          --color-primary-base: #3b82f6;
+          --color-background: var(--color-primary-variants-50);
+        }
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // generate-color-utilities() mixin tests
+  // -------------------------------------------------------------------------
+
+  @include test("generate-color-utilities() mixin - Basic functionality") {
+    @include assert {
+      @include output {
+        @include colors.generate-color-utilities("color", ".text-{color}");
+      }
+
+      @include contains {
+        .text-primary-base {
+          color: var(--color-primary-base);
+        }
+
+        .text-background {
+          color: var(--color-background);
+        }
+
+        .text-surface {
+          color: var(--color-surface);
+        }
+      }
+    }
+  }
+
+  @include test("generate-color-utilities() mixin - Background colors") {
+    @include assert {
+      @include output {
+        @include colors.generate-color-utilities("background-color", ".bg-{color}");
+      }
+
+      @include contains {
+        .bg-primary-base {
+          background-color: var(--color-primary-base);
+        }
+
+        .bg-neutral-white {
+          background-color: var(--color-neutral-white);
+        }
+
+        .bg-status-success {
+          background-color: var(--color-status-success);
+        }
+      }
+    }
+  }
+
+  @include test("generate-color-utilities() mixin - Custom prefix") {
+    @include assert {
+      @include output {
+        @include colors.generate-color-utilities("border-color", ".ds-border-{color}");
+      }
+
+      @include contains {
+        .ds-border-primary-base {
+          border-color: var(--color-primary-base);
+        }
+
+        .ds-border-neutral-gray-100 {
+          border-color: var(--color-neutral-gray-100);
+        }
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Mixin error cases
+  // -------------------------------------------------------------------------
+
+  @include test("generate-color-utilities() mixin - Error cases") {
+    @include assert-error(
+      colors.generate-color-utilities("color", ".invalid-template"),
+      "Should throw error when template doesn't contain {color} placeholder"
+    );
+  }
+}
+
+// =============================================================================
+// INTEGRATION TESTS
+// =============================================================================
+
+@include test-module("Integration Tests") {
+  // -------------------------------------------------------------------------
+  // Cross-theme consistency tests
+  // -------------------------------------------------------------------------
+
+  @include test("Cross-theme consistency") {
+    // Test that the same color path exists in both themes
+    @include assert-true(
+      map.has-key(map.get($test-colors, "light"), "primary"),
+      "Primary colors should exist in light theme"
+    );
+
+    @include assert-true(
+      map.has-key(map.get($test-colors, "dark"), "primary"),
+      "Primary colors should exist in dark theme"
+    );
+
+    // Test that references work across themes
+    @include assert-equal(
+      colors.color("background"),
+      var(--color-background),
+      "Background reference should work consistently"
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // Warning generation tests (manually verify in output)
+  // -------------------------------------------------------------------------
+
+  @include test("Warning generation for missing colors") {
+    // This test checks that warnings are generated but doesn't fail
+    // You should manually check the compilation output for warnings
+
+    $colors-with-invalid: (
+      valid-color: #ff0000,
+      invalid-reference: (
+        nonexistent,
+        path,
+      ),
+    ) !global;
+
+    @include assert {
+      @include output {
+        @include colors.generate-color-properties($colors-with-invalid);
+      }
+
+      @include expect {
+        --color-valid-color: #ff0000;
+        // invalid-reference should be skipped with warning
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Real-world usage patterns
+  // -------------------------------------------------------------------------
+
+  @include test("Real-world usage patterns") {
+    // Test component-like usage
+    @include assert {
+      @include output {
+        .button {
+          background-color: #{colors.color("primary-base")};
+          color: #{colors.color("neutral-white")};
+          border: 1px solid #{colors.color("primary-dark")};
+
+          &:hover {
+            background-color: #{colors.color("primary-light")};
+          }
+
+          &.secondary {
+            background-color: #{colors.color("secondary-base")};
+          }
+
+          &.success {
+            background-color: #{colors.color("status-success")};
+          }
+        }
+      }
+
+      @include expect {
+        .button {
+          background-color: var(--color-primary-base);
+          color: var(--color-neutral-white);
+          border: 1px solid var(--color-primary-dark);
+
+          &:hover {
+            background-color: var(--color-primary-light);
+          }
+
+          &.secondary {
+            background-color: var(--color-secondary-base);
+          }
+
+          &.success {
+            background-color: var(--color-status-success);
+          }
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// EDGE CASES AND STRESS TESTS
+// =============================================================================
+
+@include test-module("Edge Cases and Stress Tests") {
+  @include test("Empty maps and null values") {
+    @include assert-equal(colors.collect-color-paths(()), (), "Should handle empty map gracefully");
+
+    @include assert-equal(
+      colors.collect-color-paths(null),
+      (),
+      "Should handle null input gracefully"
+    );
+  }
+
+  @include test("Deep nesting levels") {
+    $deep-nested: (
+      level1: (
+        level2: (
+          level3: (
+            level4: (
+              color: #ff0000,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    @include assert-equal(
+      colors.collect-color-paths($deep-nested),
+      (level1-level2-level3-level4-color),
+      "Should handle deep nesting"
+    );
+  }
+
+  @include test("Special characters in color names") {
+    // Test with numbers and special naming patterns
+    @include assert-equal(
+      colors.color("primary", "variants", "50"),
+      var(--color-primary-variants-50),
+      "Should handle numeric color names"
+    );
+
+    @include assert-equal(
+      colors.color("neutral-gray-100"),
+      var(--color-neutral-gray-100),
+      "Should handle complex naming patterns"
+    );
+  }
+
+  @include test("Large color maps performance") {
+    // This is more of a sanity check for reasonable performance
+    $large-map: ();
+
+    @for $i from 1 through 50 {
+      $large-map: map.set($large-map, "color-#{$i}", #ff0000);
+    }
+
+    $paths: colors.collect-color-paths($large-map);
+
+    @include assert-equal(length($paths), 50, "Should handle large maps efficiently");
+  }
+}
+
+// =============================================================================
+// CONFIGURATION VALIDATION TESTS
+// =============================================================================
+
+@include test-module("Configuration Validation") {
+  @include test("Invalid global configuration") {
+    // Save original values
+    $original-colors: $colors;
+    $original-theme: $default-theme;
+
+    // Test with invalid $colors
+    $colors: "not-a-map" !global;
+
+    @include assert-error(
+      colors.color("any-color"),
+      "Should throw error when $colors is not a map"
+    );
+
+    // Test with invalid $default-theme
+    $colors: $original-colors !global;
+    $default-theme: "nonexistent-theme" !global;
+
+    @include assert-error(
+      colors.color("primary-base"),
+      "Should throw error when $default-theme doesn't exist"
+    );
+
+    // Restore original values
+    $colors: $original-colors !global;
+    $default-theme: $original-theme !global;
+  }
+}
+
+@include report;

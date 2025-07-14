@@ -1,0 +1,367 @@
+@use "sass:meta";
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+@use "commons.core" as *;
+@use "../config" as *;
+
+// =============================================================================
+// TailorDS - COLORS CORE
+// =============================================================================
+//
+// Description: Core color functions and mixins for design token management
+//
+// This module provides the essential functionality for working with color
+// design tokens in TailorDS. It includes type-safe functions for accessing
+// colors from your configuration and mixins for generating CSS custom
+// properties and utility classes.
+//
+// Key features:
+//   - color() function: Type-safe access to color tokens with path validation
+//   - generate-color-variables(): Creates theme-aware CSS custom properties
+//   - generate-color-utilities(): Generates utility classes from color tokens
+//   - Automatic theme switching support for light/dark modes
+//   - Flexible color referencing with nested path resolution
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// PRIVATE FUNCTIONS
+// -----------------------------------------------------------------------------
+// Internal helper functions for color processing and validation
+// These functions support the public API but are not intended for direct use
+
+/// Helper function to check if a value is a color
+///
+/// @param {Any} $value - The value to check
+/// @returns {Boolean} True if the value is a color, false otherwise
+///
+@function is-color($value) {
+  @return meta.type-of($value) == "color";
+}
+
+/// Recursively collects all color paths from a nested color map
+///
+/// @param {Map} $map - The map to process
+/// @param {String} $prefix - The current path prefix
+/// @param {List} $color-paths - Accumulated list of color paths
+/// @returns {List} List of all color paths in the map
+///
+@function collect-color-paths($map, $prefix: "", $color-paths: ()) {
+  @if not is-map($map) {
+    @return $color-paths;
+  }
+
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", $key, $prefix + "-" + $key);
+
+    @if is-color($value) or meta.type-of($value) == "list" {
+      $color-paths: list.append($color-paths, $property-name, "comma");
+    } @else if is-map($value) {
+      $color-paths: collect-color-paths($value, $property-name, $color-paths);
+    }
+  }
+
+  @return $color-paths;
+}
+
+// -----------------------------------------------------------------------------
+// PUBLIC FUNCTIONS
+// -----------------------------------------------------------------------------
+
+/// Retrieves a CSS custom property for a color from a nested $color map structure.
+///
+/// @param {String|List} $path... - The path to the color in the map. Can be:
+///                               - A single string with dash-separated keys: 'neutral-5'
+///                               - Multiple string arguments: 'neutral', '5'
+///                               - A single key: 'background'
+///
+/// @returns {String} A CSS custom property in the format: var(--color-path-key)
+///
+/// @throws {Error} If no arguments are provided
+/// @throws {Error} If $colors is not a valid map
+/// @throws {Error} If $default-theme is not defined
+/// @throws {Error} If the default theme doesn't exist in $colors
+/// @throws {Error} If any key in the path is not a string
+/// @throws {Error} If a key doesn't exist in the current map level
+/// @throws {Error} If trying to access a key on a non-map value
+/// @throws {Error} If the final path points to a map instead of a color
+/// @throws {Error} If the final value is not a valid color
+///
+/// @example
+///   color('neutral-5')            // → var(--color-neutral-5)
+///   color('neutral', '5')         // → var(--color-neutral-5)
+///   color('neutral', 'zinc', '5') // → var(--color-neutral-zinc-5)
+///   color('background')           // → var(--color-background)
+///
+@function color($path...) {
+  // Check if arguments are provided
+  @if list.length($path) == 0 {
+    @error "color(): At least one argument is required. Usage: color('primary-light') or color('primary', 'light')";
+  }
+
+  // Check if $colors is a valid map
+  @if not is-map($colors) {
+    @error "color(): The variable '$colors' must be a map.";
+  }
+
+  // Check if the default theme exists in $colors
+  @if not map.has-key($colors, $default-theme) {
+    @error "color(): The default theme '#{$default-theme}' does not exist in '$colors'.";
+  }
+
+  $keys: $path;
+
+  // Check if the first argument is a string with a dash
+  @if list.length($path) == 1 and meta.type-of(list.nth($path, 1)) == "string" {
+    $path-string: list.nth($path, 1);
+
+    @if string.index($path-string, "-") {
+      $keys: string.split($path-string, "-");
+    } @else {
+      $keys: ($path-string);
+    }
+  }
+
+  // Validate that all keys are strings
+  @each $key in $keys {
+    @if meta.type-of("#{$key}") != "string" {
+      @error "color(): All keys must be strings. Received: #{$key} (#{meta.type-of($key)})";
+    }
+  }
+
+  // Initialize the current map with the default theme
+  $current-map: map.get($colors, $default-theme);
+  $current-path: "";
+
+  // Navigate through the map to validate the path exists
+  @each $key in $keys {
+    $current-path: if($current-path == "", "#{$key}", "#{$current-path}-#{$key}");
+
+    @if not is-map($current-map) {
+      @error "color(): Cannot access '#{$key}' in '#{$current-path}'. The current value is not a map.";
+    }
+
+    @if not map.has-key($current-map, "#{$key}") {
+      @error "color(): The key '#{$key}' does not exist in the path '#{$current-path}'.";
+    }
+
+    $current-map: map.get($current-map, "#{$key}");
+  }
+
+  // Handle color references before validation
+  @if meta.type-of($current-map) == "list" {
+    // Check if the reference exists in the default theme
+    $referenced-color: map.get($colors, $default-theme, $current-map...);
+
+    @if not $referenced-color {
+      @error "color(): The color reference '#{$current-path}' (#{$current-map}) does not exist in the default theme '#{$default-theme}'.";
+    }
+
+    @if not is-color($referenced-color) {
+      @error "color(): The color reference '#{$current-path}' points to '#{$referenced-color}' which is not a valid color.";
+    }
+
+    // Valid reference, return CSS variable
+    @return var(--color-#{$current-path});
+  }
+
+  // Validate that the final result is a color
+  @if not is-color($current-map) {
+    @if is-map($current-map) {
+      @error "color(): The path '#{$current-path}' points to a map, not a color.";
+    } @else {
+      @error "color(): The value at '#{$current-path}' is not a valid color. Found: #{$current-map} (#{meta.type-of($current-map)}).";
+    }
+  }
+
+  // Return CSS custom property with the complete path
+  @return var(--color-#{$current-path});
+}
+
+// -----------------------------------------------------------------------------
+// MIXINS
+// -----------------------------------------------------------------------------
+
+/// Generates CSS custom properties for all colors in a nested map.
+///
+/// This mixin processes a color map and creates CSS custom properties with the --color- prefix.
+/// It handles direct color values, color references (lists), and nested maps. All colors are
+/// validated against the default theme - colors that don't exist in the default theme will
+/// be ignored with a warning.
+///
+/// @param {Map} $map - The map to process
+/// @param {String} $prefix [''] - The current path prefix for variable names (used internally for recursion)
+///
+/// @throws {warning} When a color doesn't exist in the default theme
+/// @throws {warning} When a color reference cannot be resolved
+///
+@mixin generate-color-properties($map, $prefix: "") {
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", "#{$key}", "#{$prefix}-#{$key}");
+
+    @if is-color($value) {
+      $default-color: map.get($colors, $default-theme, string.split($property-name, "-")...);
+
+      @if not $default-color {
+        @warn "generate-color-variables(): Color '#{$property-name}' will be ignored because it doesn't exist in the default theme '#{$default-theme}'.";
+      } @else {
+        --color-#{$property-name}: #{$value};
+      }
+    } @else if meta.type-of($value) == "list" {
+      // Handle color references - check if the path exists and resolves to a color
+      $referenced-color: map.get($colors, $default-theme, $value...);
+
+      @if $referenced-color and is-color($referenced-color) {
+        // Generate CSS variable reference using the path
+        $reference-path: string.join($value, "-");
+        --color-#{$property-name}: var(--color-#{$reference-path});
+      } @else {
+        @warn "generate-color-variables(): Color reference '#{$property-name}' (#{$value}) will be ignored because it doesn't exist in the default theme '#{$default-theme}'.";
+      }
+    } @else if is-map($value) {
+      @include generate-color-properties($value, $property-name);
+    }
+  }
+}
+
+/// Generates CSS custom properties for all color themes defined in $colors
+///
+/// This mixin creates CSS selectors for each theme with the following pattern:
+/// - Default theme: :root, .{theme}-theme, [data-theme="{theme}"]
+/// - Other themes: .{theme}-theme, [data-theme="{theme}"]
+///
+/// All color values are converted to CSS custom properties with the format:
+/// --color-{path-to-color}
+///
+/// @throws {error} If $colors is not defined or not a map
+/// @throws {error} If $default-theme is not defined
+/// @throws {error} If the default theme doesn't exist in $colors
+///
+/// @example
+/// @include generate-color-variables(); // Include the mixin to generate all color variables
+///
+/// @result
+/// :root,
+/// .light-theme,
+/// [data-theme="light"] {
+///   --color-primary-base: #1d4ed8;
+///   --color-primary-light: #3b82f6;
+///   --color-neutral-white: #ffffff;
+/// }
+///
+/// .dark-theme,
+/// [data-theme="dark"] {
+///   --color-primary-base: #3b82f6;
+///   --color-primary-light: #60a5fa;
+///   --color-neutral-white: #1f2937;
+/// }
+///
+@mixin generate-color-variables() {
+  // Validate that $colors is a valid map
+  @if not is-map($colors) {
+    @error "generate-color-variables(): The variable '$colors' must be a map.";
+  }
+
+  // Validate that the default theme exists in $colors
+  @if not map.has-key($colors, $default-theme) {
+    @error "generate-color-variables(): The default theme '#{$default-theme}' does not exist in '$colors'.";
+  }
+
+  // Generate CSS selectors and properties for each theme
+  @each $theme-name, $theme-colors in $colors {
+    // Build selectors for the current theme
+    $selectors: ();
+
+    // Add :root selector only for default theme
+    @if $theme-name == $default-theme {
+      $selectors: list.append($selectors, ":root", "comma");
+    }
+
+    // Add class selector
+    $selectors: list.append($selectors, ".#{$theme-name}-theme", "comma");
+
+    // Add data attribute selector
+    $selectors: list.append($selectors, '[data-theme="#{$theme-name}"]', "comma");
+
+    // Generate the CSS rule with all selectors
+    #{$selectors} {
+      --COLORS------------------------: 12;
+      @include generate-color-properties($theme-colors);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// UTILITY CLASS GENERATION
+// -----------------------------------------------------------------------------
+// Functions for generating utility classes based on color tokens
+// Integrates with $utilities configuration to create classes like .text-*, .bg-*
+
+/// Generates utility classes for colors from the default theme
+///
+/// This mixin creates CSS utility classes for each color in the default theme.
+/// It handles both direct color values and color references, always using CSS
+/// custom properties (variables) as values.
+///
+/// @param {String} $property - The CSS property to set (e.g., 'color', 'background-color', 'border-color')
+/// @param {String} $template - The class name template with {color} placeholder (e.g., '.text-{color}', '.bg-{color}')
+///
+/// @throws {error} If $colors or $default-theme are not defined
+/// @throws {error} If the default theme doesn't exist in $colors
+/// @throws {error} If $template doesn't contain {color} placeholder
+///
+/// @example scss
+///   // Generate background color utilities
+///   @include generate-color-utilities('background-color', '.bg-{color}');
+///
+///   // Output:
+///   // .bg-primary-base { background-color: var(--color-primary-base); }
+///   // .bg-primary-light { background-color: var(--color-primary-light); }
+///   // .bg-neutral-white { background-color: var(--color-neutral-white); }
+///
+/// @example scss
+///   // Generate text color utilities with custom prefix
+///   @include generate-color-utilities('color', '.ds-text-{color}');
+///
+///   // Output:
+///   // .ds-text-primary-base { color: var(--color-primary-base); }
+///   // .ds-text-status-success { color: var(--color-status-success); }
+///
+/// @example scss
+///   // Generate border color utilities
+///   @include generate-color-utilities('border-color', '.border-{color}');
+///
+@mixin generate-color-utilities($property, $template) {
+  // Validate that $colors is a valid map
+  @if not is-map($colors) {
+    @error "generate-color-utilities(): The variable '$colors' must be a map.";
+  }
+
+  // Validate that the default theme exists in $colors
+  @if not map.has-key($colors, $default-theme) {
+    @error "generate-color-utilities(): The default theme '#{$default-theme}' does not exist in '$colors'.";
+  }
+
+  // Validate template contains {color} placeholder
+  @if not string.index($template, "{color}") {
+    @error "generate-color-utilities(): The template '#{$template}' must contain a '{color}' placeholder.";
+  }
+
+  // Get default theme colors
+  $default-theme-colors: map.get($colors, $default-theme);
+
+  // Collect all color paths from the default theme
+  $color-paths: collect-color-paths($default-theme-colors);
+
+  // Generate utility class for each color
+  @each $color-path in $color-paths {
+    // Replace {color} placeholder with the actual color path
+    $class-name: string-replace($template, "{color}", $color-path);
+
+    // Generate the CSS class
+    #{$class-name} {
+      #{$property}: var(--color-#{$color-path});
+    }
+  }
+}

@@ -1,52 +1,72 @@
-@use "core/colors" as *;
-@use "core/common" as *;
-@use "theme" as *;
-@use "config" as *;
+@use "core/colors.core" as *;
 
 // =============================================================================
-// TailorDS - ROOT
+// TailorDS - CSS CUSTOM PROPERTIES GENERATION
 // =============================================================================
 //
-// Description: Generate all css variables of the design system
+// Description: Generates all CSS custom properties for the design system
+//
+// This file is responsible for creating the complete set of CSS custom
+// properties that serve as the single source of truth for your design system.
+// It automatically generates variables for all design tokens based on your
+// configuration.
+//
+// Generated variable categories:
+//   - Colors: --color-* (theme-aware, auto-switching)
+//   - Typography: --font-*, --text-* (static values)
+//   - Spacing: --spacing-* (static values)
+//   - Borders: --radius-*, --border-* (static values)
+//   - Shadows: --shadow-* (static values)
 //
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// ROOT
+// DESIGN TOKEN ORGANIZATION
 // -----------------------------------------------------------------------------
-// Generate root styles
+// All non-themeable design tokens generated within :root
+// Visual separators help identify token categories in browser developer tools
 
 :root {
   --BLUR--------------------------: 01;
+  // @include generate-blur-variables();
+
   --BORDERS-----------------------: 02;
-  --COLORS------------------------: 03;
-  @include generate-colors-vars();
-  --FONT-FAMILIES-----------------: 04;
-  --FONT-SIZES--------------------: 05;
-  --FONT-WEIGHTS------------------: 06;
-  --GRADIENTS---------------------: 07;
-  --LETTER-SPACINGS---------------: 08;
-  --LINE-HEIGHTS------------------: 09;
-  --RADIUS------------------------: 10;
-  --SHADOWS-----------------------: 11;
-  --SPACE-------------------------: 12;
+  // @include generate-border-variables();
+
+  --FONT-FAMILIES-----------------: 03;
+  // @include generate-font-family-variables();
+  // @include generate-font-size-variables();
+
+  --FONT-WEIGHTS------------------: 05;
+  // @include generate-font-weight-variables();
+
+  --GRADIENTS---------------------: 06;
+  // @include generate-gradient-variables();
+
+  --LETTER-SPACINGS---------------: 07;
+  // @include generate-letter-spacing-variables();
+
+  --LINE-HEIGHTS------------------: 08;
+  // @include generate-line-height-variables();
+
+  --RADIUS------------------------: 09;
+  // @include generate-radius-variables();
+
+  --SHADOWS-----------------------: 10;
+  // @include generate-shadow-variables();
+
+  --SPACE-------------------------: 11;
+  // @include generate-space-variables();
 }
 
 // -----------------------------------------------------------------------------
-// LIGHT MODE
+// THEME-AWARE COLOR VARIABLES
 // -----------------------------------------------------------------------------
-// Generate light mode styles
-:root,
-.#{$prefix}light-mode,
-[data-theme="light"] {
-  @include generate-theme-vars($theme);
-}
+// Color variables are generated with theme-specific selectors
+// Includes light theme as default and dark theme overrides
+//
+// Color variables are generated outside :root because they include theme-aware
+// selectors (light/dark modes). All other design tokens generate static values
+// that don't change between themes and are placed directly within :root.
 
-// -----------------------------------------------------------------------------
-// DARK MODE
-// -----------------------------------------------------------------------------
-// Generate dark mode styles
-.#{$prefix}dark-mode,
-[data-theme="dark"] {
-  @include generate-theme-vars($theme-dark);
-}
+@include generate-color-variables();

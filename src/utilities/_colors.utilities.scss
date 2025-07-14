@@ -1,0 +1,123 @@
+@use "../config" as *;
+@use "../core/commons.core" as *;
+@use "../core/colors.core" as *;
+
+// =============================================================================
+// TailorDS - COLORS UTILITIES
+// =============================================================================
+//
+// Description: Generates color utility classes based on configuration
+//
+// This module automatically generates CSS utility classes for color properties
+// based on your $utilities configuration. It creates classes for text color,
+// background color, border color, and SVG fill/stroke properties using your
+// exact color token names.
+//
+// Generated utility classes follow the templates defined in $utilities and
+// use CSS custom properties as values, ensuring automatic theme switching
+// and consistent behavior across your design system.
+//
+// Example output with default configuration:
+//   .text-neutral-5 { color: var(--color-neutral-5); }
+//   .bg-brand-9 { background-color: var(--color-brand-9); }
+//   .border-background { border-color: var(--color-background); }
+//
+// Only generates utilities for enabled types in your configuration.
+//
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// COLOR UTILITIES GENERATION
+// -----------------------------------------------------------------------------
+// Automatically generates utility classes for configured color properties
+// Maps utility names from configuration to their corresponding CSS properties
+
+@if has-utilities("colors") {
+  // Mapping of utility names to their corresponding CSS properties
+  // This defines which CSS properties are controlled by each utility type
+  $color-utility-mappings: (
+    "text": "color",
+    // Text color utilities
+    "background": "background-color",
+    // Background color utilities
+    "border": "border-color",
+    // Border color utilities
+    "fill": "fill",
+    // SVG fill color utilities
+    "stroke": "stroke", // SVG stroke color utilities
+  );
+
+  // Generate color utilities for each configured utility type
+  // Only creates utilities that are both mapped and configured in $utilities
+  @each $utility-name, $css-property in $color-utility-mappings {
+    $template: get-utility-template("colors", $utility-name);
+
+    @if $template {
+      @include generate-color-utilities($css-property, $template);
+    }
+  }
+}
+
+$utilities-properties: (
+  colors: (
+    text: "color",
+    background: "background-color",
+    border: "border-color",
+    fill: "fill",
+    stroke: "stroke",
+  ),
+);
+
+$utilities: (
+  colors: (
+    text,
+    background,
+    border,
+    fill,
+    stroke,
+  ),
+) !default;
+
+$templates: (
+  colors: (
+    text: ".text-{color}",
+    background: ".bg-{color}",
+    border: ".border-{color}",
+    fill: ".fill-{color}",
+    stroke: ".stroke-{color}",
+  ),
+) !default;
+
+@mixin generate-color-utilities($property, $template) {
+  // Validate that $colors is a valid map
+  @if not is-map($colors) {
+    @error "generate-color-utilities(): The variable '$colors' must be a map.";
+  }
+
+  // Validate that the default theme exists in $colors
+  @if not map.has-key($colors, $default-theme) {
+    @error "generate-color-utilities(): The default theme '#{$default-theme}' does not exist in '$colors'.";
+  }
+
+  // Validate template contains {color} placeholder
+  @if not string.index($template, "{color}") {
+    @error "generate-color-utilities(): The template '#{$template}' must contain a '{color}' placeholder.";
+  }
+
+  // Get default theme colors
+  $default-theme-colors: map.get($colors, $default-theme);
+
+  // Collect all color paths from the default theme
+  $color-paths: collect-color-paths($default-theme-colors);
+
+  // Generate utility class for each color
+  @each $color-path in $color-paths {
+    // Replace {color} placeholder with the actual color path
+    $class-name: string-replace($template, "{color}", $color-path);
+
+    // Generate the CSS class
+    #{$class-name} {
+      #{$property}: var(--color-#{$color-path});
+    }
+  }
+}

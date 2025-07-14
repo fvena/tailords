@@ -1,0 +1,156 @@
+/// =============================================================================
+/// TAILORDS - FUNCIONES COMUNES Y DE AYUDA
+/// =============================================================================
+///
+/// Funciones utilitarias compartidas entre todos los módulos de TailorDS.
+/// Este archivo contiene las funciones básicas que son utilizadas tanto
+/// para la generación de variables CSS como para las utility classes.
+///
+
+/// =============================================================================
+/// VALIDACIÓN DE TIPOS
+/// =============================================================================
+
+/// Helper function to check if a value is a color
+/// @param {Any} $value - The value to check
+/// @returns {Boolean} True if the value is a color, false otherwise
+@function is-color($value) {
+  @return meta.type-of($value) == "color";
+}
+
+/// Helper function to check if a value is a map
+/// @param {Any} $value - The value to check
+/// @returns {Boolean} True if the value is a map, false otherwise
+@function is-map($value) {
+  @return meta.type-of($value) == "map";
+}
+
+/// =============================================================================
+/// MANIPULACIÓN DE STRINGS
+/// =============================================================================
+
+/// Replace all occurrences of $search with $replace in $string
+/// @param {String} $string - The string to search in
+/// @param {String} $search - The substring to search for
+/// @param {String} $replace - The replacement substring
+/// @returns {String} The string with replacements made
+@function string-replace($string, $search, $replace: "") {
+  $result: $string;
+  $index: string.index($result, $search);
+
+  @while $index {
+    $before: if($index > 1, string.slice($result, 1, $index - 1), "");
+    $after: string.slice($result, $index + string.length($search));
+    $result: $before + $replace + $after;
+    $index: string.index($result, $search);
+  }
+
+  @return $result;
+}
+
+/// Join list elements with a separator
+/// @param {List} $list - The list to join
+/// @param {String} $separator - The separator to use
+/// @returns {String} The joined string
+@function string-join($list, $separator: "-") {
+  $result: "";
+
+  @for $i from 1 through list.length($list) {
+    $result: $result + nth($list, $i);
+
+    @if $i < list.length($list) {
+      $result: $result + $separator;
+    }
+  }
+
+  @return $result;
+}
+
+/// =============================================================================
+/// COLECCIÓN DE PATHS DE TOKENS
+/// =============================================================================
+
+/// Recursively collects all token paths from a nested foundation map
+/// This function mirrors the exact logic used in generate-foundation-variables()
+/// to ensure perfect alignment between generated variables and utility classes
+///
+/// @param {Map} $map - The map to process
+/// @param {String} $foundation - Foundation name for handling special cases
+/// @param {String} $prefix - The current path prefix
+/// @param {List} $token-paths - Accumulated list of token paths
+/// @returns {List} List of all token paths that would generate CSS variables
+@function collect-token-paths($map, $foundation, $prefix: "", $token-paths: ()) {
+  @if not is-map($map) {
+    @return $token-paths;
+  }
+
+  @each $key, $value in $map {
+    $property-name: if($prefix == "", $key, $prefix + "-" + $key);
+
+    @if $foundation == "colors" {
+      // Mirror the exact logic from generate-color-variables
+      @if is-color($value) {
+        // Direct color value - will generate a variable
+        $token-paths: list.append($token-paths, $property-name, "comma");
+      } @else if meta.type-of($value) == "list" {
+        // Color reference - will generate a variable reference
+        $token-paths: list.append($token-paths, $property-name, "comma");
+      } @else if is-map($value) {
+        // Nested map - recurse
+        $token-paths: collect-token-paths($value, $foundation, $property-name, $token-paths);
+      }
+    } @else {
+      // For other foundations (spacing, typography, etc.)
+      @if is-map($value) {
+        // Nested map - recurse
+        $token-paths: collect-token-paths($value, $foundation, $property-name, $token-paths);
+      } @else {
+        // Any value type - will generate a variable
+        $token-paths: list.append($token-paths, $property-name, "comma");
+      }
+    }
+  }
+
+  @return $token-paths;
+}
+
+/// =============================================================================
+/// VALIDACIÓN DE FOUNDATIONS
+/// =============================================================================
+
+/// Gets the foundation data from global variables
+/// @param {String} $foundation - Foundation name (colors, spacing, typography)
+/// @returns {Map|null} The foundation data map or null if not found
+@function get-foundation-data($foundation) {
+  @if $foundation == "colors" {
+    @return $colors;
+  } @else if $foundation == "spacing" {
+    @return $spacing;
+  } @else if $foundation == "typography" {
+    @return $typography;
+  }
+
+  @return null;
+}
+
+/// Validates that a foundation exists and is properly configured
+/// @param {String} $foundation - Foundation name
+/// @param {Boolean} $require-default-theme - Whether to require default theme (for colors)
+/// @throws {error} If foundation is not supported or not properly configured
+@mixin validate-foundation($foundation, $require-default-theme: false) {
+  $foundation-data: get-foundation-data($foundation);
+
+  @if not $foundation-data {
+    @error "Foundation '#{$foundation}' is not supported. Available foundations: colors, spacing, typography.";
+  }
+
+  @if not is-map($foundation-data) {
+    @error "The variable '$#{$foundation}' must be a map.";
+  }
+
+  @if $require-default-theme and $foundation == "colors" {
+    @if not map.has-key($foundation-data, $default-theme) {
+      @error "The default theme '#{$default-theme}' does not exist in '$colors'.";
+    }
+  }
+}

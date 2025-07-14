@@ -2,33 +2,295 @@
 // TailorDS - CONFIG
 // =============================================================================
 //
-// Description: Definition of design system configuration
+// Description: Core configuration variables for TailorDS design system
 //
-// Expose all config variables of design system that the user can customize
+// This file defines the main configuration options that control how TailorDS
+// generates CSS custom properties, utility classes, and other system features.
+// These variables allow you to customize the output and behavior of the design
+// system to match your project's specific needs.
+//
+// All configuration variables use the !default flag, allowing you to override
+// them when importing TailorDS with custom values using Sass's 'with' syntax.
 //
 // =============================================================================
 
-// Enable base styles
-$enable-base: true !default;
+// Important flag applied to all generated CSS variables and utility classes
+// Set to "!important" if you need to override existing styles, or leave empty
+// for normal CSS specificity behavior
+//
+// Example:
+// $important: true;
+$important: false !default;
 
-// Prefix for all css variables
-$prefix: "" !default;
+// Prefix for all generated utility classes
+// Set to a string if you need to prefix your variables and utility classes
+// with a specific string, or leave empty for no prefix
+//
+// Example:
+// $prefix: "tds";
+$prefix: null !default;
 
-// Important flag for all css variables
-$important: "" !default;
-
-// Utilities classes to generate
+// Utility class generation configuration
+// Controls which utility classes are generated
+//
+// Example:
+// $utilities: (
+//   colors: (text, background, border, fill, stroke),
+//   spacing: (margin, padding),
+//   typography: (size, weight),
+// )
 $utilities: (
+  colors: null,
+) !default;
+
+// Default theme used as fallback and reference
+// Specifies which theme serves as the base when colors are missing from
+// other theme definitions. Only colors defined in this theme are considered
+// valid throughout the system. Must match a key in your $colors configuration.
+//
+// Example:
+// $default-theme: "light";
+$default-theme: null !default;
+
+// Colors configuration
+// Defines the colors for each theme
+// Each theme must contain the same color structure to ensure consistent
+// behavior across theme switches.
+//
+// Example:
+// $colors: (
+//   light: (
+//     white: oklch(1 0 0),
+//     black: oklch(0 0 0),
+//     neutral: (
+//       1: oklch(0.97 0.005 240),
+//       2: oklch(0.94 0.005 240),
+//     ),
+//     brand: (
+//       1: oklch(0.68 0.2 240),
+//       2: oklch(0.58 0.2 240),
+//     ),
+//   ),
+// )
+$colors: (
+  light: null,
+  dark: null,
+) !default;
+
+// Templates for utility classes
+// Defines the templates for utility classes that will be generated
+// Each template is a string with placeholders that will be replaced
+// with actual values from your design tokens
+//
+// Available placeholders:
+// - {color}: Replaced with flattened color names (e.g., "neutral-5", "background")
+//
+$templates: (
   colors: (
-    text,
-    background,
-  ),
-  spacing: (
-    margin,
-    padding,
-  ),
-  typography: (
-    size,
-    weight,
+    text: ".text-{color}",
+    background: ".bg-{color}",
+    border: ".border-{color}",
+    fill: ".fill-{color}",
+    stroke: ".stroke-{color}",
   ),
 ) !default;
+
+/// =============================================================================
+/// TAILORDS - CONFIGURACIÓN DEL SISTEMA
+/// =============================================================================
+///
+/// Configuración centralizada para TailorDS. Aquí se definen todos los
+/// mappings, templates por defecto y configuración del sistema.
+///
+
+/// =============================================================================
+/// CONFIGURACIÓN DE FOUNDATIONS
+/// =============================================================================
+
+/// Mapping de utilities a propiedades CSS por foundation
+/// Define qué propiedades CSS controla cada utility de cada foundation
+$foundation-utility-mappings: (
+  colors: (
+    "text": "color",
+    "background": "background-color",
+    "border": "border-color",
+    "fill": "fill",
+    "stroke": "stroke",
+  ),
+  spacing: (
+    "margin": "margin",
+    "margin-top": "margin-top",
+    "margin-right": "margin-right",
+    "margin-bottom": "margin-bottom",
+    "margin-left": "margin-left",
+    "margin-x": (
+      "margin-left",
+      "margin-right",
+    ),
+    "margin-y": (
+      "margin-top",
+      "margin-bottom",
+    ),
+    "padding": "padding",
+    "padding-top": "padding-top",
+    "padding-right": "padding-right",
+    "padding-bottom": "padding-bottom",
+    "padding-left": "padding-left",
+    "padding-x": (
+      "padding-left",
+      "padding-right",
+    ),
+    "padding-y": (
+      "padding-top",
+      "padding-bottom",
+    ),
+    "gap": "gap",
+  ),
+  typography: (
+    "size": "font-size",
+    "weight": "font-weight",
+    "family": "font-family",
+    "line-height": "line-height",
+    "letter-spacing": "letter-spacing",
+  ),
+) !default;
+
+/// =============================================================================
+/// TEMPLATES POR DEFECTO
+/// =============================================================================
+
+/// Templates por defecto para utility classes
+/// Los usuarios pueden sobrescribir estos templates o añadir nuevos
+$default-utility-templates: (
+  colors: (
+    "text": ".text-{color}",
+    "background": ".bg-{color}",
+    "border": ".border-{color}",
+    "fill": ".fill-{color}",
+    "stroke": ".stroke-{color}",
+  ),
+  spacing: (
+    "margin": ".m-{size}",
+    "margin-top": ".mt-{size}",
+    "margin-right": ".mr-{size}",
+    "margin-bottom": ".mb-{size}",
+    "margin-left": ".ml-{size}",
+    "margin-x": ".mx-{size}",
+    "margin-y": ".my-{size}",
+    "padding": ".p-{size}",
+    "padding-top": ".pt-{size}",
+    "padding-right": ".pr-{size}",
+    "padding-bottom": ".pb-{size}",
+    "padding-left": ".pl-{size}",
+    "padding-x": ".px-{size}",
+    "padding-y": ".py-{size}",
+    "gap": ".gap-{size}",
+  ),
+  typography: (
+    "size": ".text-{value}",
+    "weight": ".font-{value}",
+    "family": ".font-{value}",
+    "line-height": ".leading-{value}",
+    "letter-spacing": ".tracking-{value}",
+  ),
+) !default;
+
+/// =============================================================================
+/// CONFIGURACIÓN DE PLACEHOLDERS
+/// =============================================================================
+
+/// Mapping de foundations a sus placeholders por defecto
+$foundation-placeholders: (
+  "colors": "{color}",
+  "spacing": "{size}",
+  "typography": "{value}",
+) !default;
+
+/// =============================================================================
+/// FUNCIÓN DE MERGE DE TEMPLATES
+/// =============================================================================
+
+/// Merge user templates with default templates
+/// @param {Map} $defaults - Default templates
+/// @param {Map} $user-templates - User-defined templates
+/// @returns {Map} Merged templates
+@function merge-utility-templates($defaults, $user-templates) {
+  $result: $defaults;
+
+  @each $foundation, $properties in $user-templates {
+    @if map-has-key($result, $foundation) {
+      // Merge properties within the foundation
+      $existing: map-get($result, $foundation);
+      $merged: map-merge($existing, $properties);
+      $result: map-merge(
+        $result,
+        (
+          $foundation: $merged,
+        )
+      );
+    } @else {
+      // Add new foundation
+      $result: map-merge(
+        $result,
+        (
+          $foundation: $properties,
+        )
+      );
+    }
+  }
+
+  @return $result;
+}
+
+/// =============================================================================
+/// CONFIGURACIÓN FINAL DE UTILITIES
+/// =============================================================================
+
+/// Variable para templates de usuario (debe ser definida por el usuario)
+/// Si no se define, se usarán solo los templates por defecto
+$user-utility-templates: () !default;
+
+/// Templates finales (merge de defaults + user)
+$final-utility-templates: merge-utility-templates(
+  $default-utility-templates,
+  $user-utility-templates
+);
+
+/// =============================================================================
+/// FUNCIONES DE ACCESO A CONFIGURACIÓN
+/// =============================================================================
+
+/// Gets the placeholder for a foundation
+/// @param {String} $foundation - Foundation name
+/// @returns {String} The placeholder string
+@function get-foundation-placeholder($foundation) {
+  @return map-get($foundation-placeholders, $foundation);
+}
+
+/// Gets the final utility template for a foundation and utility
+/// @param {String} $foundation - Foundation name
+/// @param {String} $utility - Utility name
+/// @returns {String|null} The template string or null if not found
+@function get-final-utility-template($foundation, $utility) {
+  $foundation-utilities: map-get($final-utility-templates, $foundation);
+
+  @if $foundation-utilities and map-has-key($foundation-utilities, $utility) {
+    @return map-get($foundation-utilities, $utility);
+  }
+
+  @return null;
+}
+
+/// Gets the CSS properties mapping for a foundation and utility
+/// @param {String} $foundation - Foundation name
+/// @param {String} $utility - Utility name
+/// @returns {String|List|null} The CSS property/properties or null if not found
+@function get-utility-css-properties($foundation, $utility) {
+  $foundation-mappings: map-get($foundation-utility-mappings, $foundation);
+
+  @if $foundation-mappings and map-has-key($foundation-mappings, $utility) {
+    @return map-get($foundation-mappings, $utility);
+  }
+
+  @return null;
+}

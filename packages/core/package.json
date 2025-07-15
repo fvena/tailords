@@ -1,0 +1,85 @@
+{
+  "name": "tailords",
+  "version": "0.1.0",
+  "description": "A modern, customizable SCSS framework for building design systems with utility-first approach and component-based architecture.",
+  "type": "module",
+  "main": "./src/index.scss",
+  "sass": "./src/index.scss",
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "sass": "./src/index.scss",
+      "style": "./src/index.scss",
+      "default": "./src/index.scss"
+    },
+    "./variables": {
+      "sass": "./src/_variables.scss"
+    }
+  },
+  "workspaces": [
+    "playground"
+  ],
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "stylelint 'src/**/*.scss'",
+    "lint:fix": "stylelint 'src/**/*.scss' --fix",
+    "test": "sass-true",
+    "prepare": "husky",
+    "semantic-release": "semantic-release",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "playground": "npm run dev --workspace=playground -- --force"
+  },
+  "lint-staged": {
+    "*": "prettier -w --ignore-unknown",
+    "*.scss": [
+      "stylelint --fix"
+    ]
+  },
+  "keywords": [
+    "scss",
+    "sass",
+    "css",
+    "framework",
+    "design-system",
+    "utility-first",
+    "responsive",
+    "components",
+    "mixins",
+    "variables"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/fvena/tailords#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:fvena/tailords.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fvena/tailords/issues"
+  },
+  "author": "Francisco Vena <fvena32@gmail.com>",
+  "engines": {
+    "node": ">=22.11.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "personal-style-guide": "^0.6.0",
+    "prettier": "^3.6.2",
+    "sass": "^1.77.0",
+    "sass-true": "^9.0.0",
+    "semantic-release": "^24.2.6",
+    "stylelint": "^16.21.0",
+    "vitepress": "^1.6.3"
+  },
+  "peerDependencies": {
+    "sass": "^1.0.0"
+  }
+}

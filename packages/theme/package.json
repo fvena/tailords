@@ -1,0 +1,74 @@
+{
+  "name": "@tailords/theme",
+  "version": "0.1.0",
+  "description": "Opinionated HTML/CSS foundation framework with cross-browser normalization, semantic styling, and TailorDS token integration.",
+  "type": "module",
+  "main": "scss/index.scss",
+  "sass": "scss/index.scss",
+  "style": "scss/index.scss",
+  "exports": {
+    ".": {
+      "sass": "./scss/index.scss",
+      "style": "./scss/index.scss",
+      "default": "./scss/index.scss"
+    },
+    "./scss": "./scss/index.scss",
+    "./scss/*": "./scss/*",
+    "./css": "./dist/index.css",
+    "./css/*": "./dist/*"
+  },
+  "files": [
+    "scss",
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "echo 'TailorDS Theme: Will compile SCSS when files exist'",
+    "dev": "echo 'TailorDS Theme: SCSS watch mode not implemented yet'",
+    "lint": "stylelint 'scss/**/*.scss' --allow-empty-input",
+    "lint:fix": "stylelint 'scss/**/*.scss' --fix --allow-empty-input",
+    "typecheck": "echo 'TailorDS Theme: SCSS project - no TypeScript to check'",
+    "docs:dev": "echo 'TailorDS Theme: Documentation not implemented yet'",
+    "docs:build": "echo 'TailorDS Theme: Documentation not implemented yet'",
+    "docs:preview": "echo 'TailorDS Theme: Documentation not implemented yet'"
+  },
+  "dependencies": {
+    "@tailords/tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "sass": "^1.77.0"
+  },
+  "devDependencies": {
+    "sass": "^1.89.2",
+    "stylelint": "^16.21.1",
+    "vitepress": "^1.6.3"
+  },
+  "keywords": [
+    "scss",
+    "sass",
+    "css-reset",
+    "normalize",
+    "foundation",
+    "base-styles",
+    "semantic-html",
+    "accessibility"
+  ],
+  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
+  "license": "MIT",
+  "homepage": "https://tailords.dev/theme",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:fvena/tailords.git",
+    "directory": "packages/theme"
+  },
+  "bugs": {
+    "url": "https://github.com/fvena/tailords/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

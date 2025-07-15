@@ -3,7 +3,7 @@ node_modules
 .pnpm-store
 .npm
 
-# Build
+# Build outputs
 dist
 lib
 .swc
@@ -21,13 +21,16 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # Environment
 .env
 
-# Vitepress
+# VitePress
 docs/.vitepress/cache
 docs/.vitepress/dist
+packages/*/.vitepress/cache
+packages/*/.vitepress/dist
 
 # Editor directories and files
 .idea
@@ -44,3 +47,10 @@ docs/.vitepress/dist
 # OS
 .DS_Store
 Thumbs.db
+
+# Turbo
+.turbo
+
+# Changesets
+.changeset/*.md
+!.changeset/config.json

@@ -1,0 +1,11 @@
+packages:
+  - packages/*
+  - docs
+
+ignoredBuiltDependencies:
+  - core-js-pure
+
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - esbuild
+  - unrs-resolver

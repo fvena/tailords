@@ -1,0 +1,69 @@
+{
+  "name": "@tailords/tokens",
+  "version": "0.1.0",
+  "description": "The foundational SCSS framework for building custom Design Systems with complete token management and systematic utilities generation.",
+  "type": "module",
+  "main": "scss/index.scss",
+  "sass": "scss/index.scss",
+  "style": "scss/index.scss",
+  "exports": {
+    ".": {
+      "sass": "./scss/index.scss",
+      "style": "./scss/index.scss",
+      "default": "./scss/index.scss"
+    },
+    "./scss": "./scss/index.scss",
+    "./scss/*": "./scss/*"
+  },
+  "files": [
+    "scss",
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "echo 'TailorDS Tokens: SCSS framework - no build step required'",
+    "dev": "echo 'TailorDS Tokens: SCSS framework - use in consuming project'",
+    "test": "sass test --color",
+    "test:watch": "sass test --watch --color",
+    "lint": "stylelint 'scss/**/*.scss' --allow-empty-input",
+    "lint:fix": "stylelint 'scss/**/*.scss' --fix --allow-empty-input",
+    "typecheck": "echo 'TailorDS Tokens: SCSS project - no TypeScript to check'"
+  },
+  "peerDependencies": {
+    "sass": "^1.77.0"
+  },
+  "devDependencies": {
+    "sass": "^1.89.2",
+    "sass-true": "^9.0.0",
+    "stylelint": "^16.21.1",
+    "vitepress": "^1.6.3"
+  },
+  "keywords": [
+    "scss",
+    "sass",
+    "design-system",
+    "design-tokens",
+    "css-variables",
+    "utility-classes",
+    "customizable",
+    "framework-agnostic"
+  ],
+  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
+  "license": "MIT",
+  "homepage": "https://tailords.dev/tokens",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:fvena/tailords.git",
+    "directory": "packages/tokens"
+  },
+  "bugs": {
+    "url": "https://github.com/fvena/tailords/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

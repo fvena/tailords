@@ -1,61 +1,72 @@
 {
-  "name": "tailords",
-  "version": "0.1.0",
-  "description": "A modern, customizable SCSS framework for building design systems with utility-first approach and component-based architecture.",
+  "name": "@tailords",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TailorDS Ecosystem - Build your own Design System with complete customization freedom",
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=10.0.0"
   },
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "prepare": "husky",
-    "semantic-release": "semantic-release",
+    "format:check": "prettier --check .",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
+    "test:coverage": "turbo test:coverage",
+    "clean": "turbo clean && rm -rf node_modules",
+    "clean:cache": "turbo clean",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "size": "size-limit"
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "release": "pnpm build && pnpm changeset:publish",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.5",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@turbo/gen": "^2.5.4",
+    "eslint": "^9.31.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "personal-style-guide": "^0.6.0",
+    "prettier": "^3.6.2",
+    "sass": "^1.89.2",
+    "stylelint": "^16.21.1",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3",
+    "vitepress": "^1.6.3"
   },
   "lint-staged": {
     "*": "prettier -w --ignore-unknown",
-    "*.{js,ts}": "eslint --fix",
-    "*.scss": [
-      "stylelint --fix --allow-empty-input"
-    ]
+    "*.{js,ts,vue}": "eslint --fix",
+    "*.scss": "stylelint --fix --allow-empty-input"
   },
+  "workspaces": [
+    "packages/*",
+    "docs"
+  ],
   "keywords": [
-    "typescript",
-    "starter",
-    "library",
-    "template"
+    "design-system",
+    "scss",
+    "css-variables",
+    "design-tokens",
+    "utility-classes",
+    "customizable",
+    "framework-agnostic"
   ],
-  "size-limit": [
-    {
-      "path": "dist/index.js",
-      "limit": "10 kB"
-    },
-    {
-      "path": "dist/index.cjs",
-      "limit": "10 kB"
-    }
-  ],
+  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
   "license": "MIT",
   "homepage": "https://github.com/fvena/tailords#readme",
   "repository": {
@@ -65,34 +76,7 @@
   "bugs": {
     "url": "https://github.com/fvena/tailords/issues"
   },
-  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
-  "engines": {
-    "node": ">=22.11.0"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@swc/core": "^1.12.14",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
-    "eslint": "^9.31.0",
-    "husky": "^9.1.7",
-    "jsdom": "^26.1.0",
-    "lint-staged": "^16.1.2",
-    "personal-style-guide": "^0.6.0",
-    "prettier": "^3.6.2",
-    "sass": "^1.89.2",
-    "sass-true": "^9.0.0",
-    "semantic-release": "^24.2.7",
-    "size-limit": "^11.2.0",
-    "size-limit-preset-node-lib": "^0.4.0",
-    "stylelint": "^16.21.1",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
-    "unplugin-swc": "^1.5.5",
-    "vitepress": "^1.6.3",
+  "dependencies": {
     "vitest": "^3.2.4"
   }
 }

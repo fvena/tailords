@@ -1,0 +1,85 @@
+{
+  "name": "@tailords/vitepress",
+  "version": "0.1.0",
+  "description": "VitePress theme for Design System documentation with interactive token previews and live sandbox environments.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme": {
+      "types": "./dist/theme/index.d.ts",
+      "import": "./dist/theme/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup && vue-tsc --emitDeclarationOnly",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "vue-tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "@tailords/tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "vitepress": "^1.0.0",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vue/tsconfig": "^0.5.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitepress": "^1.6.3",
+    "vitest": "^3.2.4",
+    "vue": "^3.0.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "keywords": [
+    "vitepress",
+    "vitepress-theme",
+    "design-system",
+    "documentation",
+    "vue",
+    "interactive",
+    "playground"
+  ],
+  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
+  "license": "MIT",
+  "homepage": "https://tailords.dev/vitepress",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:fvena/tailords.git",
+    "directory": "packages/vitepress"
+  },
+  "bugs": {
+    "url": "https://github.com/fvena/tailords/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

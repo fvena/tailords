@@ -1,0 +1,93 @@
+{
+  "name": "@tailords/ui",
+  "version": "0.1.0",
+  "description": "Vue.js component library built with TailorDS Core - fully customizable components with token-driven design and accessibility-first development.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./composables": {
+      "types": "./dist/composables/index.d.ts",
+      "import": "./dist/composables/index.js"
+    },
+    "./styles": {
+      "sass": "./scss/index.scss",
+      "default": "./scss/index.scss"
+    }
+  },
+  "files": [
+    "dist",
+    "scss",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup && vue-tsc --emitDeclarationOnly",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "vue-tsc --noEmit",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "@tailords/tokens": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vue/test-utils": "^2.0.0",
+    "@vue/tsconfig": "^0.5.0",
+    "eslint-plugin-vue": "^10.3.0",
+    "jsdom": "^26.1.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitepress": "^1.6.3",
+    "vitest": "^3.2.4",
+    "vue": "^3.0.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "components",
+    "design-system",
+    "typescript",
+    "accessibility",
+    "customizable",
+    "tokens"
+  ],
+  "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
+  "license": "MIT",
+  "homepage": "https://tailords.dev/ui",
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:fvena/tailords.git",
+    "directory": "packages/ui"
+  },
+  "bugs": {
+    "url": "https://github.com/fvena/tailords/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

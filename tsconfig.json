@@ -1,4 +1,16 @@
 {
   "extends": "personal-style-guide/typescript/browser",
-  "include": ["src", "test", "docs/.vitepress/**/*", "*.config.*"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "paths": {
+      "@tailords/tokens": ["./packages/tokens/src"],
+      "@tailords/studio": ["./packages/studio/src"],
+      "@tailords/theme": ["./packages/theme/src"],
+      "@tailords/ui": ["./packages/ui/src"],
+      "@tailords/vitepress": ["./packages/vitepress/src"]
+    }
+  },
+  "include": ["docs/.vitepress/**/*", "*.config.*", "vitest.workspace.ts"],
+  "exclude": ["node_modules", "dist", "lib", ".vitepress/dist", "coverage"]
 }

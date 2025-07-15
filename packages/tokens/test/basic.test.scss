@@ -1,0 +1,41 @@
+@use "sass:meta";
+
+// Configure sass-true for terminal-only output
+@use "../node_modules/sass-true" as * with (
+  $terminal-output: true
+);
+
+// Import the file we want to test (when it exists)
+// @use '../scss/index' as tokens;
+
+// Test suite for TailorDS Tokens
+@include test-module("TailorDS Tokens - Basic Import") {
+  @include test("should be ready for implementation") {
+    @include assert-true(true, "Framework structure is ready");
+  }
+
+  @include test("should support sass-true testing") {
+    @include assert-equal(1 + 1, 2, "Basic math works in tests");
+  }
+
+  @include test("should handle string assertions") {
+    @include assert-equal("hello", "hello", "String comparison works");
+  }
+}
+
+// Placeholder test for future token functions
+@include test-module("TailorDS Tokens - Token Validation (Future)") {
+  @include test("will validate token structure") {
+    @include assert-true(true, "Token validation will be implemented in Phase 1");
+  }
+
+  @include test("will generate CSS variables") {
+    @include assert-true(true, "CSS variable generation will be implemented in Phase 1");
+  }
+
+  @include test("will provide helper functions") {
+    @include assert-true(true, "Helper functions will be implemented in Phase 1");
+  }
+}
+
+@include report;

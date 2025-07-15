@@ -1,44 +1,62 @@
 name: Release
 
 on:
+  # Trigger manual
+  workflow_dispatch:
+  # O cuando CI/CD termine exitosamente en main
   workflow_run:
     workflows:
-      - CI/CD
+      - "CI/CD"
     types:
       - completed
+    branches:
+      - main
+
+concurrency: release
+
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 jobs:
   release:
-    name: Release
+    name: Release Packages
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}
-
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
-
+    # Solo ejecutar si CI pasó exitosamente
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: false
+
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
-      - uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: "pnpm"
 
-      - run: npm ci --ignore-scripts
-      - run: npm run build
-      - run: npx semantic-release
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Intentar descargar artifacts del CI si están disponibles
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: build-artifacts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      # Build si no hay artifacts disponibles
+      - name: Build packages
+        run: pnpm build
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset:publish
+          commit: "chore: release packages"
+          title: "chore: release packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "sass": "^1.89.2",
-    "stylelint": "^16.21.1",
+    "stylelint": "^16.23.0",
     "vitepress": "^1.6.3"
   },
   "keywords": [
